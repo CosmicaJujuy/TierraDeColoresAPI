@@ -6,6 +6,7 @@
 package com.ar.dev.tierra.api.config;
 
 import com.ar.dev.tierra.api.config.security.CustomAuthenticationProvider;
+import com.ar.dev.tierra.api.config.security.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +17,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
@@ -30,17 +30,17 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     CustomAuthenticationProvider customAuthenticationProvider;
-
+    
     @Autowired
-    UserDetailsService userDetailsService;
+    CustomUserDetailsService cuds;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder())
-                .and()
-                .authenticationProvider(customAuthenticationProvider);
+                .userDetailsService(cuds)
+                .passwordEncoder(passwordEncoder());
+//                .and()
+//                .authenticationProvider(customAuthenticationProvider);
     }
 
     @Bean

@@ -43,7 +43,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         if (userFromDatabase == null) {
             throw new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database");
-        } else if (!userFromDatabase.isEstado() == false) {
+        } else if (!userFromDatabase.isEstado() == true) {
             throw new UserNotActivatedException("User " + lowercaseLogin + " is not activated");
         }
 
