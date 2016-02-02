@@ -15,6 +15,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class TierraApplication {
 
+    /**
+     * Funcion principal para arrancar Spring-boot
+     * @param args 
+     */
     public static void main(String[] args) {
         SpringApplication.run(TierraApplication.class, args);
     }
