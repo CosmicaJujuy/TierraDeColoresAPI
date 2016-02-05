@@ -50,7 +50,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             success = passwordEncoder.matches(password, us.getPasswordUsuario());
         } catch (Exception ex) {
         }
-//        if (us != null) {
         if (success == true) {
             final List<GrantedAuthority> grantedAuths = new ArrayList<>();
             String authority;

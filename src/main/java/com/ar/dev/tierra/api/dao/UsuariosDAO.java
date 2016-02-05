@@ -20,6 +20,10 @@ public interface UsuariosDAO {
     
     public List<Usuarios> allUsuarios();
     
+    public void addUsuario(Usuarios usuarios);
+    
     public Usuarios findUsuarioByUsername(String username);
+    
+    public Usuarios findUsuarioByDNI(Integer dni);
     
 }

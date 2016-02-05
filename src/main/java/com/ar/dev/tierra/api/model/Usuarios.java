@@ -53,6 +53,9 @@ public class Usuarios implements Serializable {
     @Column(name = "domicilio", nullable = false, length = 100)
     private String domicilio;
 
+    @Column(name = "provincia", nullable = false, length = 100)
+    private String provincia;
+
     @Column(name = "username", unique = true, nullable = false, length = 40)
     private String username;
 
@@ -76,32 +79,13 @@ public class Usuarios implements Serializable {
     @Column(name = "id_usuario_creacion", nullable = false)
     private int idUsuarioCreacion;
 
-    @Column(name = "id_usuario_modificacion", nullable = false)
+    @Column(name = "id_usuario_modificacion")
     private int idUsuarioModificacion;
 
     public Usuarios() {
     }
 
-    public Usuarios(Usuarios usuarios) {
-        super();
-        this.idUsuario = usuarios.getIdUsuario();
-        this.roles = usuarios.getRoles();
-        this.nombre = usuarios.getNombre();
-        this.apellido = usuarios.getApellido();
-        this.fechaNacimiento = usuarios.getFechaNacimiento();
-        this.dni = usuarios.getDni();
-        this.email = usuarios.getEmail();
-        this.telefono = usuarios.getTelefono();
-        this.domicilio = usuarios.getDomicilio();
-        this.username = usuarios.getUsername();
-        this.password = usuarios.getPasswordUsuario();
-        this.imagen = usuarios.getImagen();
-        this.estado = usuarios.isEstado();
-    }
-    
-    
-
-    public Usuarios(int idUsuario, Roles roles, String nombre, String apellido, Date fechaNacimiento, int dni, String email, Integer telefono, String domicilio, String username, String password, byte[] imagen, boolean estado) {
+    public Usuarios(int idUsuario, Roles roles, String nombre, String apellido, Date fechaNacimiento, int dni, String email, Integer telefono, String domicilio, String provincia, String username, String password, byte[] imagen, boolean estado) {
         this.idUsuario = idUsuario;
         this.roles = roles;
         this.nombre = nombre;
@@ -111,6 +95,7 @@ public class Usuarios implements Serializable {
         this.email = email;
         this.telefono = telefono;
         this.domicilio = domicilio;
+        this.provincia = provincia;
         this.username = username;
         this.password = password;
         this.imagen = imagen;
@@ -373,6 +358,20 @@ public class Usuarios implements Serializable {
      */
     public void setIdUsuarioModificacion(int idUsuarioModificacion) {
         this.idUsuarioModificacion = idUsuarioModificacion;
+    }
+
+    /**
+     * @return the provincia
+     */
+    public String getProvincia() {
+        return provincia;
+    }
+
+    /**
+     * @param provincia the provincia to set
+     */
+    public void setProvincia(String provincia) {
+        this.provincia = provincia;
     }
 
 }

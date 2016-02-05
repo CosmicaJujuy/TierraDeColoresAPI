@@ -42,9 +42,22 @@ public class UsuariosDAOImpl implements UsuariosDAO {
     }
 
     @Override
+    public void addUsuario(Usuarios usuarios) {
+            getSession().save(usuarios);        
+    }
+
+    @Override
     public Usuarios findUsuarioByUsername(String username) {
         Criteria criteria = getSession().createCriteria(Usuarios.class);
         criteria.add(Restrictions.like("username", username));
+        Usuarios us = (Usuarios) criteria.uniqueResult();
+        return us;
+    }
+
+    @Override
+    public Usuarios findUsuarioByDNI(Integer dni) {
+        Criteria criteria = getSession().createCriteria(Usuarios.class);
+        criteria.add(Restrictions.eq("dni", dni));
         Usuarios us = (Usuarios) criteria.uniqueResult();
         return us;
     }

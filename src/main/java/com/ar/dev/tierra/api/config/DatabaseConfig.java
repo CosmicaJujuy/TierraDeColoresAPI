@@ -23,6 +23,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class DatabaseConfig {
 
+    /**
+     * Variables de conexion a la base de datos indicadas en el archivo
+     * .properties
+     */
     @Value("${db.driver}")
     private String DB_DRIVER;
 
@@ -47,6 +51,12 @@ public class DatabaseConfig {
     @Value("${entitymanager.packagesToScan}")
     private String ENTITYMANAGER_PACKAGES_TO_SCAN;
 
+    /**
+     * Bean dataSource encargado de la configuracion de conexion con la base de
+     * datos.
+     *
+     * @return objeto con la correspondiente conexion a base de datos.
+     */
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -57,6 +67,12 @@ public class DatabaseConfig {
         return dataSource;
     }
 
+    /**
+     * Bean sessionFactory, en cargado de construir una session en la base de
+     * datos utilizando el dataSource.
+     *
+     * @return objeto con la session en la base de datos.
+     */
     @Bean
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
@@ -70,6 +86,12 @@ public class DatabaseConfig {
         return sessionFactoryBean;
     }
 
+    /**
+     * Bean transactionManagar encargado de manejar las transacciones en la base
+     * de datos utilizando el sessionFactory
+     *
+     * @return objecto encargado de manejar las transacciones.
+     */
     @Bean
     public HibernateTransactionManager transactionManager() {
         HibernateTransactionManager transactionManager = new HibernateTransactionManager();

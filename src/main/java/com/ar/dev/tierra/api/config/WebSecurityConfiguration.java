@@ -24,8 +24,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  * @author PauloGaldo
  */
 @Configuration
-@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -38,9 +38,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .userDetailsService(cuds)
-                .passwordEncoder(passwordEncoder());
-//                .and()
-//                .authenticationProvider(customAuthenticationProvider);
+                .passwordEncoder(passwordEncoder())
+                .and()
+                .authenticationProvider(customAuthenticationProvider);
     }
 
     @Bean
@@ -58,6 +58,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/test").authenticated();
+                .antMatchers("/usuarios").authenticated();
     }
 }

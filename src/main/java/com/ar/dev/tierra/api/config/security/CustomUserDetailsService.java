@@ -50,10 +50,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         String authority;
         switch (userFromDatabase.getRoles().getNombreRol()) {
-            case "administrador":
+            case "ADMINISTRADOR":
                 authority = "ROLE_ADMIN";
                 break;
-            case "vendedor":
+            case "VENDEDOR":
                 authority = "ROLE_VENDEDOR";
                 break;
             default:

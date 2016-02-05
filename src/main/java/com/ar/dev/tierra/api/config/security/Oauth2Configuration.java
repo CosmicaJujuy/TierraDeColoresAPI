@@ -5,7 +5,6 @@
  */
 package com.ar.dev.tierra.api.config.security;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -25,8 +24,6 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
-import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 /**
  *
@@ -50,7 +47,6 @@ public class Oauth2Configuration {
                     .resourceId(RESOURCE_ID);
         }
 
-
         @Override
         public void configure(HttpSecurity http) throws Exception {
             http
@@ -65,17 +61,9 @@ public class Oauth2Configuration {
                     .and()
                     //URI's to verify
                     .authorizeRequests()
-                    .antMatchers("/oauth/logout").permitAll()
-                    .antMatchers("/test").hasRole("ADMIN")
-                    .antMatchers("/usuarios").authenticated()
-                    //                    .antMatchers("/**").authenticated()
-                    .antMatchers("/productos").hasAnyRole("ADMIN, VENDEDOR");
-        }
-
-        private CsrfTokenRepository csrfTokenRepository() {
-            HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
-            repository.setHeaderName("X-XSRF-TOKEN");
-            return repository;
+                    .antMatchers("/oauth/logout").permitAll()                    
+                    .antMatchers("/usuarios/**").hasRole("ADMIN")
+                    .and().csrf().disable();
         }
     }
 
@@ -96,7 +84,7 @@ public class Oauth2Configuration {
         @Autowired
         @Qualifier("authenticationManagerBean")
         private AuthenticationManager authenticationManager;
-        
+
         @Autowired
         private CustomUserDetailsService userDetailsService;
 

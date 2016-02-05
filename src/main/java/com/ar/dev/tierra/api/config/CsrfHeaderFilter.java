@@ -21,6 +21,14 @@ import org.springframework.web.util.WebUtils;
  */
 public class CsrfHeaderFilter extends OncePerRequestFilter {
 
+    /**
+     * Metodo para agregar cookie contra CRSF
+     * @param request
+     * @param response
+     * @param filterChain
+     * @throws ServletException
+     * @throws IOException 
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request,
             HttpServletResponse response, FilterChain filterChain)
