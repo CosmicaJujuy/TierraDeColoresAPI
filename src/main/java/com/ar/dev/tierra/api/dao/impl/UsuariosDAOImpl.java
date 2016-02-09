@@ -43,7 +43,12 @@ public class UsuariosDAOImpl implements UsuariosDAO {
 
     @Override
     public void addUsuario(Usuarios usuarios) {
-            getSession().save(usuarios);        
+        getSession().save(usuarios);
+    }
+
+    @Override
+    public void updateUsuario(Usuarios usuarios) {
+        getSession().update(usuarios);
     }
 
     @Override

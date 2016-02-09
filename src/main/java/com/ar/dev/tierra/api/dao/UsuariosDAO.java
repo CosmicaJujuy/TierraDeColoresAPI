@@ -22,6 +22,8 @@ public interface UsuariosDAO {
     
     public void addUsuario(Usuarios usuarios);
     
+    public void updateUsuario(Usuarios usuarios);
+    
     public Usuarios findUsuarioByUsername(String username);
     
     public Usuarios findUsuarioByDNI(Integer dni);

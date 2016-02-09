@@ -38,9 +38,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .userDetailsService(cuds)
-                .passwordEncoder(passwordEncoder())
-                .and()
-                .authenticationProvider(customAuthenticationProvider);
+                .passwordEncoder(passwordEncoder());
+//                .and()
+//                .authenticationProvider(customAuthenticationProvider);
     }
 
     @Bean
