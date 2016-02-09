@@ -1,0 +1,81 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.ar.dev.tierra.api.controller;
+
+import com.ar.dev.tierra.api.dao.TipoProductoDAO;
+import com.ar.dev.tierra.api.dao.UsuariosDAO;
+import com.ar.dev.tierra.api.model.JsonResponse;
+import com.ar.dev.tierra.api.model.TipoProducto;
+import com.ar.dev.tierra.api.model.Usuarios;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ *
+ * @author PauloGaldo
+ */
+@RestController
+@RequestMapping("/tipo")
+public class TipoProductoController implements Serializable {
+
+    @Autowired
+    TipoProductoDAO tipoProductoDAO;
+
+    @Autowired
+    UsuariosDAO usuariosDAO;
+
+    @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAllTipo() {
+        List<TipoProducto> tipoProducto = tipoProductoDAO.getAll();
+        if (!tipoProducto.isEmpty()) {
+            return new ResponseEntity<>(tipoProducto, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public ResponseEntity<?> addTipo(OAuth2Authentication authentication,
+            @RequestBody TipoProducto tipoProducto) {
+        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        tipoProducto.setUsuarioCreacion(user.getIdUsuario());
+        tipoProducto.setFechaCreacion(new Date());
+        tipoProductoDAO.add(tipoProducto);
+        JsonResponse msg = new JsonResponse("Success", "Tipo de Producto agregada con exito");
+        return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public ResponseEntity<?> updateCategoria(OAuth2Authentication authentication,
+            @RequestBody TipoProducto tipoProducto) {
+        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        tipoProducto.setUsuarioCreacion(user.getIdUsuario());
+        tipoProducto.setFechaCreacion(new Date());
+        tipoProductoDAO.update(tipoProducto);
+        JsonResponse msg = new JsonResponse("Success", "Tipo de Producto modificada con exito");
+        return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public ResponseEntity<?> deleteTipo(OAuth2Authentication authentication,
+            @RequestBody TipoProducto tipoProducto) {
+        tipoProductoDAO.delete(tipoProducto);
+        JsonResponse msg = new JsonResponse("Success", "Categoria eliminada con exito");
+        return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+}

@@ -47,7 +47,7 @@ public class UsuariosController implements Serializable {
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Usuarios>> getAllUsuarios() {
+    public ResponseEntity<?> getAllUsuarios() {
         List<Usuarios> listUsuarios = usuariosDAO.allUsuarios();
         ResponseEntity responseEntity;
         if (listUsuarios.isEmpty()) {

@@ -61,8 +61,9 @@ public class Oauth2Configuration {
                     .and()
                     //URI's to verify
                     .authorizeRequests()
-                    .antMatchers("/oauth/logout").permitAll()                    
-//                    .antMatchers("/usuarios/**").hasRole("ADMIN")
+                    .antMatchers("/oauth/logout").permitAll()
+                    .antMatchers("/**").authenticated()
+                    //                    .antMatchers("/usuarios/**").hasRole("ADMIN")
                     .and().csrf().disable();
         }
     }

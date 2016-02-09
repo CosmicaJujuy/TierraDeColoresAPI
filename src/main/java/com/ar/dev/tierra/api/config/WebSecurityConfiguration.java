@@ -30,7 +30,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     CustomAuthenticationProvider customAuthenticationProvider;
-    
+
     @Autowired
     CustomUserDetailsService cuds;
 
@@ -58,6 +58,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/usuarios").authenticated();
+                .antMatchers("/**").authenticated();
     }
 }
