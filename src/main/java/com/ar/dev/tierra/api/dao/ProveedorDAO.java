@@ -25,4 +25,6 @@ public interface ProveedorDAO {
     public void add(Proveedor proveedor);
 
     public void delete(Proveedor proveedor);
+    
+    public Proveedor searchById(int idProveedor);
 }

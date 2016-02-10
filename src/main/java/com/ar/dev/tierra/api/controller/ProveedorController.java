@@ -21,6 +21,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -58,7 +59,7 @@ public class ProveedorController implements Serializable {
         JsonResponse msg = new JsonResponse("success", "Proveedor agregado con exito.");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
-    
+
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<?> update(OAuth2Authentication authentication,
             @RequestBody Proveedor proveedor) {
@@ -69,7 +70,7 @@ public class ProveedorController implements Serializable {
         JsonResponse msg = new JsonResponse("Success", "Categoria modificada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
-    
+
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<?> delete(OAuth2Authentication authentication,
             @RequestBody Proveedor proveedor) {
@@ -80,6 +81,16 @@ public class ProveedorController implements Serializable {
         proveedorDAO.update(proveedor);
         JsonResponse msg = new JsonResponse("Success", "Categoria modificada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    public ResponseEntity<?> searchById(@RequestParam("id") int id) {
+        Proveedor proveedor = proveedorDAO.searchById(id);
+        if (proveedor != null) {
+            return new ResponseEntity<>(proveedor, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

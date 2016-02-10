@@ -57,4 +57,12 @@ public class ProveedorDAOImpl implements ProveedorDAO {
         getSession().delete(proveedor);
     }
 
+    @Override
+    public Proveedor searchById(int idProveedor) {
+        Criteria criteria = getSession().createCriteria(Proveedor.class);
+        criteria.add(Restrictions.eq("idProveedor", idProveedor));
+        Proveedor proveedor = (Proveedor) criteria.uniqueResult();
+        return proveedor;
+    }
+
 }
