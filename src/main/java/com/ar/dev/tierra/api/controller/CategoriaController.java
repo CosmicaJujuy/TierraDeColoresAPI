@@ -39,7 +39,7 @@ public class CategoriaController implements Serializable {
     UsuariosDAO usuariosDAO;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAllCategorias() {
+    public ResponseEntity<?> getAll() {
         List<Categoria> categorias = categoriaDAO.getAll();
         if (!categorias.isEmpty()) {
             return new ResponseEntity<>(categorias, HttpStatus.OK);
@@ -49,7 +49,7 @@ public class CategoriaController implements Serializable {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseEntity<?> addCategoria(OAuth2Authentication authentication,
+    public ResponseEntity<?> add(OAuth2Authentication authentication,
             @RequestBody Categoria categoria) {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
         categoria.setUsuarioCreacion(user.getIdUsuario());
@@ -60,11 +60,11 @@ public class CategoriaController implements Serializable {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResponseEntity<?> updateCategoria(OAuth2Authentication authentication,
+    public ResponseEntity<?> update(OAuth2Authentication authentication,
             @RequestBody Categoria categoria) {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
-        categoria.setUsuarioCreacion(user.getIdUsuario());
-        categoria.setFechaCreacion(new Date());
+        categoria.setUsuarioModificacion(user.getIdUsuario());
+        categoria.setFechaModificacion(new Date());
         categoriaDAO.update(categoria);
         JsonResponse msg = new JsonResponse("Success", "Categoria modificada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
@@ -72,9 +72,13 @@ public class CategoriaController implements Serializable {
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public ResponseEntity<?> deleteCategoria(OAuth2Authentication authentication,
+    public ResponseEntity<?> delete(OAuth2Authentication authentication,
             @RequestBody Categoria categoria) {
-        categoriaDAO.delete(categoria);
+        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        categoria.setEstado(false);
+        categoria.setUsuarioModificacion(user.getIdUsuario());
+        categoria.setFechaModificacion(new Date());
+        categoriaDAO.update(categoria);
         JsonResponse msg = new JsonResponse("Success", "Categoria eliminada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }

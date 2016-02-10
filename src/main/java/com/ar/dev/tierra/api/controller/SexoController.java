@@ -29,7 +29,7 @@ public class SexoController implements Serializable {
     SexoDAO sexoDAO;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAllSexo() {
+    public ResponseEntity<?> getAll() {
         List<Sexo> sexo = sexoDAO.getAll();
         if (!sexo.isEmpty()) {
             return new ResponseEntity<>(sexo, HttpStatus.OK);

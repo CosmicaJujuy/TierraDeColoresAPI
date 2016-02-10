@@ -41,16 +41,20 @@ public class Marcas implements Serializable {
     @Column(name = "usuario_modificacion")
     private Integer usuarioModificacion;
 
+    @Column(name = "estado", nullable = false)
+    private boolean estado;
+
     public Marcas() {
     }
 
-    public Marcas(int idMarca, String nombreMarca, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
+    public Marcas(int idMarca, String nombreMarca, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion, boolean estado) {
         this.idMarca = idMarca;
         this.nombreMarca = nombreMarca;
         this.fechaCreacion = fechaCreacion;
         this.fechaModificacion = fechaModificacion;
         this.usuarioCreacion = usuarioCreacion;
         this.usuarioModificacion = usuarioModificacion;
+        this.estado = estado;
     }
 
     /**
@@ -135,6 +139,20 @@ public class Marcas implements Serializable {
      */
     public void setUsuarioModificacion(Integer usuarioModificacion) {
         this.usuarioModificacion = usuarioModificacion;
+    }
+
+    /**
+     * @return the estado
+     */
+    public boolean isEstado() {
+        return estado;
+    }
+
+    /**
+     * @param estado the estado to set
+     */
+    public void setEstado(boolean estado) {
+        this.estado = estado;
     }
 
 }

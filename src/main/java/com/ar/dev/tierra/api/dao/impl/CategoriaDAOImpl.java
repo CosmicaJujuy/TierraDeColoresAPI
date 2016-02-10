@@ -12,6 +12,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +36,7 @@ public class CategoriaDAOImpl implements CategoriaDAO {
     @Override
     public List<Categoria> getAll() {
         Criteria criteria = getSession().createCriteria(Categoria.class);
+        criteria.add(Restrictions.eq("estado", true));
         criteria.addOrder(Order.asc("idCategoria"));
         List<Categoria> list = criteria.list();
         return list;

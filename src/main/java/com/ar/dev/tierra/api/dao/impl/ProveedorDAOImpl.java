@@ -5,8 +5,8 @@
  */
 package com.ar.dev.tierra.api.dao.impl;
 
-import com.ar.dev.tierra.api.dao.TipoProductoDAO;
-import com.ar.dev.tierra.api.model.TipoProducto;
+import com.ar.dev.tierra.api.dao.ProveedorDAO;
+import com.ar.dev.tierra.api.model.Proveedor;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -23,38 +23,38 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class TipoProductoDAOImpl implements TipoProductoDAO {
-    
+public class ProveedorDAOImpl implements ProveedorDAO {
+
     @Autowired
     private SessionFactory sessionFactory;
-    
+
     private Session getSession() {
         return sessionFactory.getCurrentSession();
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
-    public List<TipoProducto> getAll() {
-        Criteria criteria = getSession().createCriteria(TipoProducto.class);
-        criteria.add(Restrictions.eq("estado", true));
-        criteria.addOrder(Order.asc("idTipo"));
-        List<TipoProducto> list = criteria.list();
+    public List<Proveedor> getAll() {
+        Criteria criteria = getSession().createCriteria(Proveedor.class);
+        criteria.add(Restrictions.eq("estadoProveedor", true));
+        criteria.addOrder(Order.asc("idProveedor"));
+        List<Proveedor> list = criteria.list();
         return list;
     }
-    
+
     @Override
-    public void update(TipoProducto tipoProducto) {
-        getSession().update(tipoProducto);
+    public void update(Proveedor proveedor) {
+        getSession().update(proveedor);
     }
-    
+
     @Override
-    public void add(TipoProducto tipoProducto) {
-        getSession().save(tipoProducto);
+    public void add(Proveedor proveedor) {
+        getSession().save(proveedor);
     }
-    
+
     @Override
-    public void delete(TipoProducto tipoProducto) {
-        getSession().delete(tipoProducto);
+    public void delete(Proveedor proveedor) {
+        getSession().delete(proveedor);
     }
-    
+
 }

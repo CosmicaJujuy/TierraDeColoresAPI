@@ -41,21 +41,20 @@ public class TipoProducto implements Serializable {
     @Column(name = "fecha_modificacion", length = 13)
     private Date fechaModificacion;
 
+    @Column(name = "estado", nullable = false)
+    private boolean estado;
+
     public TipoProducto() {
     }
 
-    public TipoProducto(int idTipo, String nombreTipo) {
-        this.idTipo = idTipo;
-        this.nombreTipo = nombreTipo;
-    }
-
-    public TipoProducto(int idTipo, String nombreTipo, int usuarioCreacion, Integer usuarioModificacion, Date fechaCreacion, Date fechaModificacion) {
+    public TipoProducto(int idTipo, String nombreTipo, int usuarioCreacion, Integer usuarioModificacion, Date fechaCreacion, Date fechaModificacion, boolean estado) {
         this.idTipo = idTipo;
         this.nombreTipo = nombreTipo;
         this.usuarioCreacion = usuarioCreacion;
         this.usuarioModificacion = usuarioModificacion;
         this.fechaCreacion = fechaCreacion;
         this.fechaModificacion = fechaModificacion;
+        this.estado = estado;
     }
 
     /**
@@ -140,6 +139,20 @@ public class TipoProducto implements Serializable {
      */
     public void setFechaModificacion(Date fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
+    }
+
+    /**
+     * @return the estado
+     */
+    public boolean isEstado() {
+        return estado;
+    }
+
+    /**
+     * @param estado the estado to set
+     */
+    public void setEstado(boolean estado) {
+        this.estado = estado;
     }
 
 }

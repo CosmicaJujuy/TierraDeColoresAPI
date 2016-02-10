@@ -39,7 +39,7 @@ public class TipoProductoController implements Serializable {
     UsuariosDAO usuariosDAO;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAllTipo() {
+    public ResponseEntity<?> getAll() {
         List<TipoProducto> tipoProducto = tipoProductoDAO.getAll();
         if (!tipoProducto.isEmpty()) {
             return new ResponseEntity<>(tipoProducto, HttpStatus.OK);
@@ -49,7 +49,7 @@ public class TipoProductoController implements Serializable {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseEntity<?> addTipo(OAuth2Authentication authentication,
+    public ResponseEntity<?> add(OAuth2Authentication authentication,
             @RequestBody TipoProducto tipoProducto) {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
         tipoProducto.setUsuarioCreacion(user.getIdUsuario());
@@ -60,11 +60,11 @@ public class TipoProductoController implements Serializable {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResponseEntity<?> updateCategoria(OAuth2Authentication authentication,
+    public ResponseEntity<?> update(OAuth2Authentication authentication,
             @RequestBody TipoProducto tipoProducto) {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
-        tipoProducto.setUsuarioCreacion(user.getIdUsuario());
-        tipoProducto.setFechaCreacion(new Date());
+        tipoProducto.setUsuarioModificacion(user.getIdUsuario());
+        tipoProducto.setFechaModificacion(new Date());
         tipoProductoDAO.update(tipoProducto);
         JsonResponse msg = new JsonResponse("Success", "Tipo de Producto modificada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
@@ -72,9 +72,13 @@ public class TipoProductoController implements Serializable {
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public ResponseEntity<?> deleteTipo(OAuth2Authentication authentication,
+    public ResponseEntity<?> delete(OAuth2Authentication authentication,
             @RequestBody TipoProducto tipoProducto) {
-        tipoProductoDAO.delete(tipoProducto);
+        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        tipoProducto.setUsuarioModificacion(user.getIdUsuario());
+        tipoProducto.setFechaModificacion(new Date());
+        tipoProducto.setEstado(false);
+        tipoProductoDAO.update(tipoProducto);
         JsonResponse msg = new JsonResponse("Success", "Categoria eliminada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }

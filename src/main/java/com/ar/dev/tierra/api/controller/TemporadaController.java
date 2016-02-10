@@ -29,7 +29,7 @@ public class TemporadaController implements Serializable {
     TemporadaDAO temporadaDAO;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAllTemporada() {
+    public ResponseEntity<?> getAll() {
         List<Temporada> temporadas = temporadaDAO.getAll();
         if (!temporadas.isEmpty()) {
             return new ResponseEntity<>(temporadas, HttpStatus.OK);
