@@ -1,7 +1,8 @@
 package com.ar.dev.tierra.api.model;
-// Generated 09/02/2016 00:04:55 by Hibernate Tools 4.3.1
+// Generated 11/02/2016 01:28:34 by Hibernate Tools 4.3.1
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,9 +24,8 @@ import javax.persistence.TemporalType;
 public class Producto implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_producto", unique = true, nullable = false)
-    private long idProducto;
+    private BigInteger idProducto;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "categoria_producto", nullable = false)
@@ -66,6 +66,12 @@ public class Producto implements Serializable {
     @Column(name = "cantidad_producto", nullable = false)
     private int cantidadProducto;
 
+    @Column(name = "cantidad_minima", nullable = false)
+    private int cantidadMinima;
+
+    @Column(name = "talla", nullable = false, length = 150)
+    private String talla;
+
     @Temporal(TemporalType.DATE)
     @Column(name = "fecha_producto", length = 13)
     private Date fechaProducto;
@@ -90,7 +96,7 @@ public class Producto implements Serializable {
     public Producto() {
     }
 
-    public Producto(long idProducto, Categoria categoria, Marcas marcas, Proveedor proveedor, Sexo sexo, Temporada temporada, TipoProducto tipoProducto, String descripcion, String colorProducto, int precioCosto, int precioVenta, int cantidadProducto, Date fechaProducto, boolean estadoProducto) {
+    public Producto(BigInteger idProducto, Categoria categoria, Marcas marcas, Proveedor proveedor, Sexo sexo, Temporada temporada, TipoProducto tipoProducto, String descripcion, String colorProducto, int precioCosto, int precioVenta, int cantidadProducto, int cantidadMinima, String talla, Date fechaProducto, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
         this.idProducto = idProducto;
         this.categoria = categoria;
         this.marcas = marcas;
@@ -103,23 +109,8 @@ public class Producto implements Serializable {
         this.precioCosto = precioCosto;
         this.precioVenta = precioVenta;
         this.cantidadProducto = cantidadProducto;
-        this.fechaProducto = fechaProducto;
-        this.estadoProducto = estadoProducto;
-    }
-
-    public Producto(long idProducto, Categoria categoria, Marcas marcas, Proveedor proveedor, Sexo sexo, Temporada temporada, TipoProducto tipoProducto, String descripcion, String colorProducto, int precioCosto, int precioVenta, int cantidadProducto, Date fechaProducto, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
-        this.idProducto = idProducto;
-        this.categoria = categoria;
-        this.marcas = marcas;
-        this.proveedor = proveedor;
-        this.sexo = sexo;
-        this.temporada = temporada;
-        this.tipoProducto = tipoProducto;
-        this.descripcion = descripcion;
-        this.colorProducto = colorProducto;
-        this.precioCosto = precioCosto;
-        this.precioVenta = precioVenta;
-        this.cantidadProducto = cantidadProducto;
+        this.cantidadMinima = cantidadMinima;
+        this.talla = talla;
         this.fechaProducto = fechaProducto;
         this.estadoProducto = estadoProducto;
         this.fechaCreacion = fechaCreacion;
@@ -131,14 +122,14 @@ public class Producto implements Serializable {
     /**
      * @return the idProducto
      */
-    public long getIdProducto() {
+    public BigInteger getIdProducto() {
         return idProducto;
     }
 
     /**
      * @param idProducto the idProducto to set
      */
-    public void setIdProducto(long idProducto) {
+    public void setIdProducto(BigInteger idProducto) {
         this.idProducto = idProducto;
     }
 
@@ -294,6 +285,34 @@ public class Producto implements Serializable {
      */
     public void setCantidadProducto(int cantidadProducto) {
         this.cantidadProducto = cantidadProducto;
+    }
+
+    /**
+     * @return the cantidadMinima
+     */
+    public int getCantidadMinima() {
+        return cantidadMinima;
+    }
+
+    /**
+     * @param cantidadMinima the cantidadMinima to set
+     */
+    public void setCantidadMinima(int cantidadMinima) {
+        this.cantidadMinima = cantidadMinima;
+    }
+
+    /**
+     * @return the talla
+     */
+    public String getTalla() {
+        return talla;
+    }
+
+    /**
+     * @param talla the talla to set
+     */
+    public void setTalla(String talla) {
+        this.talla = talla;
     }
 
     /**
