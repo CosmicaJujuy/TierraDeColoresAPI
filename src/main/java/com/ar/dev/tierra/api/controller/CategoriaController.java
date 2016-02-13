@@ -54,6 +54,7 @@ public class CategoriaController implements Serializable {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
         categoria.setUsuarioCreacion(user.getIdUsuario());
         categoria.setFechaCreacion(new Date());
+        categoria.setEstado(true);
         categoriaDAO.add(categoria);
         JsonResponse msg = new JsonResponse("Success", "Categoria agregada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
