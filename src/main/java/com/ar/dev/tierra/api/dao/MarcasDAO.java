@@ -25,4 +25,6 @@ public interface MarcasDAO {
     public void add(Marcas marcas);
 
     public void delete(Marcas marcas);
+
+    public List<Marcas> searchByText(String text);
 }

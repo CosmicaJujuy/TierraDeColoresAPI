@@ -11,6 +11,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,14 @@ public class ProveedorDAOImpl implements ProveedorDAO {
         criteria.add(Restrictions.eq("idProveedor", idProveedor));
         Proveedor proveedor = (Proveedor) criteria.uniqueResult();
         return proveedor;
+    }
+
+    @Override
+    public List<Proveedor> searchByText(String text) {
+        Criteria criteria = getSession().createCriteria(Proveedor.class);
+        criteria.add(Restrictions.ilike("nombreProveedor", text, MatchMode.ANYWHERE));
+        List<Proveedor> list = criteria.list();
+        return list;
     }
 
 }

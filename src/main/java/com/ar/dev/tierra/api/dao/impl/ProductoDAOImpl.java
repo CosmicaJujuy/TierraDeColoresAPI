@@ -12,6 +12,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +65,14 @@ public class ProductoDAOImpl implements ProductoDAO {
         criteria.add(Restrictions.eq("idProducto", id));
         Producto producto = (Producto) criteria.uniqueResult();
         return producto;
+    }
+
+    @Override
+    public List<Producto> findByText(String text) {
+        Criteria criteria = getSession().createCriteria(Producto.class);
+        criteria.add(Restrictions.ilike("descripcion", text, MatchMode.ANYWHERE));
+        List<Producto> productos = criteria.list();
+        return productos;
     }
 
 }

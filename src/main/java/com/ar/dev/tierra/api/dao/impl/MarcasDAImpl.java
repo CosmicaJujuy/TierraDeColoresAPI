@@ -11,6 +11,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +25,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class MarcasDAImpl implements MarcasDAO {
-    
+
     @Autowired
     private SessionFactory sessionFactory;
-    
+
     private Session getSession() {
         return sessionFactory.getCurrentSession();
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public List<Marcas> getAll() {
@@ -41,20 +42,28 @@ public class MarcasDAImpl implements MarcasDAO {
         List<Marcas> list = criteria.list();
         return list;
     }
-    
+
     @Override
     public void update(Marcas marcas) {
         getSession().update(marcas);
     }
-    
+
     @Override
     public void add(Marcas marcas) {
         getSession().save(marcas);
     }
-    
+
     @Override
     public void delete(Marcas marcas) {
         getSession().delete(marcas);
     }
-    
+
+    @Override
+    public List<Marcas> searchByText(String text) {
+        Criteria criteria = getSession().createCriteria(Marcas.class);
+        criteria.add(Restrictions.ilike("nombreMarca", text, MatchMode.ANYWHERE));
+        List<Marcas> list = criteria.list();
+        return list;
+    }
+
 }

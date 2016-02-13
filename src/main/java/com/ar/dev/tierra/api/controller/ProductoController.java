@@ -54,6 +54,8 @@ public class ProductoController implements Serializable {
     public ResponseEntity<?> add(OAuth2Authentication authentication,
             @RequestBody Producto producto) {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        String descripcion = producto.getDescripcion();
+        producto.setDescripcion(descripcion.toUpperCase());
         producto.setUsuarioCreacion(user.getIdUsuario());
         producto.setFechaCreacion(new Date());
         productoDAO.add(producto);
@@ -93,6 +95,16 @@ public class ProductoController implements Serializable {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
             return new ResponseEntity<>(p, HttpStatus.OK);
+        }
+    }
+
+    @RequestMapping(value = "/searchText", method = RequestMethod.POST)
+    public ResponseEntity<?> findByText(@RequestParam("text") String text) {
+        List<Producto> productos = productoDAO.findByText(text.toUpperCase());
+        if (!productos.isEmpty()) {
+            return new ResponseEntity<>(productos, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(productos, HttpStatus.BAD_REQUEST);
         }
     }
 }

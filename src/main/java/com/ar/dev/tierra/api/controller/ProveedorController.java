@@ -92,5 +92,15 @@ public class ProveedorController implements Serializable {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+    
+    @RequestMapping(value = "/searchText", method = RequestMethod.POST)
+    public ResponseEntity<?> findByText(@RequestParam("text") String text) {
+        List<Proveedor> list = proveedorDAO.searchByText(text);
+        if (!list.isEmpty()) {
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(list, HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }

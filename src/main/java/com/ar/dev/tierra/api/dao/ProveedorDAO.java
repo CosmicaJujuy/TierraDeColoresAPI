@@ -27,4 +27,6 @@ public interface ProveedorDAO {
     public void delete(Proveedor proveedor);
     
     public Proveedor searchById(int idProveedor);
+    
+    public List<Proveedor> searchByText(String text);
 }
