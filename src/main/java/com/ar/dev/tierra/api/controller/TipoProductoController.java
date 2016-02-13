@@ -54,6 +54,7 @@ public class TipoProductoController implements Serializable {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
         tipoProducto.setUsuarioCreacion(user.getIdUsuario());
         tipoProducto.setFechaCreacion(new Date());
+        tipoProducto.setEstado(true);
         tipoProductoDAO.add(tipoProducto);
         JsonResponse msg = new JsonResponse("Success", "Tipo de Producto agregada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
