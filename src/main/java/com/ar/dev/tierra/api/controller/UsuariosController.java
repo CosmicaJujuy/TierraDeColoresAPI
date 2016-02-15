@@ -20,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -75,13 +76,13 @@ public class UsuariosController implements Serializable {
             ClassLoader classloader = Thread.currentThread().getContextClassLoader();
             InputStream is = classloader.getResourceAsStream("dd.png");
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                int nRead;
-                byte[] bytes = new byte[16384];
-                while ((nRead = is.read(bytes, 0, bytes.length)) != -1) {
-                    buffer.write(bytes, 0, nRead);
-                }
-                buffer.flush();
-                usuarios.setImagen(buffer.toByteArray());
+            int nRead;
+            byte[] bytes = new byte[16384];
+            while ((nRead = is.read(bytes, 0, bytes.length)) != -1) {
+                buffer.write(bytes, 0, nRead);
+            }
+            buffer.flush();
+            usuarios.setImagen(buffer.toByteArray());
             usuariosDAO.addUsuario(usuarios);
             responseEntity = new ResponseEntity(HttpStatus.OK);
         } else {
@@ -193,6 +194,13 @@ public class UsuariosController implements Serializable {
         user.setIdUsuarioModificacion(userAdmin.getIdUsuario());
         usuariosDAO.updateUsuario(user);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @RequestMapping(value = "/logged", method = RequestMethod.POST)
+    public ResponseEntity<?> isLogged(OAuth2Authentication authentication) {
+        String credential = (String) authentication.getCredentials();
+        return null;
     }
 
 }
