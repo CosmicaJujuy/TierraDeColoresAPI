@@ -7,8 +7,6 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -57,14 +55,23 @@ public class Producto implements Serializable {
     @Column(name = "color_producto", nullable = false, length = 150)
     private String colorProducto;
 
-    @Column(name = "precio_costo", nullable = false)
+    @Column(name = "precio_costo")
     private int precioCosto;
 
-    @Column(name = "precio_venta", nullable = false)
+    @Column(name = "precio_venta")
     private int precioVenta;
 
-    @Column(name = "cantidad_producto", nullable = false)
-    private int cantidadProducto;
+    @Column(name = "precio_lista", nullable = false)
+    private int precioLista;
+
+    @Column(name = "cantidad_clase_b")
+    private int cantidadClaseB;
+
+    @Column(name = "cantidad_clase_n")
+    private int cantidadClaseN;
+
+    @Column(name = "cantidad_total", nullable = false)
+    private int cantidadTotal;
 
     @Column(name = "cantidad_minima", nullable = false)
     private int cantidadMinima;
@@ -96,7 +103,7 @@ public class Producto implements Serializable {
     public Producto() {
     }
 
-    public Producto(BigInteger idProducto, Categoria categoria, Marcas marcas, Proveedor proveedor, Sexo sexo, Temporada temporada, TipoProducto tipoProducto, String descripcion, String colorProducto, int precioCosto, int precioVenta, int cantidadProducto, int cantidadMinima, String talla, Date fechaProducto, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
+    public Producto(BigInteger idProducto, Categoria categoria, Marcas marcas, Proveedor proveedor, Sexo sexo, Temporada temporada, TipoProducto tipoProducto, String descripcion, String colorProducto, int precioCosto, int precioVenta, int precioLista, int cantidadClaseB, int cantidadClaseN, int cantidadTotal, int cantidadMinima, String talla, Date fechaProducto, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
         this.idProducto = idProducto;
         this.categoria = categoria;
         this.marcas = marcas;
@@ -108,7 +115,10 @@ public class Producto implements Serializable {
         this.colorProducto = colorProducto;
         this.precioCosto = precioCosto;
         this.precioVenta = precioVenta;
-        this.cantidadProducto = cantidadProducto;
+        this.precioLista = precioLista;
+        this.cantidadClaseB = cantidadClaseB;
+        this.cantidadClaseN = cantidadClaseN;
+        this.cantidadTotal = cantidadTotal;
         this.cantidadMinima = cantidadMinima;
         this.talla = talla;
         this.fechaProducto = fechaProducto;
@@ -118,7 +128,7 @@ public class Producto implements Serializable {
         this.usuarioCreacion = usuarioCreacion;
         this.usuarioModificacion = usuarioModificacion;
     }
-
+    
     /**
      * @return the idProducto
      */
@@ -274,20 +284,6 @@ public class Producto implements Serializable {
     }
 
     /**
-     * @return the cantidadProducto
-     */
-    public int getCantidadProducto() {
-        return cantidadProducto;
-    }
-
-    /**
-     * @param cantidadProducto the cantidadProducto to set
-     */
-    public void setCantidadProducto(int cantidadProducto) {
-        this.cantidadProducto = cantidadProducto;
-    }
-
-    /**
      * @return the cantidadMinima
      */
     public int getCantidadMinima() {
@@ -397,6 +393,62 @@ public class Producto implements Serializable {
      */
     public void setUsuarioModificacion(Integer usuarioModificacion) {
         this.usuarioModificacion = usuarioModificacion;
+    }
+
+    /**
+     * @return the precioLista
+     */
+    public int getPrecioLista() {
+        return precioLista;
+    }
+
+    /**
+     * @param precioLista the precioLista to set
+     */
+    public void setPrecioLista(int precioLista) {
+        this.precioLista = precioLista;
+    }
+
+    /**
+     * @return the cantidadClaseB
+     */
+    public int getCantidadClaseB() {
+        return cantidadClaseB;
+    }
+
+    /**
+     * @param cantidadClaseB the cantidadClaseB to set
+     */
+    public void setCantidadClaseB(int cantidadClaseB) {
+        this.cantidadClaseB = cantidadClaseB;
+    }
+
+    /**
+     * @return the cantidadClaseN
+     */
+    public int getCantidadClaseN() {
+        return cantidadClaseN;
+    }
+
+    /**
+     * @param cantidadClaseN the cantidadClaseN to set
+     */
+    public void setCantidadClaseN(int cantidadClaseN) {
+        this.cantidadClaseN = cantidadClaseN;
+    }
+
+    /**
+     * @return the cantidadTotal
+     */
+    public int getCantidadTotal() {
+        return cantidadTotal;
+    }
+
+    /**
+     * @param cantidadTotal the cantidadTotal to set
+     */
+    public void setCantidadTotal(int cantidadTotal) {
+        this.cantidadTotal = cantidadTotal;
     }
 
 }

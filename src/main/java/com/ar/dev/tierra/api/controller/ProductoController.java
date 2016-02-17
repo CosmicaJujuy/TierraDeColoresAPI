@@ -58,6 +58,8 @@ public class ProductoController implements Serializable {
         producto.setDescripcion(descripcion.toUpperCase());
         producto.setUsuarioCreacion(user.getIdUsuario());
         producto.setFechaCreacion(new Date());
+        int cantidadTotal = producto.getCantidadClaseB() + producto.getCantidadClaseN();
+        producto.setCantidadTotal(cantidadTotal);
         productoDAO.add(producto);
         JsonResponse msg = new JsonResponse("Success", "Producto agregado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
