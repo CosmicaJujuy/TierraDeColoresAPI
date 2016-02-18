@@ -58,8 +58,6 @@ public class ProductoController implements Serializable {
         producto.setDescripcion(descripcion.toUpperCase());
         producto.setUsuarioCreacion(user.getIdUsuario());
         producto.setFechaCreacion(new Date());
-        int cantidadTotal = producto.getCantidadClaseB() + producto.getCantidadClaseN();
-        producto.setCantidadTotal(cantidadTotal);
         productoDAO.add(producto);
         JsonResponse msg = new JsonResponse("Success", "Producto agregado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
@@ -90,7 +88,7 @@ public class ProductoController implements Serializable {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public ResponseEntity<?> findById(@RequestParam("id") BigInteger id) {
+    public ResponseEntity<?> findById(@RequestParam("id") int id) {
         Producto p = productoDAO.findById(id);
         if (p == null || p.isEstadoProducto() == false) {
             JsonResponse jr = new JsonResponse("error", "No se encontro el producto");

@@ -23,7 +23,16 @@ public class Producto implements Serializable {
 
     @Id
     @Column(name = "id_producto", unique = true, nullable = false)
-    private BigInteger idProducto;
+    private int idProducto;
+
+    @Column(name = "codigo_producto", unique = true, nullable = false)
+    private BigInteger codigoProducto;
+
+    @Column(name = "clase_producto", unique = true, nullable = false)
+    private String claseProducto;
+
+    @Column(name = "numero_factura", unique = true, nullable = false)
+    private String numeroFactura;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "categoria_producto", nullable = false)
@@ -64,12 +73,6 @@ public class Producto implements Serializable {
     @Column(name = "precio_lista", nullable = false)
     private int precioLista;
 
-    @Column(name = "cantidad_clase_b")
-    private int cantidadClaseB;
-
-    @Column(name = "cantidad_clase_n")
-    private int cantidadClaseN;
-
     @Column(name = "cantidad_total", nullable = false)
     private int cantidadTotal;
 
@@ -103,8 +106,11 @@ public class Producto implements Serializable {
     public Producto() {
     }
 
-    public Producto(BigInteger idProducto, Categoria categoria, Marcas marcas, Proveedor proveedor, Sexo sexo, Temporada temporada, TipoProducto tipoProducto, String descripcion, String colorProducto, int precioCosto, int precioVenta, int precioLista, int cantidadClaseB, int cantidadClaseN, int cantidadTotal, int cantidadMinima, String talla, Date fechaProducto, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
+    public Producto(int idProducto, BigInteger codigoProducto, String claseProducto, String numeroFactura, Categoria categoria, Marcas marcas, Proveedor proveedor, Sexo sexo, Temporada temporada, TipoProducto tipoProducto, String descripcion, String colorProducto, int precioCosto, int precioVenta, int precioLista, int cantidadTotal, int cantidadMinima, String talla, Date fechaProducto, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
         this.idProducto = idProducto;
+        this.codigoProducto = codigoProducto;
+        this.claseProducto = claseProducto;
+        this.numeroFactura = numeroFactura;
         this.categoria = categoria;
         this.marcas = marcas;
         this.proveedor = proveedor;
@@ -116,8 +122,6 @@ public class Producto implements Serializable {
         this.precioCosto = precioCosto;
         this.precioVenta = precioVenta;
         this.precioLista = precioLista;
-        this.cantidadClaseB = cantidadClaseB;
-        this.cantidadClaseN = cantidadClaseN;
         this.cantidadTotal = cantidadTotal;
         this.cantidadMinima = cantidadMinima;
         this.talla = talla;
@@ -127,20 +131,6 @@ public class Producto implements Serializable {
         this.fechaModificacion = fechaModificacion;
         this.usuarioCreacion = usuarioCreacion;
         this.usuarioModificacion = usuarioModificacion;
-    }
-    
-    /**
-     * @return the idProducto
-     */
-    public BigInteger getIdProducto() {
-        return idProducto;
-    }
-
-    /**
-     * @param idProducto the idProducto to set
-     */
-    public void setIdProducto(BigInteger idProducto) {
-        this.idProducto = idProducto;
     }
 
     /**
@@ -410,34 +400,6 @@ public class Producto implements Serializable {
     }
 
     /**
-     * @return the cantidadClaseB
-     */
-    public int getCantidadClaseB() {
-        return cantidadClaseB;
-    }
-
-    /**
-     * @param cantidadClaseB the cantidadClaseB to set
-     */
-    public void setCantidadClaseB(int cantidadClaseB) {
-        this.cantidadClaseB = cantidadClaseB;
-    }
-
-    /**
-     * @return the cantidadClaseN
-     */
-    public int getCantidadClaseN() {
-        return cantidadClaseN;
-    }
-
-    /**
-     * @param cantidadClaseN the cantidadClaseN to set
-     */
-    public void setCantidadClaseN(int cantidadClaseN) {
-        this.cantidadClaseN = cantidadClaseN;
-    }
-
-    /**
      * @return the cantidadTotal
      */
     public int getCantidadTotal() {
@@ -449,6 +411,62 @@ public class Producto implements Serializable {
      */
     public void setCantidadTotal(int cantidadTotal) {
         this.cantidadTotal = cantidadTotal;
+    }
+
+    /**
+     * @return the idProducto
+     */
+    public int getIdProducto() {
+        return idProducto;
+    }
+
+    /**
+     * @param idProducto the idProducto to set
+     */
+    public void setIdProducto(int idProducto) {
+        this.idProducto = idProducto;
+    }
+
+    /**
+     * @return the codigoProducto
+     */
+    public BigInteger getCodigoProducto() {
+        return codigoProducto;
+    }
+
+    /**
+     * @param codigoProducto the codigoProducto to set
+     */
+    public void setCodigoProducto(BigInteger codigoProducto) {
+        this.codigoProducto = codigoProducto;
+    }
+
+    /**
+     * @return the claseProducto
+     */
+    public String getClaseProducto() {
+        return claseProducto;
+    }
+
+    /**
+     * @param claseProducto the claseProducto to set
+     */
+    public void setClaseProducto(String claseProducto) {
+        this.claseProducto = claseProducto;
+    }
+
+    /**
+     * @return the numeroFactura
+     */
+    public String getNumeroFactura() {
+        return numeroFactura;
+    }
+
+    /**
+     * @param numeroFactura the numeroFactura to set
+     */
+    public void setNumeroFactura(String numeroFactura) {
+        this.numeroFactura = numeroFactura;
     }
 
 }

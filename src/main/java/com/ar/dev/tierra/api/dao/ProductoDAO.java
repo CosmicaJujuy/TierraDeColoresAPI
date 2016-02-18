@@ -27,7 +27,7 @@ public interface ProductoDAO {
 
     public void delete(Producto producto);
     
-    public Producto findById(BigInteger id);
+    public Producto findById(int id);
     
     public List<Producto> findByText(String text);
 }

@@ -60,7 +60,7 @@ public class ProductoDAOImpl implements ProductoDAO {
     }
 
     @Override
-    public Producto findById(BigInteger id) {
+    public Producto findById(int id) {
         Criteria criteria = getSession().createCriteria(Producto.class);
         criteria.add(Restrictions.eq("idProducto", id));
         Producto producto = (Producto) criteria.uniqueResult();
