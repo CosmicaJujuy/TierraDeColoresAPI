@@ -54,10 +54,6 @@ public class Producto implements Serializable {
     @JoinColumn(name = "temporada_producto", nullable = false)
     private Temporada temporada;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "tipo_producto", nullable = false)
-    private TipoProducto tipoProducto;
-
     @Column(name = "descripcion", nullable = false, length = 200)
     private String descripcion;
 
@@ -106,7 +102,7 @@ public class Producto implements Serializable {
     public Producto() {
     }
 
-    public Producto(int idProducto, BigInteger codigoProducto, String claseProducto, String numeroFactura, Categoria categoria, Marcas marcas, Proveedor proveedor, Sexo sexo, Temporada temporada, TipoProducto tipoProducto, String descripcion, String colorProducto, int precioCosto, int precioVenta, int precioLista, int cantidadTotal, int cantidadMinima, String talla, Date fechaProducto, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
+    public Producto(int idProducto, BigInteger codigoProducto, String claseProducto, String numeroFactura, Categoria categoria, Marcas marcas, Proveedor proveedor, Sexo sexo, Temporada temporada, String descripcion, String colorProducto, int precioCosto, int precioVenta, int precioLista, int cantidadTotal, int cantidadMinima, String talla, Date fechaProducto, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
         this.idProducto = idProducto;
         this.codigoProducto = codigoProducto;
         this.claseProducto = claseProducto;
@@ -116,7 +112,6 @@ public class Producto implements Serializable {
         this.proveedor = proveedor;
         this.sexo = sexo;
         this.temporada = temporada;
-        this.tipoProducto = tipoProducto;
         this.descripcion = descripcion;
         this.colorProducto = colorProducto;
         this.precioCosto = precioCosto;
@@ -201,20 +196,6 @@ public class Producto implements Serializable {
      */
     public void setTemporada(Temporada temporada) {
         this.temporada = temporada;
-    }
-
-    /**
-     * @return the tipoProducto
-     */
-    public TipoProducto getTipoProducto() {
-        return tipoProducto;
-    }
-
-    /**
-     * @param tipoProducto the tipoProducto to set
-     */
-    public void setTipoProducto(TipoProducto tipoProducto) {
-        this.tipoProducto = tipoProducto;
     }
 
     /**

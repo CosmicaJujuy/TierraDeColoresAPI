@@ -5,9 +5,12 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -44,10 +47,14 @@ public class Categoria implements Serializable {
     @Column(name = "estado", nullable = false)
     private boolean estado;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "tipo_categoria", nullable = false)
+    private TipoProducto tipoCategoria;
+
     public Categoria() {
     }
 
-    public Categoria(int idCategoria, String nombreCategoria, int usuarioCreacion, Integer usuarioModificacion, Date fechaCreacion, Date fechaModificacion, boolean estado) {
+    public Categoria(int idCategoria, String nombreCategoria, int usuarioCreacion, Integer usuarioModificacion, Date fechaCreacion, Date fechaModificacion, boolean estado, TipoProducto tipoCategoria) {
         this.idCategoria = idCategoria;
         this.nombreCategoria = nombreCategoria;
         this.usuarioCreacion = usuarioCreacion;
@@ -55,6 +62,7 @@ public class Categoria implements Serializable {
         this.fechaCreacion = fechaCreacion;
         this.fechaModificacion = fechaModificacion;
         this.estado = estado;
+        this.tipoCategoria = tipoCategoria;
     }
 
     /**
@@ -153,6 +161,20 @@ public class Categoria implements Serializable {
      */
     public void setEstado(boolean estado) {
         this.estado = estado;
+    }
+
+    /**
+     * @return the tipoCategoria
+     */
+    public TipoProducto getTipoCategoria() {
+        return tipoCategoria;
+    }
+
+    /**
+     * @param tipoCategoria the tipoCategoria to set
+     */
+    public void setTipoCategoria(TipoProducto tipoCategoria) {
+        this.tipoCategoria = tipoCategoria;
     }
 
 }

@@ -6,9 +6,11 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,38 +22,47 @@ import javax.persistence.TemporalType;
 @Table(name = "tarjeta")
 public class Tarjeta implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id_tarjeta", unique = true, nullable = false)
     private int idTarjeta;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "tarjeta_entidad", nullable = false)
     private EntidadBancaria entidadBancaria;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "tarjeta_medio", nullable = false)
     private MedioPago medioPago;
+
+    @Column(name = "nombre_tarjeta", nullable = false, length = 150)
     private String nombreTarjeta;
-    private int tarjetaMedio;
-    private int tarjetaEntidad;
+
+    @Column(name = "estado_tarjeta", nullable = false)
     private boolean estadoTarjeta;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "fecha_creacion", nullable = false, length = 13)
     private Date fechaCreacion;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "fecha_modificacion", length = 13)
     private Date fechaModificacion;
+
+    @Column(name = "usuario_creacion")
     private Integer usuarioCreacion;
+
+    @Column(name = "usuario_modificacion")
     private Integer usuarioModificacion;
 
     public Tarjeta() {
     }
 
-    public Tarjeta(EntidadBancaria entidadBancaria, MedioPago medioPago, String nombreTarjeta, int tarjetaMedio, int tarjetaEntidad, boolean estadoTarjeta, Date fechaCreacion) {
-        this.entidadBancaria = entidadBancaria;
-        this.medioPago = medioPago;
-        this.nombreTarjeta = nombreTarjeta;
-        this.tarjetaMedio = tarjetaMedio;
-        this.tarjetaEntidad = tarjetaEntidad;
-        this.estadoTarjeta = estadoTarjeta;
-        this.fechaCreacion = fechaCreacion;
-    }
-
-    public Tarjeta(int idTarjeta, EntidadBancaria entidadBancaria, MedioPago medioPago, String nombreTarjeta, int tarjetaMedio, int tarjetaEntidad, boolean estadoTarjeta, Date fechaCreacion, Date fechaModificacion, Integer usuarioCreacion, Integer usuarioModificacion) {
+    public Tarjeta(int idTarjeta, EntidadBancaria entidadBancaria, MedioPago medioPago, String nombreTarjeta, boolean estadoTarjeta, Date fechaCreacion, Date fechaModificacion, Integer usuarioCreacion, Integer usuarioModificacion) {
         this.idTarjeta = idTarjeta;
         this.entidadBancaria = entidadBancaria;
         this.medioPago = medioPago;
         this.nombreTarjeta = nombreTarjeta;
-        this.tarjetaMedio = tarjetaMedio;
-        this.tarjetaEntidad = tarjetaEntidad;
         this.estadoTarjeta = estadoTarjeta;
         this.fechaCreacion = fechaCreacion;
         this.fechaModificacion = fechaModificacion;
@@ -59,107 +70,128 @@ public class Tarjeta implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
     }
 
-    @Id
-
-    @Column(name = "id_tarjeta", unique = true, nullable = false)
+    /**
+     * @return the idTarjeta
+     */
     public int getIdTarjeta() {
-        return this.idTarjeta;
+        return idTarjeta;
     }
 
+    /**
+     * @param idTarjeta the idTarjeta to set
+     */
     public void setIdTarjeta(int idTarjeta) {
         this.idTarjeta = idTarjeta;
     }
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @PrimaryKeyJoinColumn
+    /**
+     * @return the entidadBancaria
+     */
     public EntidadBancaria getEntidadBancaria() {
-        return this.entidadBancaria;
+        return entidadBancaria;
     }
 
+    /**
+     * @param entidadBancaria the entidadBancaria to set
+     */
     public void setEntidadBancaria(EntidadBancaria entidadBancaria) {
         this.entidadBancaria = entidadBancaria;
     }
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @PrimaryKeyJoinColumn
+    /**
+     * @return the medioPago
+     */
     public MedioPago getMedioPago() {
-        return this.medioPago;
+        return medioPago;
     }
 
+    /**
+     * @param medioPago the medioPago to set
+     */
     public void setMedioPago(MedioPago medioPago) {
         this.medioPago = medioPago;
     }
 
-    @Column(name = "nombre_tarjeta", nullable = false, length = 150)
+    /**
+     * @return the nombreTarjeta
+     */
     public String getNombreTarjeta() {
-        return this.nombreTarjeta;
+        return nombreTarjeta;
     }
 
+    /**
+     * @param nombreTarjeta the nombreTarjeta to set
+     */
     public void setNombreTarjeta(String nombreTarjeta) {
         this.nombreTarjeta = nombreTarjeta;
     }
 
-    @Column(name = "tarjeta_medio", nullable = false)
-    public int getTarjetaMedio() {
-        return this.tarjetaMedio;
-    }
-
-    public void setTarjetaMedio(int tarjetaMedio) {
-        this.tarjetaMedio = tarjetaMedio;
-    }
-
-    @Column(name = "tarjeta_entidad", nullable = false)
-    public int getTarjetaEntidad() {
-        return this.tarjetaEntidad;
-    }
-
-    public void setTarjetaEntidad(int tarjetaEntidad) {
-        this.tarjetaEntidad = tarjetaEntidad;
-    }
-
-    @Column(name = "estado_tarjeta", nullable = false)
+    /**
+     * @return the estadoTarjeta
+     */
     public boolean isEstadoTarjeta() {
-        return this.estadoTarjeta;
+        return estadoTarjeta;
     }
 
+    /**
+     * @param estadoTarjeta the estadoTarjeta to set
+     */
     public void setEstadoTarjeta(boolean estadoTarjeta) {
         this.estadoTarjeta = estadoTarjeta;
     }
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "fecha_creacion", nullable = false, length = 13)
+    /**
+     * @return the fechaCreacion
+     */
     public Date getFechaCreacion() {
-        return this.fechaCreacion;
+        return fechaCreacion;
     }
 
+    /**
+     * @param fechaCreacion the fechaCreacion to set
+     */
     public void setFechaCreacion(Date fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "fecha_modificacion", length = 13)
+    /**
+     * @return the fechaModificacion
+     */
     public Date getFechaModificacion() {
-        return this.fechaModificacion;
+        return fechaModificacion;
     }
 
+    /**
+     * @param fechaModificacion the fechaModificacion to set
+     */
     public void setFechaModificacion(Date fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }
 
-    @Column(name = "usuario_creacion")
+    /**
+     * @return the usuarioCreacion
+     */
     public Integer getUsuarioCreacion() {
-        return this.usuarioCreacion;
+        return usuarioCreacion;
     }
 
+    /**
+     * @param usuarioCreacion the usuarioCreacion to set
+     */
     public void setUsuarioCreacion(Integer usuarioCreacion) {
         this.usuarioCreacion = usuarioCreacion;
     }
 
-    @Column(name = "usuario_modificacion")
+    /**
+     * @return the usuarioModificacion
+     */
     public Integer getUsuarioModificacion() {
-        return this.usuarioModificacion;
+        return usuarioModificacion;
     }
 
+    /**
+     * @param usuarioModificacion the usuarioModificacion to set
+     */
     public void setUsuarioModificacion(Integer usuarioModificacion) {
         this.usuarioModificacion = usuarioModificacion;
     }
