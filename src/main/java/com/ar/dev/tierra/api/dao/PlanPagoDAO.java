@@ -5,7 +5,7 @@
  */
 package com.ar.dev.tierra.api.dao;
 
-import com.ar.dev.tierra.api.model.Cliente;
+import com.ar.dev.tierra.api.model.PlanPago;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -16,18 +16,13 @@ import org.springframework.stereotype.Repository;
  */
 @Component
 @Repository
-public interface ClienteDAO {
+public interface PlanPagoDAO {
 
-    public List<Cliente> getAll();
+    public List<PlanPago> getAll();
 
-    public void update(Cliente cliente);
+    public void update(PlanPago planPago);
 
-    public int add(Cliente cliente);
+    public void add(PlanPago planPago);
 
-    public void delete(Cliente cliente);
-
-    public Cliente searchById(int idCliente);
-
-    public List<Cliente> searchByApellido(String nombreApellido);
-
+    public void delete(PlanPago planPago);
 }

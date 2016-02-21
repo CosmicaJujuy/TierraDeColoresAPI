@@ -22,7 +22,10 @@ public interface FacturaDAO {
 
     public void update(Factura factura);
 
-    public void add(Factura factura);
+    public int add(Factura factura);
 
     public void delete(Factura factura);
+
+    public Factura searchById(int idFactura);
+    
 }

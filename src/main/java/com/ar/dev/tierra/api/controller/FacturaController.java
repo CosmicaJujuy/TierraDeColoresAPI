@@ -22,6 +22,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -54,8 +55,9 @@ public class FacturaController implements Serializable {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
         factura.setUsuarioCreacion(user.getIdUsuario());
         factura.setFechaCreacion(new Date());
-        facturaDAO.add(factura);
-        JsonResponse msg = new JsonResponse("Success", "Factura agregada con exito");
+        factura.setEstado("INICIADO");
+        int idFactura = facturaDAO.add(factura);
+        JsonResponse msg = new JsonResponse("Success", String.valueOf(idFactura));
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
@@ -80,5 +82,15 @@ public class FacturaController implements Serializable {
         facturaDAO.delete(factura);
         JsonResponse msg = new JsonResponse("Success", "Factura eliminada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    public ResponseEntity<?> searchById(@RequestParam("idFactura") int id) {
+        Factura factura = facturaDAO.searchById(id);
+        if (factura != null) {
+            return new ResponseEntity<>(factura, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

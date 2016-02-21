@@ -5,9 +5,8 @@
  */
 package com.ar.dev.tierra.api.dao.impl;
 
-import com.ar.dev.tierra.api.dao.FacturaDAO;
-import com.ar.dev.tierra.api.model.Factura;
-import java.io.Serializable;
+import com.ar.dev.tierra.api.dao.PlanPagoDAO;
+import com.ar.dev.tierra.api.model.PlanPago;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -24,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class FacturaDAOImpl implements FacturaDAO {
+public class PlanPagoDAOImpl implements PlanPagoDAO {
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -35,35 +34,27 @@ public class FacturaDAOImpl implements FacturaDAO {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Factura> getAll() {
-        Criteria criteria = getSession().createCriteria(Factura.class);
-        criteria.addOrder(Order.asc("idFactura"));
-        List<Factura> list = criteria.list();
+    public List<PlanPago> getAll() {
+        Criteria criteria = getSession().createCriteria(PlanPago.class);
+        criteria.add(Restrictions.eq("estadoPlanes", true));
+        criteria.addOrder(Order.asc("idPlanesPago"));
+        List<PlanPago> list = criteria.list();
         return list;
     }
 
     @Override
-    public void update(Factura factura) {
-        getSession().update(factura);
+    public void update(PlanPago planPago) {
+        getSession().update(planPago);
     }
 
     @Override
-    public int add(Factura factura) {
-        Serializable idFactura = getSession().save(factura);
-        return (int) idFactura;
+    public void add(PlanPago planPago) {
+        getSession().save(planPago);
     }
 
     @Override
-    public void delete(Factura factura) {
-        getSession().delete(factura);
-    }
-
-    @Override
-    public Factura searchById(int idFactura) {
-        Criteria criteria = getSession().createCriteria(Factura.class);
-        criteria.add(Restrictions.eq("idFactura", idFactura));
-        Factura foundFactura = (Factura) criteria.uniqueResult();
-        return foundFactura;
+    public void delete(PlanPago planPago) {
+        getSession().delete(planPago);
     }
 
 }

@@ -92,7 +92,7 @@ public class ProductoController implements Serializable {
         Producto p = productoDAO.findById(id);
         if (p == null || p.isEstadoProducto() == false) {
             JsonResponse jr = new JsonResponse("error", "No se encontro el producto");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(jr, HttpStatus.BAD_REQUEST);
         } else {
             return new ResponseEntity<>(p, HttpStatus.OK);
         }

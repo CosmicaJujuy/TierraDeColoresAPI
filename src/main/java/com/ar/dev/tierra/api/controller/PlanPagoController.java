@@ -5,10 +5,10 @@
  */
 package com.ar.dev.tierra.api.controller;
 
-import com.ar.dev.tierra.api.dao.ClienteDAO;
+import com.ar.dev.tierra.api.dao.PlanPagoDAO;
 import com.ar.dev.tierra.api.dao.UsuariosDAO;
-import com.ar.dev.tierra.api.model.Cliente;
 import com.ar.dev.tierra.api.model.JsonResponse;
+import com.ar.dev.tierra.api.model.PlanPago;
 import com.ar.dev.tierra.api.model.Usuarios;
 import java.io.Serializable;
 import java.util.Date;
@@ -22,7 +22,6 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -30,18 +29,18 @@ import org.springframework.web.bind.annotation.RestController;
  * @author PauloGaldo
  */
 @RestController
-@RequestMapping("/cliente")
-public class ClienteController implements Serializable {
+@RequestMapping("/plan")
+public class PlanPagoController implements Serializable {
 
     @Autowired
-    ClienteDAO clienteDAO;
+    PlanPagoDAO planPagoDAO;
 
     @Autowired
     UsuariosDAO usuariosDAO;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
-        List<Cliente> list = clienteDAO.getAll();
+        List<PlanPago> list = planPagoDAO.getAll();
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
@@ -51,55 +50,38 @@ public class ClienteController implements Serializable {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<?> add(OAuth2Authentication authentication,
-            @RequestBody Cliente cliente) {
+            @RequestBody PlanPago planPago) {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
-        cliente.setUsuarioCreacion(user.getIdUsuario());
-        cliente.setFechaCreacion(new Date());
-        clienteDAO.add(cliente);
-        JsonResponse msg = new JsonResponse("Success", "Cliente agregado con exito");
+        planPago.setUsuarioCreacion(user.getIdUsuario());
+        planPago.setFechaCreacion(new Date());
+        planPago.setEstadoPlanes(true);
+        planPagoDAO.add(planPago);
+        JsonResponse msg = new JsonResponse("Success", "Plan de pago agregado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<?> update(OAuth2Authentication authentication,
-            @RequestBody Cliente cliente) {
+            @RequestBody PlanPago planPago) {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
-        cliente.setUsuarioModificacion(user.getIdUsuario());
-        cliente.setFechaModificacion(new Date());
-        clienteDAO.update(cliente);
-        JsonResponse msg = new JsonResponse("Success", "Cliente modificado con exito");
+        planPago.setUsuarioMoficacion(user.getIdUsuario());
+        planPago.setFechaModificacion(new Date());
+        planPagoDAO.update(planPago);
+        JsonResponse msg = new JsonResponse("Success", "Plan de pago modificado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<?> delete(OAuth2Authentication authentication,
-            @RequestBody Cliente cliente) {
+            @RequestBody PlanPago planPago) {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
-        cliente.setUsuarioModificacion(user.getIdUsuario());
-        cliente.setFechaModificacion(new Date());
-        clienteDAO.delete(cliente);
-        JsonResponse msg = new JsonResponse("Success", "Cliente eliminado con exito");
+        planPago.setEstadoPlanes(false);
+        planPago.setUsuarioMoficacion(user.getIdUsuario());
+        planPago.setFechaModificacion(new Date());
+        planPagoDAO.update(planPago);
+        JsonResponse msg = new JsonResponse("Success", "Plan de pago eliminado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/searchId", method = RequestMethod.POST)
-    public ResponseEntity<?> searchById(@RequestParam("idCliente") int idCliente) {
-        Cliente cliente = clienteDAO.searchById(idCliente);
-        if (cliente != null) {
-            return new ResponseEntity<>(cliente, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @RequestMapping(value = "/searchApellido", method = RequestMethod.POST)
-    public ResponseEntity<?> searchByNombreApellido(@RequestParam("apellidoCliente") String apellidoCliente) {
-        List<Cliente> list = clienteDAO.searchByApellido(apellidoCliente);
-        if (!list.isEmpty()) {
-            return new ResponseEntity<>(list, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(list, HttpStatus.BAD_REQUEST);
-        }
-    }
 }
