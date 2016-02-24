@@ -75,4 +75,12 @@ public class ProductoDAOImpl implements ProductoDAO {
         return productos;
     }
 
+    @Override
+    public List<Producto> findByBarcode(String barcode) {
+        Criteria criteria = getSession().createCriteria(Producto.class);
+        criteria.add(Restrictions.ilike("codigoProducto", barcode));
+        List<Producto> list = criteria.list();
+        return list;
+    }
+
 }

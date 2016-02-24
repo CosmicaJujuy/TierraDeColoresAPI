@@ -11,7 +11,6 @@ import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Producto;
 import com.ar.dev.tierra.api.model.Usuarios;
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,6 +104,16 @@ public class ProductoController implements Serializable {
             return new ResponseEntity<>(productos, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(productos, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/barcode", method = RequestMethod.POST)
+    public ResponseEntity<?> findByBarcode(@RequestParam("barcode") String barcode) {
+        List<Producto> list = productoDAO.findByBarcode(barcode);
+        if (!list.isEmpty()) {
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(list, HttpStatus.BAD_REQUEST);
         }
     }
 }

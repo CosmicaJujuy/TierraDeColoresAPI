@@ -7,6 +7,8 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -22,11 +24,12 @@ import javax.persistence.TemporalType;
 public class Producto implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_producto", unique = true, nullable = false)
     private int idProducto;
 
     @Column(name = "codigo_producto", unique = true, nullable = false)
-    private BigInteger codigoProducto;
+    private String codigoProducto;
 
     @Column(name = "clase_producto", unique = true, nullable = false)
     private String claseProducto;
@@ -102,7 +105,7 @@ public class Producto implements Serializable {
     public Producto() {
     }
 
-    public Producto(int idProducto, BigInteger codigoProducto, String claseProducto, String numeroFactura, Categoria categoria, Marcas marcas, Proveedor proveedor, Sexo sexo, Temporada temporada, String descripcion, String colorProducto, int precioCosto, int precioVenta, int precioLista, int cantidadTotal, int cantidadMinima, String talla, Date fechaProducto, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
+    public Producto(int idProducto, String codigoProducto, String claseProducto, String numeroFactura, Categoria categoria, Marcas marcas, Proveedor proveedor, Sexo sexo, Temporada temporada, String descripcion, String colorProducto, int precioCosto, int precioVenta, int precioLista, int cantidadTotal, int cantidadMinima, String talla, Date fechaProducto, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
         this.idProducto = idProducto;
         this.codigoProducto = codigoProducto;
         this.claseProducto = claseProducto;
@@ -411,14 +414,14 @@ public class Producto implements Serializable {
     /**
      * @return the codigoProducto
      */
-    public BigInteger getCodigoProducto() {
+    public String getCodigoProducto() {
         return codigoProducto;
     }
 
     /**
      * @param codigoProducto the codigoProducto to set
      */
-    public void setCodigoProducto(BigInteger codigoProducto) {
+    public void setCodigoProducto(String codigoProducto) {
         this.codigoProducto = codigoProducto;
     }
 

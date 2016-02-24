@@ -30,4 +30,6 @@ public interface ProductoDAO {
     public Producto findById(int id);
     
     public List<Producto> findByText(String text);
+    
+    public List<Producto> findByBarcode(String barcode);
 }
