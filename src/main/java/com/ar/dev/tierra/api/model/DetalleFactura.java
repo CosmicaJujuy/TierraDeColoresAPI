@@ -3,9 +3,12 @@ package com.ar.dev.tierra.api.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -20,30 +23,46 @@ import javax.persistence.TemporalType;
 @Table(name = "detalle_factura")
 public class DetalleFactura implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id_detalle_factura", unique = true, nullable = false)
     private int idDetalleFactura;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_factura", nullable = false)
     private Factura factura;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_producto", nullable = false)
     private Producto producto;
+
+    @Column(name = "cantidad_detalle", nullable = false)
     private int cantidadDetalle;
+
+    @Column(name = "total_detalle", nullable = false)
     private int totalDetalle;
+
+    @Column(name = "descuento_detalle")
     private Integer descuentoDetalle;
+
+    @Column(name = "estado_detalle", nullable = false)
     private boolean estadoDetalle;
+
+    @Column(name = "usuario_creacion", nullable = false)
     private int usuarioCreacion;
+
+    @Column(name = "usuario_modificacion")
     private Integer usuarioModificacion;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "fecha_creacion", nullable = false, length = 35)
     private Date fechaCreacion;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "fecha_modificacion", length = 35)
     private Date fechaModificacion;
 
     public DetalleFactura() {
-    }
-
-    public DetalleFactura(int idDetalleFactura, Factura factura, Producto producto, int cantidadDetalle, int totalDetalle, boolean estadoDetalle, int usuarioCreacion, Date fechaCreacion) {
-        this.idDetalleFactura = idDetalleFactura;
-        this.factura = factura;
-        this.producto = producto;
-        this.cantidadDetalle = cantidadDetalle;
-        this.totalDetalle = totalDetalle;
-        this.estadoDetalle = estadoDetalle;
-        this.usuarioCreacion = usuarioCreacion;
-        this.fechaCreacion = fechaCreacion;
     }
 
     public DetalleFactura(int idDetalleFactura, Factura factura, Producto producto, int cantidadDetalle, int totalDetalle, Integer descuentoDetalle, boolean estadoDetalle, int usuarioCreacion, Integer usuarioModificacion, Date fechaCreacion, Date fechaModificacion) {
@@ -60,107 +79,156 @@ public class DetalleFactura implements Serializable {
         this.fechaModificacion = fechaModificacion;
     }
 
-    @Id
-
-    @Column(name = "id_detalle_factura", unique = true, nullable = false)
+    /**
+     * @return the idDetalleFactura
+     */
     public int getIdDetalleFactura() {
-        return this.idDetalleFactura;
+        return idDetalleFactura;
     }
 
+    /**
+     * @param idDetalleFactura the idDetalleFactura to set
+     */
     public void setIdDetalleFactura(int idDetalleFactura) {
         this.idDetalleFactura = idDetalleFactura;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_factura", nullable = false)
+    /**
+     * @return the factura
+     */
     public Factura getFactura() {
-        return this.factura;
+        return factura;
     }
 
+    /**
+     * @param factura the factura to set
+     */
     public void setFactura(Factura factura) {
         this.factura = factura;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_producto", nullable = false)
+    /**
+     * @return the producto
+     */
     public Producto getProducto() {
-        return this.producto;
+        return producto;
     }
 
+    /**
+     * @param producto the producto to set
+     */
     public void setProducto(Producto producto) {
         this.producto = producto;
     }
 
-    @Column(name = "cantidad_detalle", nullable = false)
+    /**
+     * @return the cantidadDetalle
+     */
     public int getCantidadDetalle() {
-        return this.cantidadDetalle;
+        return cantidadDetalle;
     }
 
+    /**
+     * @param cantidadDetalle the cantidadDetalle to set
+     */
     public void setCantidadDetalle(int cantidadDetalle) {
         this.cantidadDetalle = cantidadDetalle;
     }
 
-    @Column(name = "total_detalle", nullable = false)
+    /**
+     * @return the totalDetalle
+     */
     public int getTotalDetalle() {
-        return this.totalDetalle;
+        return totalDetalle;
     }
 
+    /**
+     * @param totalDetalle the totalDetalle to set
+     */
     public void setTotalDetalle(int totalDetalle) {
         this.totalDetalle = totalDetalle;
     }
 
-    @Column(name = "descuento_detalle")
+    /**
+     * @return the descuentoDetalle
+     */
     public Integer getDescuentoDetalle() {
-        return this.descuentoDetalle;
+        return descuentoDetalle;
     }
 
+    /**
+     * @param descuentoDetalle the descuentoDetalle to set
+     */
     public void setDescuentoDetalle(Integer descuentoDetalle) {
         this.descuentoDetalle = descuentoDetalle;
     }
 
-    @Column(name = "estado_detalle", nullable = false)
+    /**
+     * @return the estadoDetalle
+     */
     public boolean isEstadoDetalle() {
-        return this.estadoDetalle;
+        return estadoDetalle;
     }
 
+    /**
+     * @param estadoDetalle the estadoDetalle to set
+     */
     public void setEstadoDetalle(boolean estadoDetalle) {
         this.estadoDetalle = estadoDetalle;
     }
 
-    @Column(name = "usuario_creacion", nullable = false)
+    /**
+     * @return the usuarioCreacion
+     */
     public int getUsuarioCreacion() {
-        return this.usuarioCreacion;
+        return usuarioCreacion;
     }
 
+    /**
+     * @param usuarioCreacion the usuarioCreacion to set
+     */
     public void setUsuarioCreacion(int usuarioCreacion) {
         this.usuarioCreacion = usuarioCreacion;
     }
 
-    @Column(name = "usuario_modificacion")
+    /**
+     * @return the usuarioModificacion
+     */
     public Integer getUsuarioModificacion() {
-        return this.usuarioModificacion;
+        return usuarioModificacion;
     }
 
+    /**
+     * @param usuarioModificacion the usuarioModificacion to set
+     */
     public void setUsuarioModificacion(Integer usuarioModificacion) {
         this.usuarioModificacion = usuarioModificacion;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "fecha_creacion", nullable = false, length = 35)
+    /**
+     * @return the fechaCreacion
+     */
     public Date getFechaCreacion() {
-        return this.fechaCreacion;
+        return fechaCreacion;
     }
 
+    /**
+     * @param fechaCreacion the fechaCreacion to set
+     */
     public void setFechaCreacion(Date fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "fecha_modificacion", length = 35)
+    /**
+     * @return the fechaModificacion
+     */
     public Date getFechaModificacion() {
-        return this.fechaModificacion;
+        return fechaModificacion;
     }
 
+    /**
+     * @param fechaModificacion the fechaModificacion to set
+     */
     public void setFechaModificacion(Date fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }

@@ -2,7 +2,6 @@ package com.ar.dev.tierra.api.model;
 // Generated 11/02/2016 01:28:34 by Hibernate Tools 4.3.1
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
