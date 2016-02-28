@@ -17,15 +17,15 @@ import org.springframework.stereotype.Repository;
 @Component
 @Repository
 public interface UsuariosDAO {
-    
+
     public List<Usuarios> allUsuarios();
-    
+
     public void addUsuario(Usuarios usuarios);
-    
+
     public void updateUsuario(Usuarios usuarios);
-    
+
     public Usuarios findUsuarioByUsername(String username);
-    
+
     public Usuarios findUsuarioByDNI(Integer dni);
-    
+
 }
