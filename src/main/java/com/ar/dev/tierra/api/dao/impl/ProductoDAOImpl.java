@@ -7,7 +7,6 @@ package com.ar.dev.tierra.api.dao.impl;
 
 import com.ar.dev.tierra.api.dao.ProductoDAO;
 import com.ar.dev.tierra.api.model.Producto;
-import java.math.BigInteger;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -78,7 +77,7 @@ public class ProductoDAOImpl implements ProductoDAO {
     @Override
     public List<Producto> findByBarcode(String barcode) {
         Criteria criteria = getSession().createCriteria(Producto.class);
-        criteria.add(Restrictions.ilike("codigoProducto", barcode));
+        criteria.add(Restrictions.ilike("codigoProducto", barcode, MatchMode.START));
         List<Producto> list = criteria.list();
         return list;
     }

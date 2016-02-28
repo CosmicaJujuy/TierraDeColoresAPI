@@ -6,6 +6,7 @@
 package com.ar.dev.tierra.api.dao.impl;
 
 import com.ar.dev.tierra.api.dao.UsuariosDAO;
+import com.ar.dev.tierra.api.model.DetalleFactura;
 import com.ar.dev.tierra.api.model.Usuarios;
 import java.util.List;
 import org.hibernate.Criteria;
