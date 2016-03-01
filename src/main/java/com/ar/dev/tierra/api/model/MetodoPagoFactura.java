@@ -6,6 +6,8 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -20,27 +22,40 @@ import javax.persistence.TemporalType;
 @Table(name = "metodo_pago_factura")
 public class MetodoPagoFactura implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id_metodo_pago_factura", unique = true, nullable = false)
     private int idMetodoPagoFactura;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_factura", nullable = false)
     private Factura factura;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_plan_pago", nullable = false)
     private PlanPago planPago;
+
+    @Column(name = "monto_pago", nullable = false)
     private int montoPago;
+
+    @Column(name = "estado", nullable = false)
     private boolean estado;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "fecha_creacion", nullable = false, length = 35)
     private Date fechaCreacion;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "fecha modificacion", length = 35)
     private Date fechaModificacion;
+
+    @Column(name = "usuario_creacion", nullable = false)
     private int usuarioCreacion;
+
+    @Column(name = "usuario_modificacion")
     private Integer usuarioModificacion;
 
     public MetodoPagoFactura() {
-    }
-
-    public MetodoPagoFactura(int idMetodoPagoFactura, Factura factura, PlanPago planPago, int montoPago, boolean estado, Date fechaCreacion, int usuarioCreacion) {
-        this.idMetodoPagoFactura = idMetodoPagoFactura;
-        this.factura = factura;
-        this.planPago = planPago;
-        this.montoPago = montoPago;
-        this.estado = estado;
-        this.fechaCreacion = fechaCreacion;
-        this.usuarioCreacion = usuarioCreacion;
     }
 
     public MetodoPagoFactura(int idMetodoPagoFactura, Factura factura, PlanPago planPago, int montoPago, boolean estado, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
@@ -55,91 +70,131 @@ public class MetodoPagoFactura implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
     }
 
-    @Id
-
-    @Column(name = "id_metodo_pago_factura", unique = true, nullable = false)
+    /**
+     * @return the idMetodoPagoFactura
+     */
     public int getIdMetodoPagoFactura() {
-        return this.idMetodoPagoFactura;
+        return idMetodoPagoFactura;
     }
 
+    /**
+     * @param idMetodoPagoFactura the idMetodoPagoFactura to set
+     */
     public void setIdMetodoPagoFactura(int idMetodoPagoFactura) {
         this.idMetodoPagoFactura = idMetodoPagoFactura;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_factura", nullable = false)
+    /**
+     * @return the factura
+     */
     public Factura getFactura() {
-        return this.factura;
+        return factura;
     }
 
+    /**
+     * @param factura the factura to set
+     */
     public void setFactura(Factura factura) {
         this.factura = factura;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_plan_pago", nullable = false)
+    /**
+     * @return the planPago
+     */
     public PlanPago getPlanPago() {
-        return this.planPago;
+        return planPago;
     }
 
+    /**
+     * @param planPago the planPago to set
+     */
     public void setPlanPago(PlanPago planPago) {
         this.planPago = planPago;
     }
 
-    @Column(name = "monto_pago", nullable = false)
+    /**
+     * @return the montoPago
+     */
     public int getMontoPago() {
-        return this.montoPago;
+        return montoPago;
     }
 
+    /**
+     * @param montoPago the montoPago to set
+     */
     public void setMontoPago(int montoPago) {
         this.montoPago = montoPago;
     }
 
-    @Column(name = "estado", nullable = false)
+    /**
+     * @return the estado
+     */
     public boolean isEstado() {
-        return this.estado;
+        return estado;
     }
 
+    /**
+     * @param estado the estado to set
+     */
     public void setEstado(boolean estado) {
         this.estado = estado;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "fecha_creacion", nullable = false, length = 35)
+    /**
+     * @return the fechaCreacion
+     */
     public Date getFechaCreacion() {
-        return this.fechaCreacion;
+        return fechaCreacion;
     }
 
+    /**
+     * @param fechaCreacion the fechaCreacion to set
+     */
     public void setFechaCreacion(Date fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "fecha modificacion", length = 35)
+    /**
+     * @return the fechaModificacion
+     */
     public Date getFechaModificacion() {
-        return this.fechaModificacion;
+        return fechaModificacion;
     }
 
+    /**
+     * @param fechaModificacion the fechaModificacion to set
+     */
     public void setFechaModificacion(Date fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }
 
-    @Column(name = "usuario_creacion", nullable = false)
+    /**
+     * @return the usuarioCreacion
+     */
     public int getUsuarioCreacion() {
-        return this.usuarioCreacion;
+        return usuarioCreacion;
     }
 
+    /**
+     * @param usuarioCreacion the usuarioCreacion to set
+     */
     public void setUsuarioCreacion(int usuarioCreacion) {
         this.usuarioCreacion = usuarioCreacion;
     }
 
-    @Column(name = "usuario_modificacion")
+    /**
+     * @return the usuarioModificacion
+     */
     public Integer getUsuarioModificacion() {
-        return this.usuarioModificacion;
+        return usuarioModificacion;
     }
 
+    /**
+     * @param usuarioModificacion the usuarioModificacion to set
+     */
     public void setUsuarioModificacion(Integer usuarioModificacion) {
         this.usuarioModificacion = usuarioModificacion;
     }
 
+    
 }
