@@ -28,12 +28,12 @@ public class MetodoPagoFactura implements Serializable {
     private int idMetodoPagoFactura;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_factura", nullable = false)
-    private Factura factura;
+    @JoinColumn(name = "id_plan_pago")
+    private PlanPago planPago;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_plan_pago", nullable = false)
-    private PlanPago planPago;
+    @JoinColumn(name = "id_factura", nullable = false)
+    private Factura factura;
 
     @Column(name = "monto_pago", nullable = false)
     private int montoPago;
@@ -46,7 +46,7 @@ public class MetodoPagoFactura implements Serializable {
     private Date fechaCreacion;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "fecha modificacion", length = 35)
+    @Column(name = "fecha_modificacion", length = 35)
     private Date fechaModificacion;
 
     @Column(name = "usuario_creacion", nullable = false)
@@ -196,5 +196,4 @@ public class MetodoPagoFactura implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
     }
 
-    
 }
