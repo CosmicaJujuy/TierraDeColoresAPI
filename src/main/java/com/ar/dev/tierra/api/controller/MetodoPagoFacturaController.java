@@ -9,6 +9,7 @@ import com.ar.dev.tierra.api.dao.MetodoPagoFacturaDAO;
 import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.MetodoPagoFactura;
+import com.ar.dev.tierra.api.model.PlanPago;
 import com.ar.dev.tierra.api.model.Usuarios;
 import java.io.Serializable;
 import java.util.Date;
@@ -53,6 +54,10 @@ public class MetodoPagoFacturaController implements Serializable {
     public ResponseEntity<?> add(OAuth2Authentication authentication,
             @RequestBody MetodoPagoFactura pagoFactura) {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        if(pagoFactura.getPlanPago() == null){
+            PlanPago plan = new PlanPago(1, null, "Pago contado", 1, new Date(2016-02-02), 0, true, new Date(2016-02-02), 1);
+            pagoFactura.setPlanPago(plan);
+        }
         pagoFactura.setUsuarioCreacion(user.getIdUsuario());
         pagoFactura.setFechaCreacion(new Date());
         pagoFactura.setEstado(true);

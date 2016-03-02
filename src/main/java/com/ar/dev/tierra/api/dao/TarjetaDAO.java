@@ -25,4 +25,6 @@ public interface TarjetaDAO {
     public void add(Tarjeta tarjeta);
 
     public void delete(Tarjeta tarjeta);
+
+    public List<Tarjeta> searchEntidadMedio(int idEntidad, int idMedio);
 }

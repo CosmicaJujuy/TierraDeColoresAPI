@@ -57,4 +57,13 @@ public class PlanPagoDAOImpl implements PlanPagoDAO {
         getSession().delete(planPago);
     }
 
+    @Override
+    public List<PlanPago> searchPlanByTarjeta(int idTarjeta) {
+        Criteria criteria = getSession().createCriteria(PlanPago.class);
+        criteria.add(Restrictions.eq("estadoPlanes", true));
+        Criteria tarjetaPlan = criteria.createCriteria("tarjeta");
+        tarjetaPlan.add(Restrictions.eq("idTarjeta", idTarjeta));
+        List<PlanPago> list = criteria.list();
+        return list;
+    }
 }

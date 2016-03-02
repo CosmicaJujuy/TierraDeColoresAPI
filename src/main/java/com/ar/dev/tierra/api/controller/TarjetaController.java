@@ -22,6 +22,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -84,4 +85,15 @@ public class TarjetaController implements Serializable {
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/entidadMedio", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> searchEntidad(
+            @RequestParam("idEntidad") int idEntidad,
+            @RequestParam("idMedio") int idMedio) {
+        List<Tarjeta> list = tarjetaDAO.searchEntidadMedio(idEntidad, idMedio);
+        if (!list.isEmpty()) {
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

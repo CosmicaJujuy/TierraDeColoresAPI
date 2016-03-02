@@ -2,6 +2,7 @@ package com.ar.dev.tierra.api.model;
 // Generated 17/02/2016 00:47:04 by Hibernate Tools 4.3.1
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,6 +34,7 @@ public class Factura implements Serializable {
     private Date fechaModificacion;
     private Integer usuarioCreacion;
     private Integer usuarioModificacion;
+    private BigInteger total;
 
     public Factura() {
     }
@@ -131,4 +133,12 @@ public class Factura implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
     }
 
+    @Column(name = "total")
+    public BigInteger getTotal() {
+        return this.total;
+    }
+
+    public void setTotal(BigInteger total) {
+        this.total = total;
+    }
 }

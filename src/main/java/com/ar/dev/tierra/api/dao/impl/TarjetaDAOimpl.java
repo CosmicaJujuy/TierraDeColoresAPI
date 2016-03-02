@@ -57,4 +57,16 @@ public class TarjetaDAOimpl implements TarjetaDAO {
         getSession().delete(tarjeta);
     }
 
+    @Override
+    public List<Tarjeta> searchEntidadMedio(int idEntidad, int idMedio) {
+        Criteria criteria = getSession().createCriteria(Tarjeta.class);
+        criteria.add(Restrictions.eq("estadoTarjeta", true));
+        Criteria entidadTarjeta = criteria.createCriteria("entidadBancaria");
+        entidadTarjeta.add(Restrictions.eq("idEntidadMonetaria", idEntidad));
+        Criteria medioTarjeta = criteria.createCriteria("medioPago");
+        medioTarjeta.add(Restrictions.eq("idMedioPago", idMedio));
+        List<Tarjeta> list = criteria.list();
+        return list;
+    }
+
 }

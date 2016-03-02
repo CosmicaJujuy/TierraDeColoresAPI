@@ -11,6 +11,7 @@ import com.ar.dev.tierra.api.model.Factura;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Usuarios;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,7 @@ public class FacturaController implements Serializable {
         factura.setUsuarioCreacion(user.getIdUsuario());
         factura.setFechaCreacion(new Date());
         factura.setEstado("INICIADO");
+        factura.setTotal(BigInteger.ZERO);
         int idFactura = facturaDAO.add(factura);
         JsonResponse msg = new JsonResponse("Success", String.valueOf(idFactura));
         return new ResponseEntity<>(msg, HttpStatus.OK);
