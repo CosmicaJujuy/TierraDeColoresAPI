@@ -55,8 +55,8 @@ public class ClienteController implements Serializable {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
         cliente.setUsuarioCreacion(user.getIdUsuario());
         cliente.setFechaCreacion(new Date());
-        clienteDAO.add(cliente);
-        JsonResponse msg = new JsonResponse("Success", "Cliente agregado con exito");
+        int idCliente = clienteDAO.add(cliente);
+        JsonResponse msg = new JsonResponse("Success", String.valueOf(idCliente));
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
