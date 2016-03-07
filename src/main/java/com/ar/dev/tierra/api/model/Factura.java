@@ -35,17 +35,12 @@ public class Factura implements Serializable {
     private Integer usuarioCreacion;
     private Integer usuarioModificacion;
     private BigInteger total;
+    private String tipoFactura;
 
     public Factura() {
     }
 
-    public Factura(int idFactura, Cliente cliente, Date fechaCreacion) {
-        this.idFactura = idFactura;
-        this.cliente = cliente;
-        this.fechaCreacion = fechaCreacion;
-    }
-
-    public Factura(int idFactura, Cliente cliente, String estado, Integer idVendedor, Date fechaCreacion, Date fechaModificacion, Integer usuarioCreacion, Integer usuarioModificacion) {
+    public Factura(int idFactura, Cliente cliente, String estado, Integer idVendedor, Date fechaCreacion, Date fechaModificacion, Integer usuarioCreacion, Integer usuarioModificacion, BigInteger total, String tipoFactura) {
         this.idFactura = idFactura;
         this.cliente = cliente;
         this.estado = estado;
@@ -54,10 +49,12 @@ public class Factura implements Serializable {
         this.fechaModificacion = fechaModificacion;
         this.usuarioCreacion = usuarioCreacion;
         this.usuarioModificacion = usuarioModificacion;
+        this.total = total;
+        this.tipoFactura = tipoFactura;
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_factura", unique = true, nullable = false)
     public int getIdFactura() {
         return this.idFactura;
@@ -84,6 +81,15 @@ public class Factura implements Serializable {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    @Column(name = "tipo_factura", length = 50)
+    public String getTipoFactura() {
+        return this.tipoFactura;
+    }
+
+    public void setTipoFactura(String tipoFactura) {
+        this.tipoFactura = tipoFactura;
     }
 
     @Column(name = "id_vendedor")

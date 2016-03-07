@@ -20,7 +20,7 @@ import javax.persistence.TemporalType;
 public class Marcas implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_marca", unique = true, nullable = false)
     private int idMarca;
 

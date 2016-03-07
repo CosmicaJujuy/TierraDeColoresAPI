@@ -23,7 +23,7 @@ import javax.persistence.TemporalType;
 public class Categoria implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_categoria", unique = true, nullable = false)
     private int idCategoria;
 

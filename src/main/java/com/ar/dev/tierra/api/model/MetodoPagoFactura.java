@@ -2,6 +2,7 @@ package com.ar.dev.tierra.api.model;
 // Generated 17/02/2016 00:47:04 by Hibernate Tools 4.3.1
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,7 +37,10 @@ public class MetodoPagoFactura implements Serializable {
     private Factura factura;
 
     @Column(name = "monto_pago", nullable = false)
-    private int montoPago;
+    private BigInteger montoPago;
+
+    @Column(name = "comprobante")
+    private String comprobante;
 
     @Column(name = "estado", nullable = false)
     private boolean estado;
@@ -58,11 +62,12 @@ public class MetodoPagoFactura implements Serializable {
     public MetodoPagoFactura() {
     }
 
-    public MetodoPagoFactura(int idMetodoPagoFactura, Factura factura, PlanPago planPago, int montoPago, boolean estado, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
+    public MetodoPagoFactura(int idMetodoPagoFactura, PlanPago planPago, Factura factura, BigInteger montoPago, String comprobante, boolean estado, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
         this.idMetodoPagoFactura = idMetodoPagoFactura;
-        this.factura = factura;
         this.planPago = planPago;
+        this.factura = factura;
         this.montoPago = montoPago;
+        this.comprobante = comprobante;
         this.estado = estado;
         this.fechaCreacion = fechaCreacion;
         this.fechaModificacion = fechaModificacion;
@@ -115,14 +120,14 @@ public class MetodoPagoFactura implements Serializable {
     /**
      * @return the montoPago
      */
-    public int getMontoPago() {
+    public BigInteger getMontoPago() {
         return montoPago;
     }
 
     /**
      * @param montoPago the montoPago to set
      */
-    public void setMontoPago(int montoPago) {
+    public void setMontoPago(BigInteger montoPago) {
         this.montoPago = montoPago;
     }
 
@@ -194,6 +199,20 @@ public class MetodoPagoFactura implements Serializable {
      */
     public void setUsuarioModificacion(Integer usuarioModificacion) {
         this.usuarioModificacion = usuarioModificacion;
+    }
+
+    /**
+     * @return the comprobante
+     */
+    public String getComprobante() {
+        return comprobante;
+    }
+
+    /**
+     * @param comprobante the comprobante to set
+     */
+    public void setComprobante(String comprobante) {
+        this.comprobante = comprobante;
     }
 
 }
