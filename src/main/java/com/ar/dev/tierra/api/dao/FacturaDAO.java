@@ -19,6 +19,8 @@ import org.springframework.stereotype.Repository;
 public interface FacturaDAO {
 
     public List<Factura> getAll();
+    
+    public List<Factura> getDiary();
 
     public void update(Factura factura);
 

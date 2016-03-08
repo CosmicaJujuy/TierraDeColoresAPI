@@ -20,6 +20,8 @@ public interface UsuariosDAO {
 
     public List<Usuarios> allUsuarios();
 
+    public List<Usuarios> getVendedores();
+
     public void addUsuario(Usuarios usuarios);
 
     public void updateUsuario(Usuarios usuarios);

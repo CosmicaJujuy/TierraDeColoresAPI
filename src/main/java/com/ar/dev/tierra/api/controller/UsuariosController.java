@@ -203,4 +203,14 @@ public class UsuariosController implements Serializable {
         return null;
     }
 
+    @RequestMapping(value = "/vendedores", method = RequestMethod.GET)
+    public ResponseEntity<?> listaVendedores() {
+        List<Usuarios> vendedores = usuariosDAO.getVendedores();
+        if (!vendedores.isEmpty()) {
+            return new ResponseEntity<>(vendedores, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

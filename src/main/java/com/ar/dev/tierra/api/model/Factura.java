@@ -4,8 +4,6 @@ package com.ar.dev.tierra.api.model;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,7 +26,7 @@ public class Factura implements Serializable {
     private int idFactura;
     private Cliente cliente;
     private String estado;
-    private Integer idVendedor;
+    private Usuarios idVendedor;
     private Date fechaCreacion;
     private Date fechaModificacion;
     private Integer usuarioCreacion;
@@ -40,7 +37,7 @@ public class Factura implements Serializable {
     public Factura() {
     }
 
-    public Factura(int idFactura, Cliente cliente, String estado, Integer idVendedor, Date fechaCreacion, Date fechaModificacion, Integer usuarioCreacion, Integer usuarioModificacion, BigInteger total, String tipoFactura) {
+    public Factura(int idFactura, Cliente cliente, String estado, Usuarios idVendedor, Date fechaCreacion, Date fechaModificacion, Integer usuarioCreacion, Integer usuarioModificacion, BigInteger total, String tipoFactura) {
         this.idFactura = idFactura;
         this.cliente = cliente;
         this.estado = estado;
@@ -92,12 +89,13 @@ public class Factura implements Serializable {
         this.tipoFactura = tipoFactura;
     }
 
-    @Column(name = "id_vendedor")
-    public Integer getIdVendedor() {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_vendedor")
+    public Usuarios getIdVendedor() {
         return this.idVendedor;
     }
 
-    public void setIdVendedor(Integer idVendedor) {
+    public void setIdVendedor(Usuarios idVendedor) {
         this.idVendedor = idVendedor;
     }
 

@@ -8,6 +8,7 @@ package com.ar.dev.tierra.api.dao.impl;
 import com.ar.dev.tierra.api.dao.FacturaDAO;
 import com.ar.dev.tierra.api.model.Factura;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -37,6 +38,17 @@ public class FacturaDAOImpl implements FacturaDAO {
     @Override
     public List<Factura> getAll() {
         Criteria criteria = getSession().createCriteria(Factura.class);
+        criteria.addOrder(Order.asc("idFactura"));
+        List<Factura> list = criteria.list();
+        return list;
+    }
+
+    @Override
+    public List<Factura> getDiary() {
+        Criteria criteria = getSession().createCriteria(Factura.class);
+        Date dayControl = new Date(); 
+        Date compare = new Date(dayControl.getYear(), dayControl.getMonth(), dayControl.getDate());
+        criteria.add(Restrictions.ge("fechaCreacion", compare));
         criteria.addOrder(Order.asc("idFactura"));
         List<Factura> list = criteria.list();
         return list;

@@ -43,6 +43,17 @@ public class UsuariosDAOImpl implements UsuariosDAO {
     }
 
     @Override
+    public List<Usuarios> getVendedores() {
+        Criteria criteria = getSession().createCriteria(Usuarios.class);
+        criteria.add(Restrictions.eq("estado", true));
+        Criteria roles = criteria.createCriteria("roles");
+        roles.add(Restrictions.eq("idRol", 2));
+        criteria.addOrder(Order.asc("idUsuario"));
+        List<Usuarios> us = criteria.list();
+        return us;
+    }
+
+    @Override
     public void addUsuario(Usuarios usuarios) {
         getSession().save(usuarios);
     }
