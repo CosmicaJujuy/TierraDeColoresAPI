@@ -8,6 +8,7 @@ package com.ar.dev.tierra.api.dao.impl;
 import com.ar.dev.tierra.api.dao.FacturaDAO;
 import com.ar.dev.tierra.api.model.Factura;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -48,14 +49,14 @@ public class FacturaDAOImpl implements FacturaDAO {
     @Override
     public List<Factura> getDiary() {
         Criteria criteria = getSession().createCriteria(Factura.class);
-        Date dayControl = new Date();
+        Date dayControl = new Date();        
         Calendar c = new GregorianCalendar();
         c.set(Calendar.HOUR_OF_DAY, 0); //anything 0 - 23
         c.set(Calendar.MINUTE, 0);
         c.set(Calendar.SECOND, 0);
-        dayControl = c.getTime();
-        Date compare = new Date(dayControl.getYear(), dayControl.getMonth(), dayControl.getDate());
-        criteria.add(Restrictions.eq("fechaCreacion", dayControl));
+        c.set(dayControl.getYear(), dayControl.getMonth(), dayControl.getDate()); 
+        Timestamp ts_now = new Timestamp(c.getTimeInMillis());
+        criteria.add(Restrictions.ge("fechaCreacion", ts_now));
         criteria.addOrder(Order.asc("idFactura"));
         List<Factura> list = criteria.list();
         return list;
