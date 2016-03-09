@@ -55,7 +55,7 @@ public class FacturaDAOImpl implements FacturaDAO {
         c.set(Calendar.SECOND, 0);
         dayControl = c.getTime();
         Date compare = new Date(dayControl.getYear(), dayControl.getMonth(), dayControl.getDate());
-        criteria.add(Restrictions.ge("fechaCreacion", dayControl));
+        criteria.add(Restrictions.eq("fechaCreacion", dayControl));
         criteria.addOrder(Order.asc("idFactura"));
         List<Factura> list = criteria.list();
         return list;
