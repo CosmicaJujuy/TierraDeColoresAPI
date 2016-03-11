@@ -24,7 +24,7 @@ import javax.persistence.TemporalType;
 public class DetalleFactura implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_detalle_factura", unique = true, nullable = false)
     private int idDetalleFactura;
 

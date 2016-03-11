@@ -18,6 +18,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ChartDAO {
     
-    public List<ChartVentaVendedores> getVentaVendedores();
+    public List<ChartVentaVendedores> getVentaVendedores(int idVendedor);
     
 }

@@ -24,7 +24,7 @@ import javax.persistence.TemporalType;
 public class MetodoPagoFactura implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_metodo_pago_factura", unique = true, nullable = false)
     private int idMetodoPagoFactura;
 
