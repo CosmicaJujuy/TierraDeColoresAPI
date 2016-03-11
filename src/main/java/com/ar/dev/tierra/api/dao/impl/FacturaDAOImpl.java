@@ -49,27 +49,16 @@ public class FacturaDAOImpl implements FacturaDAO {
     @Override
     public List<Factura> getDiary() {
         Criteria criteria = getSession().createCriteria(Factura.class);
-//        Calendar date = Calendar.getInstance();
-//        date.set(Calendar.HOUR_OF_DAY, 0);
-//        date.set(Calendar.MINUTE, 0);
-//        date.set(Calendar.SECOND, 0);
-//        date.set(Calendar.MILLISECOND, 0);
-//        Timestamp ts_now = new Timestamp(date.getTimeInMillis());
-//        Date compare = new Date(ts_now.getTime());
-
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         Date fromDate = calendar.getTime();
-
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
         Date toDate = calendar.getTime();
-
         criteria.add(Restrictions.between("fechaCreacion", fromDate, toDate));
-//        criteria.add(Restrictions.gt("fechaCreacion", compare));
         criteria.addOrder(Order.asc("idFactura"));
         List<Factura> list = criteria.list();
         return list;

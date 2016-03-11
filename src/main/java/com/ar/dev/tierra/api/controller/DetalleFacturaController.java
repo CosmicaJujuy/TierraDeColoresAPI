@@ -62,8 +62,10 @@ public class DetalleFacturaController implements Serializable {
         detalleFactura.setFechaCreacion(new Date());
         detalleFactura.setEstadoDetalle(true);
         Producto prod = productoDAO.findById(detalleFactura.getProducto().getIdProducto());
-        detalleFactura.setProducto(prod);        
-        detalleFactura.setTotalDetalle(detalleFactura.getProducto().getPrecioVenta()* detalleFactura.getCantidadDetalle());
+        detalleFactura.setProducto(prod);
+        int monto = detalleFactura.getProducto().getPrecioVenta()* detalleFactura.getCantidadDetalle();
+        monto = monto - detalleFactura.getDescuentoDetalle();
+        detalleFactura.setTotalDetalle(monto);
         detalleFacturaDAO.add(detalleFactura);
         JsonResponse msg = new JsonResponse("Success", "Detalle agregado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
