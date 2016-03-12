@@ -5,9 +5,8 @@
  */
 package com.ar.dev.tierra.api.model.chart;
 
-import com.ar.dev.tierra.api.model.Usuarios;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Date;
 
 /**
  *
@@ -15,43 +14,43 @@ import java.util.List;
  */
 public class ChartVentaVendedores implements Serializable {
 
-    private Usuarios usuarios;
-    private List<CantidadFecha> cantidadFecha;
+    private int rowCount;
+    private Date date;
 
     public ChartVentaVendedores() {
     }
 
-    public ChartVentaVendedores(Usuarios usuarios, List<CantidadFecha> cantidadFecha) {
-        this.usuarios = usuarios;
-        this.cantidadFecha = cantidadFecha;
+    public ChartVentaVendedores(int rowCount, Date date) {
+        this.rowCount = rowCount;
+        this.date = date;
     }
 
     /**
-     * @return the usuarios
+     * @return the date
      */
-    public Usuarios getUsuarios() {
-        return usuarios;
+    public Date getDate() {
+        return date;
     }
 
     /**
-     * @param usuarios the usuarios to set
+     * @param date the date to set
      */
-    public void setUsuarios(Usuarios usuarios) {
-        this.usuarios = usuarios;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     /**
-     * @return the cantidadFecha
+     * @return the rowCount
      */
-    public List<CantidadFecha> getCantidadFecha() {
-        return cantidadFecha;
+    public int getRowCount() {
+        return rowCount;
     }
 
     /**
-     * @param cantidadFecha the cantidadFecha to set
+     * @param rowCount the rowCount to set
      */
-    public void setCantidadFecha(List<CantidadFecha> cantidadFecha) {
-        this.cantidadFecha = cantidadFecha;
+    public void setRowCount(int rowCount) {
+        this.rowCount = rowCount;
     }
 
 }

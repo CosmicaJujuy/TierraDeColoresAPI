@@ -7,8 +7,7 @@ package com.ar.dev.tierra.api.dao.impl;
 
 import com.ar.dev.tierra.api.dao.ChartDAO;
 import com.ar.dev.tierra.api.model.DetalleFactura;
-import com.ar.dev.tierra.api.model.Usuarios;
-import com.ar.dev.tierra.api.model.chart.CantidadFecha;
+import com.ar.dev.tierra.api.model.Factura;
 import com.ar.dev.tierra.api.model.chart.ChartVentaVendedores;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,19 +51,26 @@ public class ChartDAOImpl implements ChartDAO {
         calendarClosing.set(Calendar.SECOND, 59);
         Date toDate = calendarClosing.getTime();
         int days = 0;
-        List<ChartVentaVendedores> chartVentaVendedoreses = new ArrayList<>();
+        List<ChartVentaVendedores> chartVenta = new ArrayList<>();
         while (days <= 6) {
-            Criteria detallesFactura = getSession().createCriteria(DetalleFactura.class);
-            detallesFactura.add(Restrictions.eq("estadoDetalle", true));
-            Criteria facturas = detallesFactura.createCriteria("factura");
+            ChartVentaVendedores chart = new ChartVentaVendedores();
+            Criteria facturas = getSession().createCriteria(Factura.class);
             facturas.add(Restrictions.like("estado", "CONFIRMADO"));
-            facturas.add(Restrictions.eq("idVendedor", idVendedor));
             facturas.add(Restrictions.between("fechaCreacion", fromDate, toDate));
-            facturas.setProjection(Projections.sum("total"));
-            List<CantidadFecha> venta = new ArrayList<>();
+            Criteria vendedorFactura = facturas.createCriteria("idVendedor");
+            vendedorFactura.add(Restrictions.eq("idUsuario", idVendedor));
+            vendedorFactura.setProjection(Projections.rowCount());
+            Long counter = (Long) facturas.uniqueResult();
+            chart.setRowCount(counter.intValue());
+            chart.setDate(fromDate);
+            chartVenta.add(chart);
+            calendarInitial.add(Calendar.DAY_OF_MONTH, -1);
+            fromDate = calendarInitial.getTime();
+            calendarClosing.add(Calendar.DAY_OF_MONTH, -1);
+            toDate = calendarClosing.getTime();
+            days++;
         }
-
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return chartVenta;
     }
 
 }
