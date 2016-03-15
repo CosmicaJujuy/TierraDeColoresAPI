@@ -5,7 +5,9 @@
  */
 package com.ar.dev.tierra.api.controller;
 
+import com.ar.dev.tierra.api.dao.DetalleFacturaDAO;
 import com.ar.dev.tierra.api.dao.FacturaDAO;
+import com.ar.dev.tierra.api.dao.ProductoDAO;
 import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.Factura;
 import com.ar.dev.tierra.api.model.JsonResponse;
@@ -39,6 +41,12 @@ public class FacturaController implements Serializable {
 
     @Autowired
     UsuariosDAO usuariosDAO;
+
+    @Autowired
+    ProductoDAO productoDAO;
+
+    @Autowired
+    DetalleFacturaDAO detalleFacturaDAO;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
@@ -105,4 +113,5 @@ public class FacturaController implements Serializable {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
 }

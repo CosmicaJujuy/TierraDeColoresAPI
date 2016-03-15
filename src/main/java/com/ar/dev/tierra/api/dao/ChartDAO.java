@@ -5,7 +5,7 @@
  */
 package com.ar.dev.tierra.api.dao;
 
-import com.ar.dev.tierra.api.model.chart.ChartVentaVendedores;
+import com.ar.dev.tierra.api.model.chart.Chart;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -17,7 +17,13 @@ import org.springframework.stereotype.Repository;
 @Component
 @Repository
 public interface ChartDAO {
+
+    public List<Chart> getVentaVendedores(int idVendedor);
+
+    public List<Chart> getDineroVendedores(int idVendedor);
+
+    public List<Chart> getMontoMedioPago(int idMedioPago);
     
-    public List<ChartVentaVendedores> getVentaVendedores(int idVendedor);
-    
+    public List<Chart> getVentaMedioPago(int idMedioPago);
+
 }

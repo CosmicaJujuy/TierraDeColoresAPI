@@ -40,10 +40,10 @@ public class DetalleFacturaController implements Serializable {
 
     @Autowired
     DetalleFacturaDAO detalleFacturaDAO;
-    
+
     @Autowired
     ProductoDAO productoDAO;
-    
+
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
         List<DetalleFactura> list = detalleFacturaDAO.getAll();
@@ -62,13 +62,21 @@ public class DetalleFacturaController implements Serializable {
         detalleFactura.setFechaCreacion(new Date());
         detalleFactura.setEstadoDetalle(true);
         Producto prod = productoDAO.findById(detalleFactura.getProducto().getIdProducto());
-        detalleFactura.setProducto(prod);
-        int monto = detalleFactura.getProducto().getPrecioVenta()* detalleFactura.getCantidadDetalle();
-        monto = monto - detalleFactura.getDescuentoDetalle();
-        detalleFactura.setTotalDetalle(monto);
-        detalleFacturaDAO.add(detalleFactura);
-        JsonResponse msg = new JsonResponse("Success", "Detalle agregado con exito");
-        return new ResponseEntity<>(msg, HttpStatus.OK);
+        if (prod.getCantidadTotal() >= detalleFactura.getCantidadDetalle()) {
+            int cantidadTotal = prod.getCantidadTotal();
+            prod.setCantidadTotal(cantidadTotal - detalleFactura.getCantidadDetalle());
+            detalleFactura.setProducto(prod);
+            productoDAO.update(prod);
+            int monto = detalleFactura.getProducto().getPrecioVenta() * detalleFactura.getCantidadDetalle();
+            monto = monto - detalleFactura.getDescuentoDetalle();
+            detalleFactura.setTotalDetalle(monto);
+            detalleFacturaDAO.add(detalleFactura);
+            JsonResponse msg = new JsonResponse("Success", "Detalle agregado con exito");
+            return new ResponseEntity<>(msg, HttpStatus.OK);
+        } else {
+            JsonResponse msg = new JsonResponse("Error", "Stock insuficiente.");
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
@@ -96,13 +104,13 @@ public class DetalleFacturaController implements Serializable {
     }
 
     @RequestMapping(value = "/factura", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> listDetalleFactura(@RequestParam("idFactura")int idFactura){
-    List<DetalleFactura> list = detalleFacturaDAO.facturaDetalle(idFactura);
+    public ResponseEntity<?> listDetalleFactura(@RequestParam("idFactura") int idFactura) {
+        List<DetalleFactura> list = detalleFacturaDAO.facturaDetalle(idFactura);
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }        
+        }
     }
-    
+
 }

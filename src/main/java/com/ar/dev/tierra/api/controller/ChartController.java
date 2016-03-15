@@ -6,7 +6,7 @@
 package com.ar.dev.tierra.api.controller;
 
 import com.ar.dev.tierra.api.dao.ChartDAO;
-import com.ar.dev.tierra.api.model.chart.ChartVentaVendedores;
+import com.ar.dev.tierra.api.model.chart.Chart;
 import java.io.Serializable;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,37 @@ public class ChartController implements Serializable {
 
     @RequestMapping(value = "/vendedor/cantidad", method = RequestMethod.GET)
     public ResponseEntity<?> getRowCountVendedor(@RequestParam("idVendedor") int idVendedor) {
-        List<ChartVentaVendedores> chart = impl.getVentaVendedores(idVendedor);
+        List<Chart> chart = impl.getVentaVendedores(idVendedor);
+        if(!chart.isEmpty()){
+            return new ResponseEntity<>(chart, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    @RequestMapping(value = "/vendedor/ventas", method = RequestMethod.GET)
+    public ResponseEntity<?> getVentaVendedor(@RequestParam("idVendedor") int idVendedor) {
+        List<Chart> chart = impl.getDineroVendedores(idVendedor);
+        if(!chart.isEmpty()){
+            return new ResponseEntity<>(chart, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    @RequestMapping(value = "/medio/cantidad", method = RequestMethod.GET)
+    public ResponseEntity<?> getMedioCantidad(@RequestParam("idMedioPago") int idMedioPago) {
+        List<Chart> chart = impl.getVentaMedioPago(idMedioPago);
+        if(!chart.isEmpty()){
+            return new ResponseEntity<>(chart, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    @RequestMapping(value = "/medio/ventas", method = RequestMethod.GET)
+    public ResponseEntity<?> getMedioMonto(@RequestParam("idMedioPago") int idMedioPago) {
+        List<Chart> chart = impl.getMontoMedioPago(idMedioPago);
         if(!chart.isEmpty()){
             return new ResponseEntity<>(chart, HttpStatus.OK);
         }else{

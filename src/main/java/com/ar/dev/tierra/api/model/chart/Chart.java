@@ -12,16 +12,16 @@ import java.util.Date;
  *
  * @author PauloGaldo
  */
-public class ChartVentaVendedores implements Serializable {
+public class Chart implements Serializable {
 
-    private int rowCount;
+    private int value;
     private Date date;
 
-    public ChartVentaVendedores() {
+    public Chart() {
     }
 
-    public ChartVentaVendedores(int rowCount, Date date) {
-        this.rowCount = rowCount;
+    public Chart(int value, Date date) {
+        this.value = value;
         this.date = date;
     }
 
@@ -42,15 +42,15 @@ public class ChartVentaVendedores implements Serializable {
     /**
      * @return the rowCount
      */
-    public int getRowCount() {
-        return rowCount;
+    public int getValue() {
+        return value;
     }
 
     /**
-     * @param rowCount the rowCount to set
+     * @param value the rowCount to set
      */
-    public void setRowCount(int rowCount) {
-        this.rowCount = rowCount;
+    public void setValue(int value) {
+        this.value = value;
     }
 
 }
