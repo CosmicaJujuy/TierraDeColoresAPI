@@ -62,9 +62,9 @@ public class UsuariosController implements Serializable {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @RequestMapping(value = "/addUsuario", method = RequestMethod.POST)
     public ResponseEntity<?> addNewUsuario(@RequestBody Usuarios usuarios) throws IOException {
-        String ptoEnc = usuarios.getPasswordUsuario();
+        String ptoEnc = usuarios.getPassword();
         String bCrypt = passwordEncoder.encode(ptoEnc);
-        usuarios.setPasswordUsuario(bCrypt);
+        usuarios.setPassword(bCrypt);
         usuarios.setEstado(false);
         usuarios.setFechaCreacion(new Date());
         Usuarios replyUsername;
@@ -163,10 +163,10 @@ public class UsuariosController implements Serializable {
             @RequestParam("repPw") String repPassword) {
         String username = authentication.getName();
         Usuarios user = usuariosDAO.findUsuarioByUsername(username);
-        boolean rightPassword = passwordEncoder.matches(oldPassword, user.getPasswordUsuario());
+        boolean rightPassword = passwordEncoder.matches(oldPassword, user.getPassword());
         if (rightPassword) {
             if (newPassword.equals(repPassword)) {
-                user.setPasswordUsuario(passwordEncoder.encode(newPassword));
+                user.setPassword(passwordEncoder.encode(newPassword));
                 user.setIdUsuarioModificacion(user.getIdUsuario());
                 user.setFechaModificacion(new Date());
                 usuariosDAO.updateUsuario(user);

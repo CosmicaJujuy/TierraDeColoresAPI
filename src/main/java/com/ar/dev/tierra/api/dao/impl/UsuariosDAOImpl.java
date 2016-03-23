@@ -13,6 +13,8 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -38,6 +40,19 @@ public class UsuariosDAOImpl implements UsuariosDAO {
     public List<Usuarios> allUsuarios() {
         Criteria criteria = getSession().createCriteria(Usuarios.class);
         criteria.addOrder(Order.asc("idUsuario"));
+        ProjectionList projList = Projections.projectionList();
+        projList.add(Projections.property("idUsuario"));
+        projList.add(Projections.property("roles"));
+        projList.add(Projections.property("nombre"));
+        projList.add(Projections.property("apellido"));
+        projList.add(Projections.property("dni"));
+        projList.add(Projections.property("telefono"));
+        projList.add(Projections.property("email"));
+        projList.add(Projections.property("fechaNacimiento"));
+        projList.add(Projections.property("domicilio"));
+        projList.add(Projections.property("provincia"));
+        projList.add(Projections.property("estado"));
+//        criteria.setProjection(Projections.distinct(projList));
         List<Usuarios> us = criteria.list();
         return us;
     }

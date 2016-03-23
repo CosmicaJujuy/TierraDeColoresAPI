@@ -5,13 +5,20 @@
  */
 package com.ar.dev.tierra.api.config.security;
 
+import com.ar.dev.tierra.api.dao.UsuariosDAO;
+import com.ar.dev.tierra.api.model.Usuarios;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -32,6 +39,9 @@ public class CustomLogoutSuccessHandler
     @Autowired
     private TokenStore tokenStore;
 
+    @Autowired
+    private UsuariosDAO usuariosDAO;
+
     @Override
     public void onLogoutSuccess(HttpServletRequest request,
             HttpServletResponse response,
@@ -42,6 +52,14 @@ public class CustomLogoutSuccessHandler
         if (token != null && token.startsWith(BEARER_AUTHENTICATION)) {
             OAuth2AccessToken oAuth2AccessToken = tokenStore.readAccessToken(token.split(" ")[1]);
             if (oAuth2AccessToken != null) {
+                Calendar cal = Calendar.getInstance();
+                Date date = cal.getTime();
+                Map<String, Object> map = oAuth2AccessToken.getAdditionalInformation();
+                OAuth2Authentication auth = tokenStore.readAuthentication(oAuth2AccessToken);
+                User user = (User) auth.getPrincipal();
+                Usuarios u = usuariosDAO.findUsuarioByUsername(user.getUsername());
+                u.setUltimaConexion(date);
+                usuariosDAO.updateUsuario(u);
                 tokenStore.removeAccessToken(oAuth2AccessToken);
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {

@@ -47,7 +47,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         boolean success = false;
         try {
             us = user.findUsuarioByUsername(username);
-            success = passwordEncoder.matches(password, us.getPasswordUsuario());
+            success = passwordEncoder.matches(password, us.getPassword());
         } catch (Exception ex) {
         }
         if (success == true) {

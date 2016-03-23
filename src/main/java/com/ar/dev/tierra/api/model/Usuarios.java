@@ -48,7 +48,7 @@ public class Usuarios implements Serializable {
     private String email;
 
     @Column(name = "telefono")
-    private Integer telefono;
+    private String telefono;
 
     @Column(name = "domicilio", nullable = false, length = 100)
     private String domicilio;
@@ -76,6 +76,10 @@ public class Usuarios implements Serializable {
     @Column(name = "fecha_modificacion", length = 13)
     private Date fechaModificacion;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "ultima_conexion", nullable = false, length = 35)
+    private Date ultimaConexion;
+
     @Column(name = "id_usuario_creacion", nullable = false)
     private int idUsuarioCreacion;
 
@@ -85,7 +89,7 @@ public class Usuarios implements Serializable {
     public Usuarios() {
     }
 
-    public Usuarios(int idUsuario, Roles roles, String nombre, String apellido, Date fechaNacimiento, int dni, String email, Integer telefono, String domicilio, String provincia, String username, String password, byte[] imagen, boolean estado) {
+    public Usuarios(int idUsuario, Roles roles, String nombre, String apellido, Date fechaNacimiento, int dni, String email, String telefono, String domicilio, String provincia, String username, String password, byte[] imagen, boolean estado, Date fechaCreacion, Date fechaModificacion, Date ultimaConexion, int idUsuarioCreacion, int idUsuarioModificacion) {
         this.idUsuario = idUsuario;
         this.roles = roles;
         this.nombre = nombre;
@@ -100,24 +104,9 @@ public class Usuarios implements Serializable {
         this.password = password;
         this.imagen = imagen;
         this.estado = estado;
-    }
-
-    public Usuarios(int idUsuario, Roles roles, String nombre, String apellido, Date fechaNacimiento, int dni, String email, Integer telefono, String domicilio, String username, String password, byte[] imagen, boolean estado, Date fechaCreacion, Date fechaModificacion, int idUsuarioCreacion, int idUsuarioModificacion) {
-        this.idUsuario = idUsuario;
-        this.roles = roles;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.fechaNacimiento = fechaNacimiento;
-        this.dni = dni;
-        this.email = email;
-        this.telefono = telefono;
-        this.domicilio = domicilio;
-        this.username = username;
-        this.password = password;
-        this.imagen = imagen;
-        this.estado = estado;
         this.fechaCreacion = fechaCreacion;
         this.fechaModificacion = fechaModificacion;
+        this.ultimaConexion = ultimaConexion;
         this.idUsuarioCreacion = idUsuarioCreacion;
         this.idUsuarioModificacion = idUsuarioModificacion;
     }
@@ -223,14 +212,14 @@ public class Usuarios implements Serializable {
     /**
      * @return the telefono
      */
-    public Integer getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
     /**
      * @param telefono the telefono to set
      */
-    public void setTelefono(Integer telefono) {
+    public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
 
@@ -246,6 +235,20 @@ public class Usuarios implements Serializable {
      */
     public void setDomicilio(String domicilio) {
         this.domicilio = domicilio;
+    }
+
+    /**
+     * @return the provincia
+     */
+    public String getProvincia() {
+        return provincia;
+    }
+
+    /**
+     * @param provincia the provincia to set
+     */
+    public void setProvincia(String provincia) {
+        this.provincia = provincia;
     }
 
     /**
@@ -265,14 +268,14 @@ public class Usuarios implements Serializable {
     /**
      * @return the password
      */
-    public String getPasswordUsuario() {
+    public String getPassword() {
         return password;
     }
 
     /**
      * @param password the password to set
      */
-    public void setPasswordUsuario(String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
@@ -333,6 +336,20 @@ public class Usuarios implements Serializable {
     }
 
     /**
+     * @return the ultimaConexion
+     */
+    public Date getUltimaConexion() {
+        return ultimaConexion;
+    }
+
+    /**
+     * @param ultimaConexion the ultimaConexion to set
+     */
+    public void setUltimaConexion(Date ultimaConexion) {
+        this.ultimaConexion = ultimaConexion;
+    }
+
+    /**
      * @return the idUsuarioCreacion
      */
     public int getIdUsuarioCreacion() {
@@ -358,20 +375,6 @@ public class Usuarios implements Serializable {
      */
     public void setIdUsuarioModificacion(int idUsuarioModificacion) {
         this.idUsuarioModificacion = idUsuarioModificacion;
-    }
-
-    /**
-     * @return the provincia
-     */
-    public String getProvincia() {
-        return provincia;
-    }
-
-    /**
-     * @param provincia the provincia to set
-     */
-    public void setProvincia(String provincia) {
-        this.provincia = provincia;
     }
 
 }

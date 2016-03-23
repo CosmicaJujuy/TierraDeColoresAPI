@@ -62,6 +62,7 @@ public class ProductoDAOImpl implements ProductoDAO {
     public Producto findById(int id) {
         Criteria criteria = getSession().createCriteria(Producto.class);
         criteria.add(Restrictions.eq("idProducto", id));
+        criteria.add(Restrictions.eq("estadoProducto", true));
         Producto producto = (Producto) criteria.uniqueResult();
         return producto;
     }
