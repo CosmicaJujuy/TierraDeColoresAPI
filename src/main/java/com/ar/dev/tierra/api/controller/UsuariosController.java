@@ -203,6 +203,20 @@ public class UsuariosController implements Serializable {
         return null;
     }
 
+    @RequestMapping(value = "/activeSession", method = RequestMethod.POST)
+    public ResponseEntity<?> activeSession(OAuth2Authentication authentication) {
+        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        if (user.getRoles().getIdRol() == 1) {
+            JsonResponse response = new JsonResponse("Admin", "home");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else if (user.getRoles().getIdRol() == 2) {
+            JsonResponse response = new JsonResponse("Vendedor", "ventas");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @RequestMapping(value = "/vendedores", method = RequestMethod.GET)
     public ResponseEntity<?> listaVendedores() {
         List<Usuarios> vendedores = usuariosDAO.getVendedores();
