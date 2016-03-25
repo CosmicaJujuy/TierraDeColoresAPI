@@ -10,6 +10,7 @@ import com.ar.dev.tierra.api.model.DetalleFactura;
 import com.ar.dev.tierra.api.model.Factura;
 import com.ar.dev.tierra.api.model.MetodoPagoFactura;
 import com.ar.dev.tierra.api.model.chart.Chart;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -101,7 +102,7 @@ public class ChartDAOImpl implements ChartDAO {
             Criteria vendedorFactura = facturas.createCriteria("idVendedor");
             vendedorFactura.add(Restrictions.eq("idUsuario", idVendedor));
             facturas.setProjection(Projections.sum("total"));
-            BigInteger counter = (BigInteger) facturas.uniqueResult();
+            BigDecimal counter = (BigDecimal) facturas.uniqueResult();
             if (counter != null) {
                 chart.setValue(counter.intValue());
             } else {
@@ -144,7 +145,7 @@ public class ChartDAOImpl implements ChartDAO {
             medioPago.add(Restrictions.eq("idMedioPago", idMedioPago));
             metodo.add(Restrictions.between("fechaCreacion", fromDate, toDate));
             metodo.setProjection(Projections.sum("montoPago"));
-            BigInteger counter = (BigInteger) metodo.uniqueResult();
+            BigDecimal counter = (BigDecimal) metodo.uniqueResult();
             if (counter != null) {
                 chart.setValue(counter.intValue());
             } else {
