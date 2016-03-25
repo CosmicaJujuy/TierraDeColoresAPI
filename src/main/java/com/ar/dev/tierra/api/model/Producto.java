@@ -2,6 +2,7 @@ package com.ar.dev.tierra.api.model;
 // Generated 11/02/2016 01:28:34 by Hibernate Tools 4.3.1
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -63,13 +64,13 @@ public class Producto implements Serializable {
     private String colorProducto;
 
     @Column(name = "precio_costo")
-    private int precioCosto;
+    private BigInteger precioCosto;
 
     @Column(name = "precio_venta")
-    private int precioVenta;
+    private BigInteger precioVenta;
 
     @Column(name = "precio_lista", nullable = false)
-    private int precioLista;
+    private BigInteger precioLista;
 
     @Column(name = "cantidad_total", nullable = false)
     private int cantidadTotal;
@@ -104,7 +105,7 @@ public class Producto implements Serializable {
     public Producto() {
     }
 
-    public Producto(int idProducto, String codigoProducto, String claseProducto, String numeroFactura, Categoria categoria, Marcas marcas, Proveedor proveedor, Sexo sexo, Temporada temporada, String descripcion, String colorProducto, int precioCosto, int precioVenta, int precioLista, int cantidadTotal, int cantidadMinima, String talla, Date fechaProducto, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
+    public Producto(int idProducto, String codigoProducto, String claseProducto, String numeroFactura, Categoria categoria, Marcas marcas, Proveedor proveedor, Sexo sexo, Temporada temporada, String descripcion, String colorProducto, BigInteger precioCosto, BigInteger precioVenta, BigInteger precioLista, int cantidadTotal, int cantidadMinima, String talla, Date fechaProducto, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
         this.idProducto = idProducto;
         this.codigoProducto = codigoProducto;
         this.claseProducto = claseProducto;
@@ -128,6 +129,62 @@ public class Producto implements Serializable {
         this.fechaModificacion = fechaModificacion;
         this.usuarioCreacion = usuarioCreacion;
         this.usuarioModificacion = usuarioModificacion;
+    }
+
+    /**
+     * @return the idProducto
+     */
+    public int getIdProducto() {
+        return idProducto;
+    }
+
+    /**
+     * @param idProducto the idProducto to set
+     */
+    public void setIdProducto(int idProducto) {
+        this.idProducto = idProducto;
+    }
+
+    /**
+     * @return the codigoProducto
+     */
+    public String getCodigoProducto() {
+        return codigoProducto;
+    }
+
+    /**
+     * @param codigoProducto the codigoProducto to set
+     */
+    public void setCodigoProducto(String codigoProducto) {
+        this.codigoProducto = codigoProducto;
+    }
+
+    /**
+     * @return the claseProducto
+     */
+    public String getClaseProducto() {
+        return claseProducto;
+    }
+
+    /**
+     * @param claseProducto the claseProducto to set
+     */
+    public void setClaseProducto(String claseProducto) {
+        this.claseProducto = claseProducto;
+    }
+
+    /**
+     * @return the numeroFactura
+     */
+    public String getNumeroFactura() {
+        return numeroFactura;
+    }
+
+    /**
+     * @param numeroFactura the numeroFactura to set
+     */
+    public void setNumeroFactura(String numeroFactura) {
+        this.numeroFactura = numeroFactura;
     }
 
     /**
@@ -231,29 +288,57 @@ public class Producto implements Serializable {
     /**
      * @return the precioCosto
      */
-    public int getPrecioCosto() {
+    public BigInteger getPrecioCosto() {
         return precioCosto;
     }
 
     /**
      * @param precioCosto the precioCosto to set
      */
-    public void setPrecioCosto(int precioCosto) {
+    public void setPrecioCosto(BigInteger precioCosto) {
         this.precioCosto = precioCosto;
     }
 
     /**
      * @return the precioVenta
      */
-    public int getPrecioVenta() {
+    public BigInteger getPrecioVenta() {
         return precioVenta;
     }
 
     /**
      * @param precioVenta the precioVenta to set
      */
-    public void setPrecioVenta(int precioVenta) {
+    public void setPrecioVenta(BigInteger precioVenta) {
         this.precioVenta = precioVenta;
+    }
+
+    /**
+     * @return the precioLista
+     */
+    public BigInteger getPrecioLista() {
+        return precioLista;
+    }
+
+    /**
+     * @param precioLista the precioLista to set
+     */
+    public void setPrecioLista(BigInteger precioLista) {
+        this.precioLista = precioLista;
+    }
+
+    /**
+     * @return the cantidadTotal
+     */
+    public int getCantidadTotal() {
+        return cantidadTotal;
+    }
+
+    /**
+     * @param cantidadTotal the cantidadTotal to set
+     */
+    public void setCantidadTotal(int cantidadTotal) {
+        this.cantidadTotal = cantidadTotal;
     }
 
     /**
@@ -368,88 +453,5 @@ public class Producto implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
     }
 
-    /**
-     * @return the precioLista
-     */
-    public int getPrecioLista() {
-        return precioLista;
-    }
-
-    /**
-     * @param precioLista the precioLista to set
-     */
-    public void setPrecioLista(int precioLista) {
-        this.precioLista = precioLista;
-    }
-
-    /**
-     * @return the cantidadTotal
-     */
-    public int getCantidadTotal() {
-        return cantidadTotal;
-    }
-
-    /**
-     * @param cantidadTotal the cantidadTotal to set
-     */
-    public void setCantidadTotal(int cantidadTotal) {
-        this.cantidadTotal = cantidadTotal;
-    }
-
-    /**
-     * @return the idProducto
-     */
-    public int getIdProducto() {
-        return idProducto;
-    }
-
-    /**
-     * @param idProducto the idProducto to set
-     */
-    public void setIdProducto(int idProducto) {
-        this.idProducto = idProducto;
-    }
-
-    /**
-     * @return the codigoProducto
-     */
-    public String getCodigoProducto() {
-        return codigoProducto;
-    }
-
-    /**
-     * @param codigoProducto the codigoProducto to set
-     */
-    public void setCodigoProducto(String codigoProducto) {
-        this.codigoProducto = codigoProducto;
-    }
-
-    /**
-     * @return the claseProducto
-     */
-    public String getClaseProducto() {
-        return claseProducto;
-    }
-
-    /**
-     * @param claseProducto the claseProducto to set
-     */
-    public void setClaseProducto(String claseProducto) {
-        this.claseProducto = claseProducto;
-    }
-
-    /**
-     * @return the numeroFactura
-     */
-    public String getNumeroFactura() {
-        return numeroFactura;
-    }
-
-    /**
-     * @param numeroFactura the numeroFactura to set
-     */
-    public void setNumeroFactura(String numeroFactura) {
-        this.numeroFactura = numeroFactura;
-    }
-
+    
 }

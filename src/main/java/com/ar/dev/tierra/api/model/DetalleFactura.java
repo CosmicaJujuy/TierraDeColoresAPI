@@ -2,6 +2,7 @@ package com.ar.dev.tierra.api.model;
 // Generated 17/02/2016 00:47:04 by Hibernate Tools 4.3.1
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -40,10 +41,10 @@ public class DetalleFactura implements Serializable {
     private int cantidadDetalle;
 
     @Column(name = "total_detalle", nullable = false)
-    private int totalDetalle;
+    private BigInteger totalDetalle;
 
     @Column(name = "descuento_detalle")
-    private Integer descuentoDetalle;
+    private BigInteger descuentoDetalle;
 
     @Column(name = "estado_detalle", nullable = false)
     private boolean estadoDetalle;
@@ -65,7 +66,7 @@ public class DetalleFactura implements Serializable {
     public DetalleFactura() {
     }
 
-    public DetalleFactura(int idDetalleFactura, Factura factura, Producto producto, int cantidadDetalle, int totalDetalle, Integer descuentoDetalle, boolean estadoDetalle, int usuarioCreacion, Integer usuarioModificacion, Date fechaCreacion, Date fechaModificacion) {
+    public DetalleFactura(int idDetalleFactura, Factura factura, Producto producto, int cantidadDetalle, BigInteger totalDetalle, BigInteger descuentoDetalle, boolean estadoDetalle, int usuarioCreacion, Integer usuarioModificacion, Date fechaCreacion, Date fechaModificacion) {
         this.idDetalleFactura = idDetalleFactura;
         this.factura = factura;
         this.producto = producto;
@@ -138,28 +139,28 @@ public class DetalleFactura implements Serializable {
     /**
      * @return the totalDetalle
      */
-    public int getTotalDetalle() {
+    public BigInteger getTotalDetalle() {
         return totalDetalle;
     }
 
     /**
      * @param totalDetalle the totalDetalle to set
      */
-    public void setTotalDetalle(int totalDetalle) {
+    public void setTotalDetalle(BigInteger totalDetalle) {
         this.totalDetalle = totalDetalle;
     }
 
     /**
      * @return the descuentoDetalle
      */
-    public Integer getDescuentoDetalle() {
+    public BigInteger getDescuentoDetalle() {
         return descuentoDetalle;
     }
 
     /**
      * @param descuentoDetalle the descuentoDetalle to set
      */
-    public void setDescuentoDetalle(Integer descuentoDetalle) {
+    public void setDescuentoDetalle(BigInteger descuentoDetalle) {
         this.descuentoDetalle = descuentoDetalle;
     }
 

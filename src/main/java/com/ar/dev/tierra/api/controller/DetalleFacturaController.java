@@ -13,6 +13,7 @@ import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Producto;
 import com.ar.dev.tierra.api.model.Usuarios;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,8 +68,8 @@ public class DetalleFacturaController implements Serializable {
             prod.setCantidadTotal(cantidadTotal - detalleFactura.getCantidadDetalle());
             detalleFactura.setProducto(prod);
             productoDAO.update(prod);
-            int monto = detalleFactura.getProducto().getPrecioVenta() * detalleFactura.getCantidadDetalle();
-            monto = monto - detalleFactura.getDescuentoDetalle();
+            BigInteger monto = detalleFactura.getProducto().getPrecioVenta().multiply(BigInteger.valueOf(detalleFactura.getCantidadDetalle()));
+            monto = monto.subtract(detalleFactura.getDescuentoDetalle());                    
             detalleFactura.setTotalDetalle(monto);
             detalleFacturaDAO.add(detalleFactura);
             JsonResponse msg = new JsonResponse("Success", "Detalle agregado con exito");
