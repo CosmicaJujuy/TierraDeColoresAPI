@@ -14,7 +14,7 @@ import com.ar.dev.tierra.api.model.MetodoPagoFactura;
 import com.ar.dev.tierra.api.model.PlanPago;
 import com.ar.dev.tierra.api.model.Usuarios;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +66,8 @@ public class MetodoPagoFacturaController implements Serializable {
         }
         Factura factura = facturaDAO.searchById(pagoFactura.getFactura().getIdFactura());
         List<MetodoPagoFactura> list = pagoFacturaDAO.getFacturaMetodo(factura.getIdFactura());
-        BigInteger totalFactura = BigInteger.ZERO;
+        /*POSIBLE FALLA, DECIMAL INMUTABLE NO SE SUMAN ENTRE SI, NECESITA TEST*/
+        BigDecimal totalFactura = BigDecimal.ZERO;
         for (MetodoPagoFactura metodoPagoFactura : list) {
             totalFactura = totalFactura.add(metodoPagoFactura.getMontoPago());
         }

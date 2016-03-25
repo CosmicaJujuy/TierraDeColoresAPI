@@ -2,7 +2,7 @@ package com.ar.dev.tierra.api.model;
 // Generated 11/02/2016 01:28:34 by Hibernate Tools 4.3.1
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -63,14 +63,14 @@ public class Producto implements Serializable {
     @Column(name = "color_producto", nullable = false, length = 150)
     private String colorProducto;
 
-    @Column(name = "precio_costo")
-    private BigInteger precioCosto;
+    @Column(name = "precio_costo", precision = 6, scale = 2)
+    private BigDecimal precioCosto;
 
-    @Column(name = "precio_venta")
-    private BigInteger precioVenta;
+    @Column(name = "precio_venta", precision = 6, scale = 2)
+    private BigDecimal precioVenta;
 
-    @Column(name = "precio_lista", nullable = false)
-    private BigInteger precioLista;
+    @Column(name = "precio_lista", nullable = false, precision = 6, scale = 2)
+    private BigDecimal precioLista;
 
     @Column(name = "cantidad_total", nullable = false)
     private int cantidadTotal;
@@ -105,7 +105,7 @@ public class Producto implements Serializable {
     public Producto() {
     }
 
-    public Producto(int idProducto, String codigoProducto, String claseProducto, String numeroFactura, Categoria categoria, Marcas marcas, Proveedor proveedor, Sexo sexo, Temporada temporada, String descripcion, String colorProducto, BigInteger precioCosto, BigInteger precioVenta, BigInteger precioLista, int cantidadTotal, int cantidadMinima, String talla, Date fechaProducto, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
+    public Producto(int idProducto, String codigoProducto, String claseProducto, String numeroFactura, Categoria categoria, Marcas marcas, Proveedor proveedor, Sexo sexo, Temporada temporada, String descripcion, String colorProducto, BigDecimal precioCosto, BigDecimal precioVenta, BigDecimal precioLista, int cantidadTotal, int cantidadMinima, String talla, Date fechaProducto, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
         this.idProducto = idProducto;
         this.codigoProducto = codigoProducto;
         this.claseProducto = claseProducto;
@@ -288,42 +288,42 @@ public class Producto implements Serializable {
     /**
      * @return the precioCosto
      */
-    public BigInteger getPrecioCosto() {
+    public BigDecimal getPrecioCosto() {
         return precioCosto;
     }
 
     /**
      * @param precioCosto the precioCosto to set
      */
-    public void setPrecioCosto(BigInteger precioCosto) {
+    public void setPrecioCosto(BigDecimal precioCosto) {
         this.precioCosto = precioCosto;
     }
 
     /**
      * @return the precioVenta
      */
-    public BigInteger getPrecioVenta() {
+    public BigDecimal getPrecioVenta() {
         return precioVenta;
     }
 
     /**
      * @param precioVenta the precioVenta to set
      */
-    public void setPrecioVenta(BigInteger precioVenta) {
+    public void setPrecioVenta(BigDecimal precioVenta) {
         this.precioVenta = precioVenta;
     }
 
     /**
      * @return the precioLista
      */
-    public BigInteger getPrecioLista() {
+    public BigDecimal getPrecioLista() {
         return precioLista;
     }
 
     /**
      * @param precioLista the precioLista to set
      */
-    public void setPrecioLista(BigInteger precioLista) {
+    public void setPrecioLista(BigDecimal precioLista) {
         this.precioLista = precioLista;
     }
 
@@ -453,5 +453,4 @@ public class Producto implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
     }
 
-    
 }

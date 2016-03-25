@@ -2,7 +2,7 @@ package com.ar.dev.tierra.api.model;
 // Generated 17/02/2016 00:47:04 by Hibernate Tools 4.3.1
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,13 +31,13 @@ public class Factura implements Serializable {
     private Date fechaModificacion;
     private Integer usuarioCreacion;
     private Integer usuarioModificacion;
-    private BigInteger total;
+    private BigDecimal total;
     private String tipoFactura;
 
     public Factura() {
     }
 
-    public Factura(int idFactura, Cliente cliente, String estado, Usuarios idVendedor, Date fechaCreacion, Date fechaModificacion, Integer usuarioCreacion, Integer usuarioModificacion, BigInteger total, String tipoFactura) {
+    public Factura(int idFactura, Cliente cliente, String estado, Usuarios idVendedor, Date fechaCreacion, Date fechaModificacion, Integer usuarioCreacion, Integer usuarioModificacion, BigDecimal total, String tipoFactura) {
         this.idFactura = idFactura;
         this.cliente = cliente;
         this.estado = estado;
@@ -137,12 +137,12 @@ public class Factura implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
     }
 
-    @Column(name = "total")
-    public BigInteger getTotal() {
+    @Column(name = "total", precision = 10)
+    public BigDecimal getTotal() {
         return this.total;
     }
 
-    public void setTotal(BigInteger total) {
+    public void setTotal(BigDecimal total) {
         this.total = total;
     }
 }

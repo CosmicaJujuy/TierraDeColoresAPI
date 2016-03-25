@@ -2,9 +2,8 @@ package com.ar.dev.tierra.api.model;
 // Generated 17/02/2016 00:47:04 by Hibernate Tools 4.3.1
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -40,11 +39,11 @@ public class DetalleFactura implements Serializable {
     @Column(name = "cantidad_detalle", nullable = false)
     private int cantidadDetalle;
 
-    @Column(name = "total_detalle", nullable = false)
-    private BigInteger totalDetalle;
+    @Column(name = "total_detalle", nullable = false, precision = 10)
+    private BigDecimal totalDetalle;
 
-    @Column(name = "descuento_detalle")
-    private BigInteger descuentoDetalle;
+    @Column(name = "descuento_detalle", precision = 10)
+    private BigDecimal descuentoDetalle;
 
     @Column(name = "estado_detalle", nullable = false)
     private boolean estadoDetalle;
@@ -66,7 +65,7 @@ public class DetalleFactura implements Serializable {
     public DetalleFactura() {
     }
 
-    public DetalleFactura(int idDetalleFactura, Factura factura, Producto producto, int cantidadDetalle, BigInteger totalDetalle, BigInteger descuentoDetalle, boolean estadoDetalle, int usuarioCreacion, Integer usuarioModificacion, Date fechaCreacion, Date fechaModificacion) {
+    public DetalleFactura(int idDetalleFactura, Factura factura, Producto producto, int cantidadDetalle, BigDecimal totalDetalle, BigDecimal descuentoDetalle, boolean estadoDetalle, int usuarioCreacion, Integer usuarioModificacion, Date fechaCreacion, Date fechaModificacion) {
         this.idDetalleFactura = idDetalleFactura;
         this.factura = factura;
         this.producto = producto;
@@ -139,28 +138,28 @@ public class DetalleFactura implements Serializable {
     /**
      * @return the totalDetalle
      */
-    public BigInteger getTotalDetalle() {
+    public BigDecimal getTotalDetalle() {
         return totalDetalle;
     }
 
     /**
      * @param totalDetalle the totalDetalle to set
      */
-    public void setTotalDetalle(BigInteger totalDetalle) {
+    public void setTotalDetalle(BigDecimal totalDetalle) {
         this.totalDetalle = totalDetalle;
     }
 
     /**
      * @return the descuentoDetalle
      */
-    public BigInteger getDescuentoDetalle() {
+    public BigDecimal getDescuentoDetalle() {
         return descuentoDetalle;
     }
 
     /**
      * @param descuentoDetalle the descuentoDetalle to set
      */
-    public void setDescuentoDetalle(BigInteger descuentoDetalle) {
+    public void setDescuentoDetalle(BigDecimal descuentoDetalle) {
         this.descuentoDetalle = descuentoDetalle;
     }
 

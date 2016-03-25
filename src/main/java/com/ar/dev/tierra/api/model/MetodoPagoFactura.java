@@ -2,7 +2,7 @@ package com.ar.dev.tierra.api.model;
 // Generated 17/02/2016 00:47:04 by Hibernate Tools 4.3.1
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,8 +36,8 @@ public class MetodoPagoFactura implements Serializable {
     @JoinColumn(name = "id_factura", nullable = false)
     private Factura factura;
 
-    @Column(name = "monto_pago", nullable = false)
-    private BigInteger montoPago;
+    @Column(name = "monto_pago", nullable = false, precision = 10)
+    private BigDecimal montoPago;
 
     @Column(name = "comprobante")
     private String comprobante;
@@ -62,7 +62,7 @@ public class MetodoPagoFactura implements Serializable {
     public MetodoPagoFactura() {
     }
 
-    public MetodoPagoFactura(int idMetodoPagoFactura, PlanPago planPago, Factura factura, BigInteger montoPago, String comprobante, boolean estado, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
+    public MetodoPagoFactura(int idMetodoPagoFactura, PlanPago planPago, Factura factura, BigDecimal montoPago, String comprobante, boolean estado, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
         this.idMetodoPagoFactura = idMetodoPagoFactura;
         this.planPago = planPago;
         this.factura = factura;
@@ -120,14 +120,14 @@ public class MetodoPagoFactura implements Serializable {
     /**
      * @return the montoPago
      */
-    public BigInteger getMontoPago() {
+    public BigDecimal getMontoPago() {
         return montoPago;
     }
 
     /**
      * @param montoPago the montoPago to set
      */
-    public void setMontoPago(BigInteger montoPago) {
+    public void setMontoPago(BigDecimal montoPago) {
         this.montoPago = montoPago;
     }
 

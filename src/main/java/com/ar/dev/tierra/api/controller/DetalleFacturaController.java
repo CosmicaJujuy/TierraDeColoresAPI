@@ -13,7 +13,7 @@ import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Producto;
 import com.ar.dev.tierra.api.model.Usuarios;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +68,7 @@ public class DetalleFacturaController implements Serializable {
             prod.setCantidadTotal(cantidadTotal - detalleFactura.getCantidadDetalle());
             detalleFactura.setProducto(prod);
             productoDAO.update(prod);
-            BigInteger monto = detalleFactura.getProducto().getPrecioVenta().multiply(BigInteger.valueOf(detalleFactura.getCantidadDetalle()));
+            BigDecimal monto = detalleFactura.getProducto().getPrecioVenta().multiply(BigDecimal.valueOf(detalleFactura.getCantidadDetalle()));
             monto = monto.subtract(detalleFactura.getDescuentoDetalle());                    
             detalleFactura.setTotalDetalle(monto);
             detalleFacturaDAO.add(detalleFactura);
