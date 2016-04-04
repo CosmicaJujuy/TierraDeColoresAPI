@@ -60,14 +60,15 @@
             <artifactId>commons-fileupload</artifactId>
             <version>1.3.1</version> 
         </dependency>
-        <!-- makesure correct version here 
+        <!--
         <dependency>
-            <groupId>hlf.argentina</groupId>
-            <artifactId>hlf.argentina</artifactId>
+            <groupId>com.hasar</groupId>
+            <artifactId>HasarFiscalLibreria-1.0-bin</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/HasarFiscalLibreria.jar</systemPath>
-        </dependency>  -->
+            <systemPath>${project.basedir}/lib/com/hasar/HasarFiscalLibreria-1.0-bin/SNAPSHOT/HasarFiscalLibreria-1.0-bin-SNAPSHOT</systemPath>
+        </dependency>
+         makesure correct version here -->
     </dependencies>
     <build>
         <plugins>
@@ -79,8 +80,8 @@
     </build>
     <repositories>
         <repository>
-            <id>unknown-jars-temp-repo</id>
-            <name>A temporary repository created by NetBeans for libraries and jars it could not identify. Please replace the dependencies in this repository with correct ones and delete this repository.</name>
+            <id>project.local</id>
+            <name>project</name>
             <url>file:${project.basedir}/lib</url>
         </repository>
     </repositories>

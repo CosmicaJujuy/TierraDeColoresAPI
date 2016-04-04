@@ -5,11 +5,6 @@
  */
 package com.ar.dev.tierra.api.controller;
 
-//import hfl.argentina.Estados_Fiscales_RG3561;
-//import hfl.argentina.EventoFiscal;
-//import hfl.argentina.HasarException;
-//import hfl.argentina.HasarImpresoraFiscalRG3561;
-//import hfl.argentina.ProtocolHTTP;
 import java.io.Serializable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

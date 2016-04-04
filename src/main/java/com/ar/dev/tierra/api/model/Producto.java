@@ -35,9 +35,6 @@ public class Producto implements Serializable {
     @Column(name = "clase_producto", unique = true, nullable = false)
     private String claseProducto;
 
-    @Column(name = "numero_factura", unique = true, nullable = false)
-    private String numeroFactura;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "categoria_producto", nullable = false)
     private Categoria categoria;
@@ -47,8 +44,8 @@ public class Producto implements Serializable {
     private Marcas marcas;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "proveedor_producto", nullable = false)
-    private Proveedor proveedor;
+    @JoinColumn(name = "id_factura_producto", nullable = false)
+    private FacturaProducto facturaProducto;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sexo_producto", nullable = false)
@@ -106,14 +103,13 @@ public class Producto implements Serializable {
     public Producto() {
     }
 
-    public Producto(int idProducto, String codigoProducto, String claseProducto, String numeroFactura, Categoria categoria, Marcas marcas, Proveedor proveedor, Sexo sexo, Temporada temporada, String descripcion, String colorProducto, BigDecimal precioCosto, BigDecimal precioVenta, BigDecimal precioLista, int cantidadTotal, int cantidadMinima, String talla, Date fechaProducto, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
+    public Producto(int idProducto, String codigoProducto, String claseProducto, Categoria categoria, Marcas marcas, FacturaProducto facturaProducto, Sexo sexo, Temporada temporada, String descripcion, String colorProducto, BigDecimal precioCosto, BigDecimal precioVenta, BigDecimal precioLista, int cantidadTotal, int cantidadMinima, String talla, Date fechaProducto, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
         this.idProducto = idProducto;
         this.codigoProducto = codigoProducto;
         this.claseProducto = claseProducto;
-        this.numeroFactura = numeroFactura;
         this.categoria = categoria;
         this.marcas = marcas;
-        this.proveedor = proveedor;
+        this.facturaProducto = facturaProducto;
         this.sexo = sexo;
         this.temporada = temporada;
         this.descripcion = descripcion;
@@ -175,20 +171,6 @@ public class Producto implements Serializable {
     }
 
     /**
-     * @return the numeroFactura
-     */
-    public String getNumeroFactura() {
-        return numeroFactura;
-    }
-
-    /**
-     * @param numeroFactura the numeroFactura to set
-     */
-    public void setNumeroFactura(String numeroFactura) {
-        this.numeroFactura = numeroFactura;
-    }
-
-    /**
      * @return the categoria
      */
     public Categoria getCategoria() {
@@ -217,17 +199,17 @@ public class Producto implements Serializable {
     }
 
     /**
-     * @return the proveedor
+     * @return the facturaProducto
      */
-    public Proveedor getProveedor() {
-        return proveedor;
+    public FacturaProducto getFacturaProducto() {
+        return facturaProducto;
     }
 
     /**
-     * @param proveedor the proveedor to set
+     * @param facturaProducto the facturaProducto to set
      */
-    public void setProveedor(Proveedor proveedor) {
-        this.proveedor = proveedor;
+    public void setFacturaProducto(FacturaProducto facturaProducto) {
+        this.facturaProducto = facturaProducto;
     }
 
     /**
