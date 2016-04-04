@@ -3,7 +3,6 @@ package com.ar.dev.tierra.api.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,7 +43,7 @@ public class Producto implements Serializable {
     private Marcas marcas;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_factura_producto", nullable = false)
+    @JoinColumn(name = "factura_producto", nullable = false)
     private FacturaProducto facturaProducto;
 
     @ManyToOne(fetch = FetchType.EAGER)
