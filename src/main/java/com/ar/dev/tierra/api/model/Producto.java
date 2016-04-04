@@ -43,7 +43,7 @@ public class Producto implements Serializable {
     private Marcas marcas;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "factura_producto", nullable = false)
+    @JoinColumn(name = "id_factura_producto", nullable = false)
     private FacturaProducto facturaProducto;
 
     @ManyToOne(fetch = FetchType.EAGER)
