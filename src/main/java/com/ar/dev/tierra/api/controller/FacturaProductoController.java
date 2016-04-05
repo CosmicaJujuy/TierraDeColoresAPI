@@ -54,6 +54,7 @@ public class FacturaProductoController implements Serializable {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
         facturaProducto.setUsuarioCreacion(user.getIdUsuario());
         facturaProducto.setFechaCreacion(new Date());
+        facturaProducto.setEstadoLocal("SIN REPARTIR");
         facturaProducto.setEstado(true);
         facturaProductoDAO.add(facturaProducto);
         JsonResponse msg = new JsonResponse("Success", "Factura de producto/s agregada con exito");
