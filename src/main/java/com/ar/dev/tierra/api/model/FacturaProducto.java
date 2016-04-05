@@ -31,7 +31,7 @@ public class FacturaProducto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_factura_producto", unique = true, nullable = false)
-    private int idProducto;
+    private int idFacturaProducto;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_proveedor", nullable = false)
@@ -73,8 +73,8 @@ public class FacturaProducto implements Serializable {
     public FacturaProducto() {
     }
 
-    public FacturaProducto(int idProducto, Proveedor proveedor, BigDecimal monto, Date fechaFactura, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion, boolean estado, String observaciones, String estadoLocal, String numeroFactura) {
-        this.idProducto = idProducto;
+    public FacturaProducto(int idFacturaProducto, Proveedor proveedor, BigDecimal monto, Date fechaFactura, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion, boolean estado, String observaciones, String estadoLocal, String numeroFactura) {
+        this.idFacturaProducto = idFacturaProducto;
         this.proveedor = proveedor;
         this.monto = monto;
         this.fechaFactura = fechaFactura;
@@ -86,20 +86,6 @@ public class FacturaProducto implements Serializable {
         this.observaciones = observaciones;
         this.estadoLocal = estadoLocal;
         this.numeroFactura = numeroFactura;
-    }
-
-    /**
-     * @return the idProducto
-     */
-    public int getIdProducto() {
-        return idProducto;
-    }
-
-    /**
-     * @param idProducto the idProducto to set
-     */
-    public void setIdProducto(int idProducto) {
-        this.idProducto = idProducto;
     }
 
     /**
@@ -254,6 +240,20 @@ public class FacturaProducto implements Serializable {
      */
     public void setNumeroFactura(String numeroFactura) {
         this.numeroFactura = numeroFactura;
+    }
+
+    /**
+     * @return the idFacturaProducto
+     */
+    public int getIdFacturaProducto() {
+        return idFacturaProducto;
+    }
+
+    /**
+     * @param idFacturaProducto the idFacturaProducto to set
+     */
+    public void setIdFacturaProducto(int idFacturaProducto) {
+        this.idFacturaProducto = idFacturaProducto;
     }
 
 }
