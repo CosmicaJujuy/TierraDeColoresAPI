@@ -22,6 +22,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -56,8 +57,8 @@ public class FacturaProductoController implements Serializable {
         facturaProducto.setFechaCreacion(new Date());
         facturaProducto.setEstadoLocal("SIN REPARTIR");
         facturaProducto.setEstado(true);
-        facturaProductoDAO.add(facturaProducto);
-        JsonResponse msg = new JsonResponse("Success", "Factura de producto/s agregada con exito");
+        int idFacturaProducto = facturaProductoDAO.add(facturaProducto);
+        JsonResponse msg = new JsonResponse("Success", String.valueOf(idFacturaProducto));
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
@@ -83,5 +84,15 @@ public class FacturaProductoController implements Serializable {
         facturaProductoDAO.update(facturaProducto);
         JsonResponse msg = new JsonResponse("Success", "Factura de producto/s eliminada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/detail", method = RequestMethod.POST)
+    public ResponseEntity<?> detail(@RequestParam("idFacturaProducto") int idFacturaProducto) {
+        FacturaProducto facturaProducto = facturaProductoDAO.detail(idFacturaProducto);
+        if (facturaProducto != null) {
+            return new ResponseEntity<>(facturaProducto, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

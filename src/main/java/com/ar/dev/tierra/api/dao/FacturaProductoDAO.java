@@ -20,10 +20,12 @@ public interface FacturaProductoDAO {
 
     public List<FacturaProducto> getAll();
 
-    public void add(FacturaProducto facturaProducto);
+    public int add(FacturaProducto facturaProducto);
 
     public void update(FacturaProducto facturaProducto);
 
     public void delete(FacturaProducto facturaProducto);
+    
+    public FacturaProducto detail(int idFacturaProducto);
 
 }

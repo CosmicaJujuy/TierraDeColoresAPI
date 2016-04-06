@@ -32,4 +32,6 @@ public interface ProductoDAO {
     public List<Producto> findByText(String text);
     
     public List<Producto> findByBarcode(String barcode);
+    
+    public List<Producto> findByIdFactura(int idFacturaPRoducto);
 }

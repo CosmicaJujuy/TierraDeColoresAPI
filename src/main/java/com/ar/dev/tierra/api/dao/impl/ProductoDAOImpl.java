@@ -84,4 +84,14 @@ public class ProductoDAOImpl implements ProductoDAO {
         return list;
     }
 
+    @Override
+    public List<Producto> findByIdFactura(int idFacturaPRoducto) {
+        Criteria criteria = getSession().createCriteria(Producto.class);
+        criteria.add(Restrictions.eq("estadoProducto", true));
+        Criteria facturaProducto = criteria.createCriteria("facturaProducto");
+        facturaProducto.add(Restrictions.eq("idFacturaProducto", idFacturaPRoducto));
+        List<Producto> list = criteria.list();
+        return list;
+    }
+
 }

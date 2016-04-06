@@ -116,4 +116,14 @@ public class ProductoController implements Serializable {
             return new ResponseEntity<>(list, HttpStatus.BAD_REQUEST);
         }
     }
+    
+    @RequestMapping(value = "/list/factura", method = RequestMethod.POST)
+    public ResponseEntity<?> findByIdFactura(@RequestParam("idFacturaProducto") int idFacturaProducto) {
+        List<Producto> list = productoDAO.findByIdFactura(idFacturaProducto);
+        if (!list.isEmpty()) {
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(list, HttpStatus.BAD_REQUEST);
+        }
+    }
 }

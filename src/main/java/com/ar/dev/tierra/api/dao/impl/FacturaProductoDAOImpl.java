@@ -7,6 +7,7 @@ package com.ar.dev.tierra.api.dao.impl;
 
 import com.ar.dev.tierra.api.dao.FacturaProductoDAO;
 import com.ar.dev.tierra.api.model.FacturaProducto;
+import java.io.Serializable;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -41,8 +42,9 @@ public class FacturaProductoDAOImpl implements FacturaProductoDAO {
     }
 
     @Override
-    public void add(FacturaProducto facturaProducto) {
-        getSession().save(facturaProducto);
+    public int add(FacturaProducto facturaProducto) {
+        Serializable idFacturaProducto = getSession().save(facturaProducto);
+        return (int) idFacturaProducto;
     }
 
     @Override
@@ -53,6 +55,14 @@ public class FacturaProductoDAOImpl implements FacturaProductoDAO {
     @Override
     public void delete(FacturaProducto facturaProducto) {
         getSession().delete(facturaProducto);
+    }
+
+    @Override
+    public FacturaProducto detail(int idFacturaProducto) {
+        Criteria criteria = getSession().createCriteria(FacturaProducto.class);
+        criteria.add(Restrictions.eq("idFacturaProducto", idFacturaProducto));
+        FacturaProducto facturaProducto = (FacturaProducto) criteria.uniqueResult();
+        return facturaProducto;
     }
 
 }
