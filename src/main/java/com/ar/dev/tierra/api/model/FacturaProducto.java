@@ -70,10 +70,13 @@ public class FacturaProducto implements Serializable {
     @Column(name = "numero_factura", length = 25, nullable = false)
     private String numeroFactura;
 
+    @Column(name = "carga", nullable = false)
+    private boolean carga;
+
     public FacturaProducto() {
     }
 
-    public FacturaProducto(int idFacturaProducto, Proveedor proveedor, BigDecimal monto, Date fechaFactura, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion, boolean estado, String observaciones, String estadoLocal, String numeroFactura) {
+    public FacturaProducto(int idFacturaProducto, Proveedor proveedor, BigDecimal monto, Date fechaFactura, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion, boolean estado, String observaciones, String estadoLocal, String numeroFactura, boolean carga) {
         this.idFacturaProducto = idFacturaProducto;
         this.proveedor = proveedor;
         this.monto = monto;
@@ -86,6 +89,7 @@ public class FacturaProducto implements Serializable {
         this.observaciones = observaciones;
         this.estadoLocal = estadoLocal;
         this.numeroFactura = numeroFactura;
+        this.carga = carga;
     }
 
     /**
@@ -254,6 +258,20 @@ public class FacturaProducto implements Serializable {
      */
     public void setIdFacturaProducto(int idFacturaProducto) {
         this.idFacturaProducto = idFacturaProducto;
+    }
+
+    /**
+     * @return the carga
+     */
+    public boolean isCarga() {
+        return carga;
+    }
+
+    /**
+     * @param carga the carga to set
+     */
+    public void setCarga(boolean carga) {
+        this.carga = carga;
     }
 
 }

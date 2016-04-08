@@ -57,6 +57,7 @@ public class FacturaProductoController implements Serializable {
         facturaProducto.setFechaCreacion(new Date());
         facturaProducto.setEstadoLocal("SIN REPARTIR");
         facturaProducto.setEstado(true);
+        facturaProducto.setCarga(true);
         int idFacturaProducto = facturaProductoDAO.add(facturaProducto);
         JsonResponse msg = new JsonResponse("Success", String.valueOf(idFacturaProducto));
         return new ResponseEntity<>(msg, HttpStatus.OK);
@@ -91,6 +92,18 @@ public class FacturaProductoController implements Serializable {
         FacturaProducto facturaProducto = facturaProductoDAO.detail(idFacturaProducto);
         if (facturaProducto != null) {
             return new ResponseEntity<>(facturaProducto, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/finish", method = RequestMethod.POST)
+    public ResponseEntity<?> finish(@RequestParam("idFacturaProducto") int idFacturaProducto) {
+        FacturaProducto facturaProducto = facturaProductoDAO.detail(idFacturaProducto);
+        if (facturaProducto != null) {
+            facturaProducto.setCarga(false);
+            JsonResponse msg = new JsonResponse("Success", "La carga finalizo con exito.");
+            return new ResponseEntity<>(msg, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
