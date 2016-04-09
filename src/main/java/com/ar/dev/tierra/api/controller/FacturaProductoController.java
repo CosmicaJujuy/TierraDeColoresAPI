@@ -102,6 +102,7 @@ public class FacturaProductoController implements Serializable {
         FacturaProducto facturaProducto = facturaProductoDAO.detail(idFacturaProducto);
         if (facturaProducto != null) {
             facturaProducto.setCarga(false);
+            facturaProductoDAO.update(facturaProducto);
             JsonResponse msg = new JsonResponse("Success", "La carga finalizo con exito.");
             return new ResponseEntity<>(msg, HttpStatus.OK);
         } else {
