@@ -33,11 +33,12 @@ public class Factura implements Serializable {
     private Integer usuarioModificacion;
     private BigDecimal total;
     private String tipoFactura;
+    private String numeracion;
 
     public Factura() {
     }
 
-    public Factura(int idFactura, Cliente cliente, String estado, Usuarios idVendedor, Date fechaCreacion, Date fechaModificacion, Integer usuarioCreacion, Integer usuarioModificacion, BigDecimal total, String tipoFactura) {
+    public Factura(int idFactura, Cliente cliente, String estado, Usuarios idVendedor, Date fechaCreacion, Date fechaModificacion, Integer usuarioCreacion, Integer usuarioModificacion, BigDecimal total, String tipoFactura, String numeracion) {
         this.idFactura = idFactura;
         this.cliente = cliente;
         this.estado = estado;
@@ -48,7 +49,9 @@ public class Factura implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
         this.total = total;
         this.tipoFactura = tipoFactura;
+        this.numeracion = numeracion;
     }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -144,5 +147,20 @@ public class Factura implements Serializable {
 
     public void setTotal(BigDecimal total) {
         this.total = total;
+    }
+
+    /**
+     * @return the numeracion
+     */
+    @Column(name = "numeracion")
+    public String getNumeracion() {
+        return numeracion;
+    }
+
+    /**
+     * @param numeracion the numeracion to set
+     */
+    public void setNumeracion(String numeracion) {
+        this.numeracion = numeracion;
     }
 }
