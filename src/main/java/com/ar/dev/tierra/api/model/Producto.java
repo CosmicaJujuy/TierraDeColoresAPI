@@ -78,10 +78,6 @@ public class Producto implements Serializable {
     @Column(name = "talla", nullable = false, length = 150)
     private String talla;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "fecha_producto", length = 13)
-    private Date fechaProducto;
-
     @Column(name = "estado_producto", nullable = false)
     private boolean estadoProducto;
 
@@ -102,7 +98,7 @@ public class Producto implements Serializable {
     public Producto() {
     }
 
-    public Producto(int idProducto, String codigoProducto, String claseProducto, Categoria categoria, Marcas marcas, FacturaProducto facturaProducto, Sexo sexo, Temporada temporada, String descripcion, String colorProducto, BigDecimal precioCosto, BigDecimal precioVenta, BigDecimal precioLista, int cantidadTotal, int cantidadMinima, String talla, Date fechaProducto, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
+    public Producto(int idProducto, String codigoProducto, String claseProducto, Categoria categoria, Marcas marcas, FacturaProducto facturaProducto, Sexo sexo, Temporada temporada, String descripcion, String colorProducto, BigDecimal precioCosto, BigDecimal precioVenta, BigDecimal precioLista, int cantidadTotal, int cantidadMinima, String talla, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
         this.idProducto = idProducto;
         this.codigoProducto = codigoProducto;
         this.claseProducto = claseProducto;
@@ -119,7 +115,6 @@ public class Producto implements Serializable {
         this.cantidadTotal = cantidadTotal;
         this.cantidadMinima = cantidadMinima;
         this.talla = talla;
-        this.fechaProducto = fechaProducto;
         this.estadoProducto = estadoProducto;
         this.fechaCreacion = fechaCreacion;
         this.fechaModificacion = fechaModificacion;
@@ -349,20 +344,6 @@ public class Producto implements Serializable {
      */
     public void setTalla(String talla) {
         this.talla = talla;
-    }
-
-    /**
-     * @return the fechaProducto
-     */
-    public Date getFechaProducto() {
-        return fechaProducto;
-    }
-
-    /**
-     * @param fechaProducto the fechaProducto to set
-     */
-    public void setFechaProducto(Date fechaProducto) {
-        this.fechaProducto = fechaProducto;
     }
 
     /**
