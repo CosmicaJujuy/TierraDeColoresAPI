@@ -116,7 +116,7 @@ public class ProductoController implements Serializable {
             return new ResponseEntity<>(list, HttpStatus.BAD_REQUEST);
         }
     }
-    
+
     @RequestMapping(value = "/list/factura", method = RequestMethod.POST)
     public ResponseEntity<?> findByIdFactura(@RequestParam("idFacturaProducto") int idFacturaProducto) {
         List<Producto> list = productoDAO.findByIdFactura(idFacturaProducto);
@@ -126,4 +126,15 @@ public class ProductoController implements Serializable {
             return new ResponseEntity<>(list, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @RequestMapping(value = "/convert", method = RequestMethod.POST)
+    public ResponseEntity<?> convert(@RequestParam("idFacturaProducto") int idFacturaProducto) {
+        List<Producto> list = productoDAO.getAll();
+        for (Producto producto : list) {
+            producto.setEstadoDistribucion(false);
+            productoDAO.update(producto);
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
 }
