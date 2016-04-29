@@ -96,12 +96,12 @@ public class Producto implements Serializable {
     private Integer usuarioModificacion;
 
     @Column(name = "estado_distribucion")
-    private boolean estadoDistribucion;
+    private Boolean estadoDistribucion;
 
     public Producto() {
     }
 
-    public Producto(int idProducto, String codigoProducto, String claseProducto, Categoria categoria, Marcas marcas, FacturaProducto facturaProducto, Sexo sexo, Temporada temporada, String descripcion, String colorProducto, BigDecimal precioCosto, BigDecimal precioVenta, BigDecimal precioLista, int cantidadTotal, int cantidadMinima, String talla, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion, boolean estadoDistribucion) {
+    public Producto(int idProducto, String codigoProducto, String claseProducto, Categoria categoria, Marcas marcas, FacturaProducto facturaProducto, Sexo sexo, Temporada temporada, String descripcion, String colorProducto, BigDecimal precioCosto, BigDecimal precioVenta, BigDecimal precioLista, int cantidadTotal, int cantidadMinima, String talla, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion, Boolean estadoDistribucion) {
         this.idProducto = idProducto;
         this.codigoProducto = codigoProducto;
         this.claseProducto = claseProducto;
@@ -423,14 +423,14 @@ public class Producto implements Serializable {
     /**
      * @return the estadoDistribucion
      */
-    public boolean isEstadoDistribucion() {
+    public Boolean isEstadoDistribucion() {
         return estadoDistribucion;
     }
 
     /**
      * @param estadoDistribucion the estadoDistribucion to set
      */
-    public void setEstadoDistribucion(boolean estadoDistribucion) {
+    public void setEstadoDistribucion(Boolean estadoDistribucion) {
         this.estadoDistribucion = estadoDistribucion;
     }
 
