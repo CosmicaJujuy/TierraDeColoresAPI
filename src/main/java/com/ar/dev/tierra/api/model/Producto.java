@@ -95,10 +95,13 @@ public class Producto implements Serializable {
     @Column(name = "usuario_modificacion")
     private Integer usuarioModificacion;
 
+    @Column(name = "estado_distribucion")
+    private boolean estadoDistribucion;
+
     public Producto() {
     }
 
-    public Producto(int idProducto, String codigoProducto, String claseProducto, Categoria categoria, Marcas marcas, FacturaProducto facturaProducto, Sexo sexo, Temporada temporada, String descripcion, String colorProducto, BigDecimal precioCosto, BigDecimal precioVenta, BigDecimal precioLista, int cantidadTotal, int cantidadMinima, String talla, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
+    public Producto(int idProducto, String codigoProducto, String claseProducto, Categoria categoria, Marcas marcas, FacturaProducto facturaProducto, Sexo sexo, Temporada temporada, String descripcion, String colorProducto, BigDecimal precioCosto, BigDecimal precioVenta, BigDecimal precioLista, int cantidadTotal, int cantidadMinima, String talla, boolean estadoProducto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion, boolean estadoDistribucion) {
         this.idProducto = idProducto;
         this.codigoProducto = codigoProducto;
         this.claseProducto = claseProducto;
@@ -120,6 +123,7 @@ public class Producto implements Serializable {
         this.fechaModificacion = fechaModificacion;
         this.usuarioCreacion = usuarioCreacion;
         this.usuarioModificacion = usuarioModificacion;
+        this.estadoDistribucion = estadoDistribucion;
     }
 
     /**
@@ -414,6 +418,20 @@ public class Producto implements Serializable {
      */
     public void setUsuarioModificacion(Integer usuarioModificacion) {
         this.usuarioModificacion = usuarioModificacion;
+    }
+
+    /**
+     * @return the estadoDistribucion
+     */
+    public boolean isEstadoDistribucion() {
+        return estadoDistribucion;
+    }
+
+    /**
+     * @param estadoDistribucion the estadoDistribucion to set
+     */
+    public void setEstadoDistribucion(boolean estadoDistribucion) {
+        this.estadoDistribucion = estadoDistribucion;
     }
 
 }
