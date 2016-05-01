@@ -23,11 +23,11 @@ public interface StockDAO {
 
     public List<WrapperStock> getAll(int sucursal);
 
-    public void add(WrapperStock wrapper, int sucursal);
+    public void add(WrapperStock wrapper);
 
-    public void update(WrapperStock wrapper, int sucursal);
+    public void update(WrapperStock wrapper);
 
-    public void delete(WrapperStock wrapper, int sucursal);
+    public void delete(WrapperStock wrapper);
 
     public List<StockTierra> searchByFacturaStockTierra(int idFactura);
 

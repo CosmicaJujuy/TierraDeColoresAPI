@@ -30,7 +30,7 @@ import javax.persistence.TemporalType;
 public class StockBebelandia implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_stock", unique = true, nullable = false)
     private int idStock;
 

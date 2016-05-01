@@ -51,82 +51,73 @@ public class StockController implements Serializable {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<?> addStockTierra(OAuth2Authentication authentication,
-            @RequestBody WrapperStock wrapper,
-            @RequestParam("idScursal") int idSucursal) {
+            @RequestBody WrapperStock wrapper) {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
-        switch (idSucursal) {
-            case 1:
-                wrapper.getStockTierra().setFechaCreacion(new Date());
-                wrapper.getStockTierra().setUsuarioCreacion(user.getIdUsuario());
-                wrapper.getStockTierra().setEstado(true);
-                break;
-            case 2:
-                wrapper.getStockBebelandia().setFechaCreacion(new Date());
-                wrapper.getStockBebelandia().setUsuarioCreacion(user.getIdUsuario());
-                wrapper.getStockBebelandia().setEstado(true);
-                break;
-            case 3:
-                wrapper.getStockLibertador().setFechaCreacion(new Date());
-                wrapper.getStockLibertador().setUsuarioCreacion(user.getIdUsuario());
-                wrapper.getStockLibertador().setEstado(true);
-                break;
+        if (wrapper.getStockTierra() != null) {
+            wrapper.getStockTierra().setFechaCreacion(new Date());
+            wrapper.getStockTierra().setUsuarioCreacion(user.getIdUsuario());
+            wrapper.getStockTierra().setEstado(true);
         }
-        stockDAO.add(wrapper, idSucursal);
+        if (wrapper.getStockBebelandia() != null) {
+            wrapper.getStockBebelandia().setFechaCreacion(new Date());
+            wrapper.getStockBebelandia().setUsuarioCreacion(user.getIdUsuario());
+            wrapper.getStockBebelandia().setEstado(true);
+        }
+        if (wrapper.getStockLibertador() != null) {
+            wrapper.getStockLibertador().setFechaCreacion(new Date());
+            wrapper.getStockLibertador().setUsuarioCreacion(user.getIdUsuario());
+            wrapper.getStockLibertador().setEstado(true);
+        }
+        stockDAO.add(wrapper);
         JsonResponse msg = new JsonResponse("Success", "Producto agregado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/tierra/update", method = RequestMethod.POST)
     public ResponseEntity<?> updateStockTierra(OAuth2Authentication authentication,
-            @RequestBody WrapperStock wrapper,
-            @RequestParam("idScursal") int idSucursal) {
+            @RequestBody WrapperStock wrapper) {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
-        switch (idSucursal) {
-            case 1:
-                wrapper.getStockTierra().setFechaCreacion(new Date());
-                wrapper.getStockTierra().setUsuarioCreacion(user.getIdUsuario());
-                wrapper.getStockTierra().setEstado(true);
-                break;
-            case 2:
-                wrapper.getStockBebelandia().setFechaCreacion(new Date());
-                wrapper.getStockBebelandia().setUsuarioCreacion(user.getIdUsuario());
-                wrapper.getStockBebelandia().setEstado(true);
-                break;
-            case 3:
-                wrapper.getStockLibertador().setFechaCreacion(new Date());
-                wrapper.getStockLibertador().setUsuarioCreacion(user.getIdUsuario());
-                wrapper.getStockLibertador().setEstado(true);
-                break;
+        if (wrapper.getStockTierra() != null) {
+            wrapper.getStockTierra().setFechaCreacion(new Date());
+            wrapper.getStockTierra().setUsuarioCreacion(user.getIdUsuario());
+            wrapper.getStockTierra().setEstado(true);
         }
-        stockDAO.update(wrapper, idSucursal);
+        if (wrapper.getStockBebelandia() != null) {
+            wrapper.getStockBebelandia().setFechaCreacion(new Date());
+            wrapper.getStockBebelandia().setUsuarioCreacion(user.getIdUsuario());
+            wrapper.getStockBebelandia().setEstado(true);
+        }
+        if (wrapper.getStockLibertador() != null) {
+            wrapper.getStockLibertador().setFechaCreacion(new Date());
+            wrapper.getStockLibertador().setUsuarioCreacion(user.getIdUsuario());
+            wrapper.getStockLibertador().setEstado(true);
+        }
+        stockDAO.update(wrapper);
         JsonResponse msg = new JsonResponse("Success", "Producto modificado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/tierra/delete", method = RequestMethod.POST)
     public ResponseEntity<?> deleteStockTierra(OAuth2Authentication authentication,
-            @RequestBody WrapperStock wrapper,
-            @RequestParam("idScursal") int idSucursal) {
+            @RequestBody WrapperStock wrapper) {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
-        switch (idSucursal) {
-            case 1:
-                wrapper.getStockTierra().setFechaCreacion(new Date());
-                wrapper.getStockTierra().setUsuarioCreacion(user.getIdUsuario());
-                wrapper.getStockTierra().setEstado(true);
-                break;
-            case 2:
-                wrapper.getStockBebelandia().setFechaCreacion(new Date());
-                wrapper.getStockBebelandia().setUsuarioCreacion(user.getIdUsuario());
-                wrapper.getStockBebelandia().setEstado(true);
-                break;
-            case 3:
-                wrapper.getStockLibertador().setFechaCreacion(new Date());
-                wrapper.getStockLibertador().setUsuarioCreacion(user.getIdUsuario());
-                wrapper.getStockLibertador().setEstado(true);
-                break;
+        if (wrapper.getStockTierra() != null) {
+            wrapper.getStockTierra().setFechaCreacion(new Date());
+            wrapper.getStockTierra().setUsuarioCreacion(user.getIdUsuario());
+            wrapper.getStockTierra().setEstado(true);
+        }
+        if (wrapper.getStockBebelandia() != null) {
+            wrapper.getStockBebelandia().setFechaCreacion(new Date());
+            wrapper.getStockBebelandia().setUsuarioCreacion(user.getIdUsuario());
+            wrapper.getStockBebelandia().setEstado(true);
+        }
+        if (wrapper.getStockLibertador() != null) {
+            wrapper.getStockLibertador().setFechaCreacion(new Date());
+            wrapper.getStockLibertador().setUsuarioCreacion(user.getIdUsuario());
+            wrapper.getStockLibertador().setEstado(true);
         }
         /*Posible cambio a borrado logico*/
-        stockDAO.delete(wrapper, idSucursal);
+        stockDAO.delete(wrapper);
         JsonResponse msg = new JsonResponse("Success", "Producto modificado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }

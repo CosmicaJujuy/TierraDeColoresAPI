@@ -58,7 +58,7 @@ public class StockDAOImpl implements StockDAO {
             case 1:
                 List<StockTierra> tierraList = criteria.list();
                 WrapperStock wrapperTierra = new WrapperStock();
-                for (StockTierra stockTierra : tierraList) {                    
+                for (StockTierra stockTierra : tierraList) {
                     wrapperTierra.setStockTierra(stockTierra);
                     list.add(wrapperTierra);
                 }
@@ -66,7 +66,7 @@ public class StockDAOImpl implements StockDAO {
             case 2:
                 List<StockBebelandia> bebeList = criteria.list();
                 WrapperStock wrapperBebelandia = new WrapperStock();
-                for (StockBebelandia stockBebelandia : bebeList) {                    
+                for (StockBebelandia stockBebelandia : bebeList) {
                     wrapperBebelandia.setStockBebelandia(stockBebelandia);
                     list.add(wrapperBebelandia);
                 }
@@ -84,50 +84,43 @@ public class StockDAOImpl implements StockDAO {
     }
 
     @Override
-    public void add(WrapperStock wrapper, int sucursal) {
-        switch (sucursal) {
-            case 1:
-                getSession().save(wrapper.getStockTierra());
-                break;
-            case 2:
-                getSession().save(wrapper.getStockBebelandia());
-                break;
-            case 3:
-                getSession().save(wrapper.getStockLibertador());
-                break;
+    public void add(WrapperStock wrapper) {
+        if (wrapper.getStockTierra() != null) {
+            getSession().save(wrapper.getStockTierra());
         }
-        
-    }
-
-    @Override
-    public void update(WrapperStock wrapper, int sucursal) {
-        switch (sucursal) {
-            case 1:
-                getSession().update(wrapper.getStockTierra());
-                break;
-            case 2:
-                getSession().update(wrapper.getStockBebelandia());
-                break;
-            case 3:
-                getSession().update(wrapper.getStockLibertador());
-                break;
+        if (wrapper.getStockBebelandia()!= null) {
+            getSession().save(wrapper.getStockBebelandia());
+        }
+        if (wrapper.getStockLibertador()!= null) {
+            getSession().save(wrapper.getStockLibertador());
         }
     }
 
     @Override
-    public void delete(WrapperStock wrapper, int sucursal) {
-        switch (sucursal) {
-            case 1:
-                getSession().delete(wrapper.getStockTierra());
-                break;
-            case 2:
-                getSession().delete(wrapper.getStockBebelandia());
-                break;
-            case 3:
-                getSession().delete(wrapper.getStockLibertador());
-                break;
+    public void update(WrapperStock wrapper) {
+        if (wrapper.getStockTierra() != null) {
+            getSession().update(wrapper.getStockTierra());
         }
-    }   
+        if (wrapper.getStockBebelandia()!= null) {
+            getSession().update(wrapper.getStockBebelandia());
+        }
+        if (wrapper.getStockLibertador()!= null) {
+            getSession().update(wrapper.getStockLibertador());
+        }
+    }
+
+    @Override
+    public void delete(WrapperStock wrapper) {
+        if (wrapper.getStockTierra() != null) {
+            getSession().delete(wrapper.getStockTierra());
+        }
+        if (wrapper.getStockBebelandia()!= null) {
+            getSession().delete(wrapper.getStockBebelandia());
+        }
+        if (wrapper.getStockLibertador()!= null) {
+            getSession().delete(wrapper.getStockLibertador());
+        }
+    }
 
     @Override
     public List<StockTierra> searchByFacturaStockTierra(int idFactura) {
