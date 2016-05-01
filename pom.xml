@@ -5,6 +5,7 @@
     <artifactId>TierraDeColoresAPI</artifactId>
     <version>0.9.0</version>
     <packaging>jar</packaging>
+    
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -23,26 +24,9 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.social</groupId>
-            <artifactId>spring-social-core</artifactId>
-        </dependency>
-        <dependency>   
-            <groupId>org.springframework.social</groupId>
-            <artifactId>spring-social-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.social</groupId>
-            <artifactId>spring-social-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.social</groupId>
-            <artifactId>spring-social-facebook</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        
+        </dependency>        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -60,15 +44,20 @@
             <artifactId>commons-fileupload</artifactId>
             <version>1.3.1</version> 
         </dependency>
-        <!--
         <dependency>
-            <groupId>com.hasar</groupId>
-            <artifactId>HasarFiscalLibreria-1.0-bin</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/com/hasar/HasarFiscalLibreria-1.0-bin/SNAPSHOT/HasarFiscalLibreria-1.0-bin-SNAPSHOT</systemPath>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
         </dependency>
-         makesure correct version here -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.opensaml</groupId>
+            <artifactId>openws</artifactId>
+            <version>1.4.2-1</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

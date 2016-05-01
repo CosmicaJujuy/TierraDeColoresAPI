@@ -6,9 +6,11 @@
 package com.ar.dev.tierra.api.controller;
 
 import com.ar.dev.tierra.api.dao.ProductoDAO;
+import com.ar.dev.tierra.api.dao.StockDAO;
 import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Producto;
+import com.ar.dev.tierra.api.model.stock.StockTierra;
 import com.ar.dev.tierra.api.model.Usuarios;
 import java.io.Serializable;
 import java.util.Date;
@@ -81,8 +83,8 @@ public class ProductoController implements Serializable {
         producto.setEstadoProducto(false);
         producto.setUsuarioModificacion(user.getIdUsuario());
         producto.setFechaModificacion(new Date());
-        productoDAO.update(producto);
-        JsonResponse msg = new JsonResponse("Success", "Categoria eliminada con exito");
+        productoDAO.delete(producto);
+        JsonResponse msg = new JsonResponse("Success", "Producto eliminado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
