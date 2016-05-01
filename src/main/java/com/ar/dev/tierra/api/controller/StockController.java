@@ -42,10 +42,25 @@ public class StockController implements Serializable {
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public ResponseEntity<?> list(@RequestParam("idStock") int idStock) {
         List<WrapperStock> list = stockDAO.getAll(idStock);
-        if (list.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else {
-            return new ResponseEntity<>(list, HttpStatus.OK);
+        switch (idStock) {
+            case 1:
+                List<StockTierra> tierra = new ArrayList<>();
+                for (WrapperStock wrapperStock : list) {
+                    tierra.add(wrapperStock.getStockTierra());
+                }
+                return new ResponseEntity<>(tierra, HttpStatus.OK);
+            case 2:
+                List<StockTierra> bebelandia = new ArrayList<>();
+                for (WrapperStock wrapperStock : list) {
+                    bebelandia.add(wrapperStock.getStockTierra());
+                }
+                return new ResponseEntity<>(bebelandia, HttpStatus.OK);
+            case 3:
+                List<StockTierra> libertador = new ArrayList<>();
+                for (WrapperStock wrapperStock : list) {
+                    libertador.add(wrapperStock.getStockTierra());
+                }
+                return new ResponseEntity<>(libertador, HttpStatus.OK);
         }
     }
 
