@@ -10,6 +10,7 @@ import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Usuarios;
 import com.ar.dev.tierra.api.model.stock.StockBebelandia;
+import com.ar.dev.tierra.api.model.stock.StockLibertador;
 import com.ar.dev.tierra.api.model.stock.StockTierra;
 import com.ar.dev.tierra.api.model.stock.WrapperStock;
 import java.io.Serializable;
@@ -44,8 +45,8 @@ public class StockController implements Serializable {
     public ResponseEntity<?> list(@RequestParam("idStock") int idStock) {
         List<WrapperStock> list = stockDAO.getAll(idStock);
         List<StockTierra> tierra = new ArrayList<>();
-        List<StockTierra> bebelandia = new ArrayList<>();
-        List<StockTierra> libertador = new ArrayList<>();
+        List<StockBebelandia> bebelandia = new ArrayList<>();
+        List<StockLibertador> libertador = new ArrayList<>();
         switch (idStock) {
             case 1:
                 for (WrapperStock wrapperStock : list) {
@@ -54,12 +55,12 @@ public class StockController implements Serializable {
                 break;
             case 2:
                 for (WrapperStock wrapperStock : list) {
-                    bebelandia.add(wrapperStock.getStockTierra());
+                    bebelandia.add(wrapperStock.getStockBebelandia());
                 }
                 break;
             case 3:
                 for (WrapperStock wrapperStock : list) {
-                    libertador.add(wrapperStock.getStockTierra());
+                    libertador.add(wrapperStock.getStockLibertador());
                 }
                 break;
         }
