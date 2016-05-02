@@ -57,24 +57,24 @@ public class StockDAOImpl implements StockDAO {
         switch (sucursal) {
             case 1:
                 List<StockTierra> tierraList = criteria.list();
-                WrapperStock wrapperTierra = new WrapperStock();
                 for (StockTierra stockTierra : tierraList) {
+                    WrapperStock wrapperTierra = new WrapperStock();
                     wrapperTierra.setStockTierra(stockTierra);
                     list.add(wrapperTierra);
                 }
                 break;
             case 2:
                 List<StockBebelandia> bebeList = criteria.list();
-                WrapperStock wrapperBebelandia = new WrapperStock();
                 for (StockBebelandia stockBebelandia : bebeList) {
+                    WrapperStock wrapperBebelandia = new WrapperStock();
                     wrapperBebelandia.setStockBebelandia(stockBebelandia);
                     list.add(wrapperBebelandia);
                 }
                 break;
             case 3:
                 List<StockLibertador> libertadorList = criteria.list();
-                WrapperStock wrapperLibertador = new WrapperStock();
                 for (StockLibertador stockLibertador : libertadorList) {
+                    WrapperStock wrapperLibertador = new WrapperStock();
                     wrapperLibertador.setStockLibertador(stockLibertador);
                     list.add(wrapperLibertador);
                 }
@@ -88,10 +88,10 @@ public class StockDAOImpl implements StockDAO {
         if (wrapper.getStockTierra() != null) {
             getSession().save(wrapper.getStockTierra());
         }
-        if (wrapper.getStockBebelandia()!= null) {
+        if (wrapper.getStockBebelandia() != null) {
             getSession().save(wrapper.getStockBebelandia());
         }
-        if (wrapper.getStockLibertador()!= null) {
+        if (wrapper.getStockLibertador() != null) {
             getSession().save(wrapper.getStockLibertador());
         }
     }
@@ -101,10 +101,10 @@ public class StockDAOImpl implements StockDAO {
         if (wrapper.getStockTierra() != null) {
             getSession().update(wrapper.getStockTierra());
         }
-        if (wrapper.getStockBebelandia()!= null) {
+        if (wrapper.getStockBebelandia() != null) {
             getSession().update(wrapper.getStockBebelandia());
         }
-        if (wrapper.getStockLibertador()!= null) {
+        if (wrapper.getStockLibertador() != null) {
             getSession().update(wrapper.getStockLibertador());
         }
     }
@@ -114,10 +114,10 @@ public class StockDAOImpl implements StockDAO {
         if (wrapper.getStockTierra() != null) {
             getSession().delete(wrapper.getStockTierra());
         }
-        if (wrapper.getStockBebelandia()!= null) {
+        if (wrapper.getStockBebelandia() != null) {
             getSession().delete(wrapper.getStockBebelandia());
         }
-        if (wrapper.getStockLibertador()!= null) {
+        if (wrapper.getStockLibertador() != null) {
             getSession().delete(wrapper.getStockLibertador());
         }
     }

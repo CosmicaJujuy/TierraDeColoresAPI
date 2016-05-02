@@ -9,6 +9,7 @@ import com.ar.dev.tierra.api.model.Producto;
 import com.ar.dev.tierra.api.model.Sucursal;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -75,6 +76,63 @@ public class StockTierra implements Serializable {
         this.fechaCreacion = fechaCreacion;
         this.fechaModificacion = fechaModificacion;
         this.idSucursal = idSucursal;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 19 * hash + this.idStock;
+        hash = 19 * hash + this.cantidad;
+        hash = 19 * hash + Objects.hashCode(this.idProducto);
+        hash = 19 * hash + (this.estado ? 1 : 0);
+        hash = 19 * hash + this.usuarioCreacion;
+        hash = 19 * hash + Objects.hashCode(this.usuarioModificacion);
+        hash = 19 * hash + Objects.hashCode(this.fechaCreacion);
+        hash = 19 * hash + Objects.hashCode(this.fechaModificacion);
+        hash = 19 * hash + Objects.hashCode(this.idSucursal);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final StockTierra other = (StockTierra) obj;
+        if (this.idStock != other.idStock) {
+            return false;
+        }
+        if (this.cantidad != other.cantidad) {
+            return false;
+        }
+        if (this.estado != other.estado) {
+            return false;
+        }
+        if (this.usuarioCreacion != other.usuarioCreacion) {
+            return false;
+        }
+        if (!Objects.equals(this.idProducto, other.idProducto)) {
+            return false;
+        }
+        if (!Objects.equals(this.usuarioModificacion, other.usuarioModificacion)) {
+            return false;
+        }
+        if (!Objects.equals(this.fechaCreacion, other.fechaCreacion)) {
+            return false;
+        }
+        if (!Objects.equals(this.fechaModificacion, other.fechaModificacion)) {
+            return false;
+        }
+        if (!Objects.equals(this.idSucursal, other.idSucursal)) {
+            return false;
+        }
+        return true;
     }
 
     /**
