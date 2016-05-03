@@ -59,14 +59,13 @@ public class StockLibertador implements Serializable {
     @Column(name = "fecha_modificacion", length = 13)
     private Date fechaModificacion;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_sucursal", nullable = false)
-    private Sucursal idSucursal;
+    @Column(name = "id_sucursal", nullable = false)
+    private int idSucursal;
 
     public StockLibertador() {
     }
 
-    public StockLibertador(int idStock, int cantidad, Producto idProducto, boolean estado, int usuarioCreacion, Integer usuarioModificacion, Date fechaCreacion, Date fechaModificacion, Sucursal idSucursal) {
+    public StockLibertador(int idStock, int cantidad, Producto idProducto, boolean estado, int usuarioCreacion, Integer usuarioModificacion, Date fechaCreacion, Date fechaModificacion, int idSucursal) {
         this.idStock = idStock;
         this.cantidad = cantidad;
         this.idProducto = idProducto;
@@ -76,63 +75,6 @@ public class StockLibertador implements Serializable {
         this.fechaCreacion = fechaCreacion;
         this.fechaModificacion = fechaModificacion;
         this.idSucursal = idSucursal;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 59 * hash + this.idStock;
-        hash = 59 * hash + this.cantidad;
-        hash = 59 * hash + Objects.hashCode(this.idProducto);
-        hash = 59 * hash + (this.estado ? 1 : 0);
-        hash = 59 * hash + this.usuarioCreacion;
-        hash = 59 * hash + Objects.hashCode(this.usuarioModificacion);
-        hash = 59 * hash + Objects.hashCode(this.fechaCreacion);
-        hash = 59 * hash + Objects.hashCode(this.fechaModificacion);
-        hash = 59 * hash + Objects.hashCode(this.idSucursal);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final StockLibertador other = (StockLibertador) obj;
-        if (this.idStock != other.idStock) {
-            return false;
-        }
-        if (this.cantidad != other.cantidad) {
-            return false;
-        }
-        if (this.estado != other.estado) {
-            return false;
-        }
-        if (this.usuarioCreacion != other.usuarioCreacion) {
-            return false;
-        }
-        if (!Objects.equals(this.idProducto, other.idProducto)) {
-            return false;
-        }
-        if (!Objects.equals(this.usuarioModificacion, other.usuarioModificacion)) {
-            return false;
-        }
-        if (!Objects.equals(this.fechaCreacion, other.fechaCreacion)) {
-            return false;
-        }
-        if (!Objects.equals(this.fechaModificacion, other.fechaModificacion)) {
-            return false;
-        }
-        if (!Objects.equals(this.idSucursal, other.idSucursal)) {
-            return false;
-        }
-        return true;
     }
 
     /**
@@ -250,14 +192,14 @@ public class StockLibertador implements Serializable {
     /**
      * @return the idSucursal
      */
-    public Sucursal getIdSucursal() {
+    public int getIdSucursal() {
         return idSucursal;
     }
 
     /**
      * @param idSucursal the idSucursal to set
      */
-    public void setIdSucursal(Sucursal idSucursal) {
+    public void setIdSucursal(int idSucursal) {
         this.idSucursal = idSucursal;
     }
 

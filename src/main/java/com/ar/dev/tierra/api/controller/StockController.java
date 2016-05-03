@@ -77,20 +77,24 @@ public class StockController implements Serializable {
     public ResponseEntity<?> addStockTierra(OAuth2Authentication authentication,
             @RequestBody WrapperStock wrapper) {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Date today = new Date();
         if (wrapper.getStockTierra() != null) {
-            wrapper.getStockTierra().setFechaCreacion(new Date());
+            wrapper.getStockTierra().setFechaCreacion(today);
             wrapper.getStockTierra().setUsuarioCreacion(user.getIdUsuario());
             wrapper.getStockTierra().setEstado(true);
+            wrapper.getStockTierra().setIdSucursal(1);
         }
         if (wrapper.getStockBebelandia() != null) {
-            wrapper.getStockBebelandia().setFechaCreacion(new Date());
+            wrapper.getStockBebelandia().setFechaCreacion(today);
             wrapper.getStockBebelandia().setUsuarioCreacion(user.getIdUsuario());
             wrapper.getStockBebelandia().setEstado(true);
+            wrapper.getStockBebelandia().setIdSucursal(2);
         }
         if (wrapper.getStockLibertador() != null) {
-            wrapper.getStockLibertador().setFechaCreacion(new Date());
+            wrapper.getStockLibertador().setFechaCreacion(today);
             wrapper.getStockLibertador().setUsuarioCreacion(user.getIdUsuario());
             wrapper.getStockLibertador().setEstado(true);
+            wrapper.getStockLibertador().setIdSucursal(3);
         }
         stockDAO.add(wrapper);
         JsonResponse msg = new JsonResponse("Success", "Producto agregado con exito");
