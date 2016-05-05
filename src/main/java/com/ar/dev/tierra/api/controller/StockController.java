@@ -168,7 +168,7 @@ public class StockController implements Serializable {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @RequestMapping(value = "/libertdor/search", method = RequestMethod.POST)
+    @RequestMapping(value = "/libertador/search", method = RequestMethod.POST)
     public ResponseEntity<?> searchByFacturaLibertador(@RequestParam("idFactura")int idFactura) {
         List<StockLibertador> libertador = stockDAO.searchByFacturaStockLibertador(idFactura);
         if(!libertador.isEmpty()){
