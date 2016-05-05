@@ -149,4 +149,32 @@ public class StockController implements Serializable {
         JsonResponse msg = new JsonResponse("Success", "Producto modificado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/tierra/search", method = RequestMethod.POST)
+    public ResponseEntity<?> searchByFacturaTierra(@RequestParam("idFactura")int idFactura) {
+        List<StockTierra> tierra = stockDAO.searchByFacturaStockTierra(idFactura);
+        if(!tierra.isEmpty()){
+            return new ResponseEntity<>(tierra, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @RequestMapping(value = "/bebelandia/search", method = RequestMethod.POST)
+    public ResponseEntity<?> searchByFacturaBebelandia(@RequestParam("idFactura")int idFactura) {
+        List<StockBebelandia> bebelandia = stockDAO.searchByFacturaStockBebelandia(idFactura);
+        if(!bebelandia.isEmpty()){
+            return new ResponseEntity<>(bebelandia, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @RequestMapping(value = "/libertdor/search", method = RequestMethod.POST)
+    public ResponseEntity<?> searchByFacturaLibertador(@RequestParam("idFactura")int idFactura) {
+        List<StockLibertador> libertador = stockDAO.searchByFacturaStockLibertador(idFactura);
+        if(!libertador.isEmpty()){
+            return new ResponseEntity<>(libertador, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }
