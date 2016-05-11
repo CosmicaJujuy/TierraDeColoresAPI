@@ -129,6 +129,7 @@ public class StockDAOImpl implements StockDAO {
         Criteria producto = criteria.createCriteria("idProducto");
         Criteria factura = producto.createCriteria("facturaProducto");
         factura.add(Restrictions.eq("idFacturaProducto", idFactura));
+        criteria.addOrder(Order.asc("idStock"));
         List<StockTierra> list = criteria.list();
         return list;
     }
@@ -140,6 +141,7 @@ public class StockDAOImpl implements StockDAO {
         Criteria producto = criteria.createCriteria("idProducto");
         Criteria factura = producto.createCriteria("facturaProducto");
         factura.add(Restrictions.eq("idFacturaProducto", idFactura));
+        criteria.addOrder(Order.asc("idStock"));
         List<StockBebelandia> list = criteria.list();
         return list;
     }
@@ -151,6 +153,7 @@ public class StockDAOImpl implements StockDAO {
         Criteria producto = criteria.createCriteria("idProducto");
         Criteria factura = producto.createCriteria("facturaProducto");
         factura.add(Restrictions.eq("idFacturaProducto", idFactura));
+        criteria.addOrder(Order.asc("idStock"));
         List<StockLibertador> list = criteria.list();
         return list;
     }
