@@ -41,7 +41,7 @@ public class FacturaDAOImpl implements FacturaDAO {
     @Override
     public List<Factura> getAll() {
         Criteria criteria = getSession().createCriteria(Factura.class);
-        criteria.addOrder(Order.asc("idFactura"));
+        criteria.addOrder(Order.desc("idFactura"));
         List<Factura> list = criteria.list();
         return list;
     }

@@ -12,6 +12,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -37,6 +38,7 @@ public class FacturaProductoDAOImpl implements FacturaProductoDAO {
     public List<FacturaProducto> getAll() {
         Criteria criteria = getSession().createCriteria(FacturaProducto.class);
         criteria.add(Restrictions.eq("estado", true));
+        criteria.addOrder(Order.desc("idFacturaProducto"));
         List<FacturaProducto> list = criteria.list();
         return list;
     }

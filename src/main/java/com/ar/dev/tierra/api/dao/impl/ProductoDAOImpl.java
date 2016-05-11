@@ -38,7 +38,7 @@ public class ProductoDAOImpl implements ProductoDAO {
     public List<Producto> getAll() {
         Criteria criteria = getSession().createCriteria(Producto.class);
         criteria.add(Restrictions.eq("estadoProducto", true));
-        criteria.addOrder(Order.asc("idProducto"));
+        criteria.addOrder(Order.desc("idProducto"));
         List<Producto> list = criteria.list();
         return list;
     }
@@ -90,6 +90,7 @@ public class ProductoDAOImpl implements ProductoDAO {
         criteria.add(Restrictions.eq("estadoProducto", true));
         Criteria facturaProducto = criteria.createCriteria("facturaProducto");
         facturaProducto.add(Restrictions.eq("idFacturaProducto", idFacturaPRoducto));
+        criteria.addOrder(Order.desc("idProducto"));
         List<Producto> list = criteria.list();
         return list;
     }
