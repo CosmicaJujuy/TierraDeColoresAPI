@@ -6,9 +6,11 @@
 package com.ar.dev.tierra.api.controller;
 
 import com.ar.dev.tierra.api.dao.RolesDAO;
+import com.ar.dev.tierra.api.dao.SucursalDAO;
 import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Roles;
+import com.ar.dev.tierra.api.model.Sucursal;
 import com.ar.dev.tierra.api.model.Usuarios;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -22,7 +24,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -44,9 +45,12 @@ public class UsuariosController implements Serializable {
 
     @Autowired
     UsuariosDAO usuariosDAO;
-    
+
     @Autowired
     RolesDAO rolesDAO;
+
+    @Autowired
+    SucursalDAO sucursalDAO;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -231,10 +235,20 @@ public class UsuariosController implements Serializable {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-    
+
     @RequestMapping(value = "/rol/list", method = RequestMethod.GET)
     public ResponseEntity<?> rolesList() {
         List<Roles> list = rolesDAO.getAll();
+        if (!list.isEmpty()) {
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    @RequestMapping(value = "/sucursal/list", method = RequestMethod.GET)
+    public ResponseEntity<?> sucursalList() {
+        List<Sucursal> list = sucursalDAO.getAll();
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
