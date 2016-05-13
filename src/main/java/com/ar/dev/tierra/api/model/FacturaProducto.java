@@ -37,7 +37,7 @@ public class FacturaProducto implements Serializable {
     @JoinColumn(name = "id_proveedor", nullable = false)
     private Proveedor proveedor;
 
-    @Column(name = "monto", scale = 2, precision = 6)
+    @Column(name = "monto", scale = 2, precision = 10)
     private BigDecimal monto;
 
     @Temporal(TemporalType.DATE)

@@ -5,8 +5,10 @@
  */
 package com.ar.dev.tierra.api.controller;
 
+import com.ar.dev.tierra.api.dao.RolesDAO;
 import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.JsonResponse;
+import com.ar.dev.tierra.api.model.Roles;
 import com.ar.dev.tierra.api.model.Usuarios;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -42,6 +44,9 @@ public class UsuariosController implements Serializable {
 
     @Autowired
     UsuariosDAO usuariosDAO;
+    
+    @Autowired
+    RolesDAO rolesDAO;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -222,6 +227,16 @@ public class UsuariosController implements Serializable {
         List<Usuarios> vendedores = usuariosDAO.getVendedores();
         if (!vendedores.isEmpty()) {
             return new ResponseEntity<>(vendedores, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    @RequestMapping(value = "/rol/list", method = RequestMethod.GET)
+    public ResponseEntity<?> rolesList() {
+        List<Roles> list = rolesDAO.getAll();
+        if (!list.isEmpty()) {
+            return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

@@ -18,6 +18,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RolesDAO {
     
-    public List<Roles> allRoles();
+    public List<Roles> getAll();
     
 }
