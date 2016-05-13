@@ -87,7 +87,7 @@ public class Usuarios implements Serializable {
     private int idUsuarioModificacion;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "  usuario_sucursal", nullable = false)
+    @JoinColumn(name = "usuario_sucursal", nullable = false)
     private Sucursal usuarioSucursal;
 
     public Usuarios() {
