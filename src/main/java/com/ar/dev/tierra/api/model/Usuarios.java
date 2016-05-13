@@ -86,10 +86,14 @@ public class Usuarios implements Serializable {
     @Column(name = "id_usuario_modificacion")
     private int idUsuarioModificacion;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "  usuario_sucursal", nullable = false)
+    private Sucursal usuarioSucursal;
+
     public Usuarios() {
     }
 
-    public Usuarios(int idUsuario, Roles roles, String nombre, String apellido, Date fechaNacimiento, int dni, String email, String telefono, String domicilio, String provincia, String username, String password, byte[] imagen, boolean estado, Date fechaCreacion, Date fechaModificacion, Date ultimaConexion, int idUsuarioCreacion, int idUsuarioModificacion) {
+    public Usuarios(int idUsuario, Roles roles, String nombre, String apellido, Date fechaNacimiento, int dni, String email, String telefono, String domicilio, String provincia, String username, String password, byte[] imagen, boolean estado, Date fechaCreacion, Date fechaModificacion, Date ultimaConexion, int idUsuarioCreacion, int idUsuarioModificacion, Sucursal usuarioSucursal) {
         this.idUsuario = idUsuario;
         this.roles = roles;
         this.nombre = nombre;
@@ -109,6 +113,7 @@ public class Usuarios implements Serializable {
         this.ultimaConexion = ultimaConexion;
         this.idUsuarioCreacion = idUsuarioCreacion;
         this.idUsuarioModificacion = idUsuarioModificacion;
+        this.usuarioSucursal = usuarioSucursal;
     }
 
     /**
@@ -375,6 +380,20 @@ public class Usuarios implements Serializable {
      */
     public void setIdUsuarioModificacion(int idUsuarioModificacion) {
         this.idUsuarioModificacion = idUsuarioModificacion;
+    }
+
+    /**
+     * @return the usuarioSucursal
+     */
+    public Sucursal getUsuarioSucursal() {
+        return usuarioSucursal;
+    }
+
+    /**
+     * @param usuarioSucursal the usuarioSucursal to set
+     */
+    public void setUsuarioSucursal(Sucursal usuarioSucursal) {
+        this.usuarioSucursal = usuarioSucursal;
     }
 
 }
