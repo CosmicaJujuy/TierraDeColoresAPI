@@ -177,7 +177,7 @@ public class StockDAOImpl implements StockDAO {
         criteria.add(Restrictions.eq("estado", true));
         Criteria producto = criteria.createCriteria("idProducto");
         producto.add(Restrictions.ilike("codigoProducto", barcode, MatchMode.START));
-        criteria.addOrder(Order.desc(barcode));
+        criteria.addOrder(Order.desc("idStock"));
         List<WrapperStock> list = new ArrayList<>();
         switch (sucursal) {
             case 1:
