@@ -12,6 +12,7 @@ import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Producto;
 import com.ar.dev.tierra.api.model.stock.StockTierra;
 import com.ar.dev.tierra.api.model.Usuarios;
+import com.ar.dev.tierra.api.model.stock.WrapperStock;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +41,9 @@ public class ProductoController implements Serializable {
 
     @Autowired
     UsuariosDAO usuariosDAO;
+
+    @Autowired
+    StockDAO stockDAO;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
@@ -112,6 +116,18 @@ public class ProductoController implements Serializable {
     @RequestMapping(value = "/barcode", method = RequestMethod.POST)
     public ResponseEntity<?> findByBarcode(@RequestParam("barcode") String barcode) {
         List<Producto> list = productoDAO.findByBarcode(barcode);
+        if (!list.isEmpty()) {
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(list, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/stock", method = RequestMethod.POST)
+    public ResponseEntity<?> findByBarcodeInStock(@RequestParam("barcode") String barcode,
+            OAuth2Authentication authentication) {
+        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        List<WrapperStock> list = stockDAO.searchByBarcodeInStock(user.getUsuarioSucursal().getIdSucursal(), barcode);
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {

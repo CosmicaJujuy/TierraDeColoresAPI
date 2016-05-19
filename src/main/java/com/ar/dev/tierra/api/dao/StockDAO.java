@@ -34,4 +34,6 @@ public interface StockDAO {
     public List<StockBebelandia> searchByFacturaStockBebelandia(int idFactura);
 
     public List<StockLibertador> searchByFacturaStockLibertador(int idFactura);
+    
+    public List<WrapperStock> searchByBarcodeInStock(int sucursal, String barcode);
 }

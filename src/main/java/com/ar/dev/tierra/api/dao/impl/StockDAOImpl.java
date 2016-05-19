@@ -36,7 +36,7 @@ public class StockDAOImpl implements StockDAO {
         return sessionFactory.getCurrentSession();
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "null"})
     @Override
     public List<WrapperStock> getAll(int sucursal) {
         Criteria criteria = null;
@@ -155,6 +155,55 @@ public class StockDAOImpl implements StockDAO {
         factura.add(Restrictions.eq("idFacturaProducto", idFactura));
         criteria.addOrder(Order.asc("idStock"));
         List<StockLibertador> list = criteria.list();
+        return list;
+    }
+
+    @Override
+    @SuppressWarnings("null")
+    public List<WrapperStock> searchByBarcodeInStock(int sucursal, String barcode) {
+        Criteria criteria = null;
+        switch (sucursal) {
+            case 1:
+                criteria = getSession().createCriteria(StockTierra.class);
+                break;
+            case 2:
+                criteria = getSession().createCriteria(StockBebelandia.class);
+                break;
+            case 3:
+                criteria = getSession().createCriteria(StockLibertador.class);
+                break;
+        }
+        criteria.add(Restrictions.eq("estado", true));
+        Criteria producto = criteria.createCriteria("idProducto");
+        producto.add(Restrictions.like("codigoProducto", barcode));
+        criteria.addOrder(Order.desc(barcode));
+        List<WrapperStock> list = new ArrayList<>();
+        switch (sucursal) {
+            case 1:
+                List<StockTierra> tierraList = criteria.list();
+                for (StockTierra stockTierra : tierraList) {
+                    WrapperStock wrapperTierra = new WrapperStock();
+                    wrapperTierra.setStockTierra(stockTierra);
+                    list.add(wrapperTierra);
+                }
+                break;
+            case 2:
+                List<StockBebelandia> bebeList = criteria.list();
+                for (StockBebelandia stockBebelandia : bebeList) {
+                    WrapperStock wrapperBebelandia = new WrapperStock();
+                    wrapperBebelandia.setStockBebelandia(stockBebelandia);
+                    list.add(wrapperBebelandia);
+                }
+                break;
+            case 3:
+                List<StockLibertador> libertadorList = criteria.list();
+                for (StockLibertador stockLibertador : libertadorList) {
+                    WrapperStock wrapperLibertador = new WrapperStock();
+                    wrapperLibertador.setStockLibertador(stockLibertador);
+                    list.add(wrapperLibertador);
+                }
+                break;
+        }
         return list;
     }
 
