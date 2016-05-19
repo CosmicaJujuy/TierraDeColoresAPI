@@ -15,6 +15,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -175,7 +176,7 @@ public class StockDAOImpl implements StockDAO {
         }
         criteria.add(Restrictions.eq("estado", true));
         Criteria producto = criteria.createCriteria("idProducto");
-        producto.add(Restrictions.like("codigoProducto", barcode));
+        producto.add(Restrictions.ilike("codigoProducto", barcode, MatchMode.START));
         criteria.addOrder(Order.desc(barcode));
         List<WrapperStock> list = new ArrayList<>();
         switch (sucursal) {
