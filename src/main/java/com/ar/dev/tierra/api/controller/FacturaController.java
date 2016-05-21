@@ -65,6 +65,7 @@ public class FacturaController implements Serializable {
         factura.setUsuarioCreacion(user.getIdUsuario());
         factura.setFechaCreacion(new Date());
         factura.setEstado("INICIADO");
+        factura.setIdSucursal(user.getUsuarioSucursal().getIdSucursal());
         factura.setTotal(BigDecimal.ZERO);
         int idFactura = facturaDAO.add(factura);
         JsonResponse msg = new JsonResponse("Success", String.valueOf(idFactura));
