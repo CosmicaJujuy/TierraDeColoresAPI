@@ -12,8 +12,11 @@ import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Producto;
 import com.ar.dev.tierra.api.model.stock.StockTierra;
 import com.ar.dev.tierra.api.model.Usuarios;
+import com.ar.dev.tierra.api.model.stock.StockBebelandia;
+import com.ar.dev.tierra.api.model.stock.StockLibertador;
 import com.ar.dev.tierra.api.model.stock.WrapperStock;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,10 +131,32 @@ public class ProductoController implements Serializable {
             OAuth2Authentication authentication) {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
         List<WrapperStock> list = stockDAO.searchByBarcodeInStock(user.getUsuarioSucursal().getIdSucursal(), barcode);
-        if (!list.isEmpty()) {
-            return new ResponseEntity<>(list, HttpStatus.OK);
+        List<StockTierra> tierra = new ArrayList<>();
+        List<StockBebelandia> bebelandia = new ArrayList<>();
+        List<StockLibertador> libertador = new ArrayList<>();
+        switch (user.getUsuarioSucursal().getIdSucursal()) {
+            case 1:
+                for (WrapperStock wrapperStock : list) {
+                    tierra.add(wrapperStock.getStockTierra());
+                }
+                break;
+            case 2:
+                for (WrapperStock wrapperStock : list) {
+                    bebelandia.add(wrapperStock.getStockBebelandia());
+                }
+                break;
+            case 3:
+                for (WrapperStock wrapperStock : list) {
+                    libertador.add(wrapperStock.getStockLibertador());
+                }
+                break;
+        }
+        if (tierra.isEmpty() && bebelandia.isEmpty()) {
+            return new ResponseEntity<>(libertador, HttpStatus.OK);
+        } else if (bebelandia.isEmpty() && libertador.isEmpty()) {
+            return new ResponseEntity<>(tierra, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(list, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(bebelandia, HttpStatus.OK);
         }
     }
 
