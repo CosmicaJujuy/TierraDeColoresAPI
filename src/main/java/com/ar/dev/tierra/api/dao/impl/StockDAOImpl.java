@@ -209,4 +209,39 @@ public class StockDAOImpl implements StockDAO {
         return list;
     }
 
+    @Override
+    @SuppressWarnings("null")
+    public WrapperStock searchStockById(int idStock, int idSucursal) {
+        WrapperStock wrapperStock = new WrapperStock(null, null, null);
+        Criteria criteria = null;
+        switch (idSucursal) {
+            case 1:
+                criteria = getSession().createCriteria(StockTierra.class);
+                break;
+            case 2:
+                criteria = getSession().createCriteria(StockBebelandia.class);
+                break;
+            case 3:
+                criteria = getSession().createCriteria(StockLibertador.class);
+                break;
+        }
+        criteria.add(Restrictions.eq("estado", true));
+        criteria.add(Restrictions.eq("idStock", idStock));
+        switch (idSucursal) {
+            case 1:
+                StockTierra tierra = (StockTierra) criteria.uniqueResult();
+                wrapperStock.setStockTierra(tierra);
+                break;
+            case 2:
+                StockBebelandia bebelandia = (StockBebelandia) criteria.uniqueResult();
+                wrapperStock.setStockBebelandia(bebelandia);
+                break;
+            case 3:
+                StockLibertador libertador = (StockLibertador) criteria.uniqueResult();
+                wrapperStock.setStockLibertador(libertador);
+                break;
+        }
+        return wrapperStock;
+    }
+
 }

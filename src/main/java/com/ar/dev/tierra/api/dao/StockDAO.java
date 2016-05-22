@@ -36,4 +36,6 @@ public interface StockDAO {
     public List<StockLibertador> searchByFacturaStockLibertador(int idFactura);
     
     public List<WrapperStock> searchByBarcodeInStock(int sucursal, String barcode);
+    
+    public WrapperStock searchStockById(int idStock, int idSucursal);
 }

@@ -6,12 +6,16 @@
 package com.ar.dev.tierra.api.controller;
 
 import com.ar.dev.tierra.api.dao.DetalleFacturaDAO;
+import com.ar.dev.tierra.api.dao.FacturaDAO;
 import com.ar.dev.tierra.api.dao.ProductoDAO;
+import com.ar.dev.tierra.api.dao.StockDAO;
 import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.DetalleFactura;
+import com.ar.dev.tierra.api.model.Factura;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Producto;
 import com.ar.dev.tierra.api.model.Usuarios;
+import com.ar.dev.tierra.api.model.stock.WrapperStock;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -45,6 +49,12 @@ public class DetalleFacturaController implements Serializable {
     @Autowired
     ProductoDAO productoDAO;
 
+    @Autowired
+    FacturaDAO facturaDAO;
+
+    @Autowired
+    StockDAO stockDAO;
+
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
         List<DetalleFactura> list = detalleFacturaDAO.getAll();
@@ -57,23 +67,74 @@ public class DetalleFacturaController implements Serializable {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<?> add(OAuth2Authentication authentication,
-            @RequestBody DetalleFactura detalleFactura) {
+            @RequestParam("idFactura") int idFactura,
+            @RequestParam("idProducto") int idProducto,
+            @RequestParam("idItem") int idItem,
+            @RequestParam("cantidadItem") int cantidadItem) {
+        /*Instancia de nuevo detalle*/
+        DetalleFactura detalleFactura = new DetalleFactura();
+        /*Traemos los objectos necesarios para añadir el detalle*/
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Producto prod = productoDAO.findById(idProducto);
+        WrapperStock stock = stockDAO.searchStockById(idItem, user.getUsuarioSucursal().getIdSucursal());
+        Factura factura = facturaDAO.searchById(idFactura);
+        /*Bandera de control*/
+        boolean control = false;
+        /*Variable de calculo de cantidad*/
+        @SuppressWarnings("UnusedAssignment")
+        int cantidadStock = 0;
+
         detalleFactura.setUsuarioCreacion(user.getIdUsuario());
         detalleFactura.setFechaCreacion(new Date());
         detalleFactura.setEstadoDetalle(true);
-        Producto prod = productoDAO.findById(detalleFactura.getProducto().getIdProducto());
-        if (prod.getCantidadTotal() >= detalleFactura.getCantidadDetalle()) {
-            int cantidadTotal = prod.getCantidadTotal();
-            prod.setCantidadTotal(cantidadTotal - detalleFactura.getCantidadDetalle());
-            detalleFactura.setProducto(prod);
-            productoDAO.update(prod);
-            BigDecimal monto = detalleFactura.getProducto().getPrecioVenta().multiply(BigDecimal.valueOf(detalleFactura.getCantidadDetalle()));
-            monto = monto.subtract(detalleFactura.getDescuentoDetalle());                    
-            detalleFactura.setTotalDetalle(monto);
-            detalleFacturaDAO.add(detalleFactura);
-            JsonResponse msg = new JsonResponse("Success", "Detalle agregado con exito");
-            return new ResponseEntity<>(msg, HttpStatus.OK);
+
+        if (prod.getCantidadTotal() >= cantidadItem) {
+            if (stock.getStockTierra() != null) {
+                if (stock.getStockTierra().getCantidad() >= cantidadItem) {
+                    cantidadStock = stock.getStockTierra().getCantidad() - cantidadItem;
+                    stock.getStockTierra().setCantidad(cantidadStock);
+                    control = true;
+                }
+            }
+            if (stock.getStockBebelandia() != null) {
+                if (stock.getStockBebelandia().getCantidad() >= cantidadItem) {
+                    cantidadStock = stock.getStockBebelandia().getCantidad() - cantidadItem;
+                    stock.getStockBebelandia().setCantidad(cantidadStock);
+                    control = true;
+                }
+            }
+            if (stock.getStockLibertador() != null) {
+                if (stock.getStockLibertador().getCantidad() >= cantidadItem) {
+                    cantidadStock = stock.getStockLibertador().getCantidad() - cantidadItem;
+                    stock.getStockLibertador().setCantidad(cantidadStock);
+                    control = true;
+                }
+            }
+            if (control) {
+                int cantidadTotal = prod.getCantidadTotal();
+                /*seteamos cantidad nueva de productos*/
+                prod.setCantidadTotal(cantidadTotal - cantidadItem);
+                /*seteamos producto en el detalle*/
+                detalleFactura.setProducto(prod);
+                /*Calculamos el total del detalle*/
+                BigDecimal monto = detalleFactura.getProducto().getPrecioVenta().multiply(BigDecimal.valueOf(detalleFactura.getCantidadDetalle()));
+                monto = monto.subtract(detalleFactura.getDescuentoDetalle());
+                /*seteamos el total del detalle*/
+                detalleFactura.setTotalDetalle(monto);
+                /*seteamos la factura del detalle*/
+                detalleFactura.setFactura(factura);
+                /*Actualizamos producto*/
+                productoDAO.update(prod);
+                /*Actualizamos el stock*/
+                stockDAO.update(stock);
+                /*Insertamos el nuevo detalle*/
+                detalleFacturaDAO.add(detalleFactura);
+                JsonResponse msg = new JsonResponse("Success", "Detalle agregado con exito");
+                return new ResponseEntity<>(msg, HttpStatus.OK);
+            } else {
+                JsonResponse msg = new JsonResponse("Error", "Stock insuficiente.");
+                return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+            }
         } else {
             JsonResponse msg = new JsonResponse("Error", "Stock insuficiente.");
             return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
