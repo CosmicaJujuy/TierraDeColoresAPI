@@ -67,7 +67,7 @@ public class DetalleFacturaController implements Serializable {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<?> add(OAuth2Authentication authentication,
-            @RequestParam("idFactura") int idFactura,
+                @RequestParam("idFactura") int idFactura,
             @RequestParam("idProducto") int idProducto,
             @RequestParam("idItem") int idItem,
             @RequestParam("cantidadItem") int cantidadItem) {
@@ -123,6 +123,8 @@ public class DetalleFacturaController implements Serializable {
                 detalleFactura.setTotalDetalle(monto);
                 /*seteamos la factura del detalle*/
                 detalleFactura.setFactura(factura);
+                /*seteamos descuento en cero*/
+                detalleFactura.setDescuentoDetalle(BigDecimal.ZERO);
                 /*Actualizamos producto*/
                 productoDAO.update(prod);
                 /*Actualizamos el stock*/
