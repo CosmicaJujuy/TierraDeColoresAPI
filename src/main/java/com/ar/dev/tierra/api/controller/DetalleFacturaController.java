@@ -117,8 +117,7 @@ public class DetalleFacturaController implements Serializable {
                 /*seteamos producto en el detalle*/
                 detalleFactura.setProducto(prod);
                 /*Calculamos el total del detalle*/
-                BigDecimal monto = detalleFactura.getProducto().getPrecioVenta().multiply(BigDecimal.valueOf(detalleFactura.getCantidadDetalle()));
-                monto = monto.subtract(detalleFactura.getDescuentoDetalle());
+                BigDecimal monto = detalleFactura.getProducto().getPrecioVenta().multiply(BigDecimal.valueOf(cantidadItem));
                 /*seteamos el total del detalle*/
                 detalleFactura.setTotalDetalle(monto);
                 /*seteamos la factura del detalle*/
