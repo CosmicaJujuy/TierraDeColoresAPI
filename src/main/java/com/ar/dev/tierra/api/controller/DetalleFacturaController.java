@@ -125,6 +125,8 @@ public class DetalleFacturaController implements Serializable {
                 detalleFactura.setFactura(factura);
                 /*seteamos descuento en cero*/
                 detalleFactura.setDescuentoDetalle(BigDecimal.ZERO);
+                /*seteamos la cantidad de items en el detalle*/
+                detalleFactura.setCantidadDetalle(cantidadItem);
                 /*Actualizamos producto*/
                 productoDAO.update(prod);
                 /*Actualizamos el stock*/
