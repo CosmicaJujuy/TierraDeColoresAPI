@@ -136,12 +136,10 @@ public class DetalleFacturaController implements Serializable {
                 /*Traemos lista de detalles, calculamos su nuevo total y actualizamos*/
                 List<DetalleFactura> detallesFactura = detalleFacturaDAO.facturaDetalle(idFactura);
                 BigDecimal sumMonto = new BigDecimal(BigInteger.ZERO);
-                BigDecimal descMonto = new BigDecimal(BigInteger.ZERO);
                 for (DetalleFactura detailList : detallesFactura) {
                     sumMonto = sumMonto.add(detailList.getTotalDetalle());
-                    descMonto = descMonto.add(detailList.getDescuentoDetalle());
                 }
-                factura.setTotal(sumMonto.subtract(descMonto));
+                factura.setTotal(sumMonto);
                 facturaDAO.update(factura);                
                 JsonResponse msg = new JsonResponse("Success", "Detalle agregado con exito");
                 return new ResponseEntity<>(msg, HttpStatus.OK);
