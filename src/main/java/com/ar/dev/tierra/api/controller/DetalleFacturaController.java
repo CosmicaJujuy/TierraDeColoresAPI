@@ -211,22 +211,27 @@ public class DetalleFacturaController implements Serializable {
         Usuarios user = usuariosDAO.findUsuarioByDNI(dni);
         boolean permiso = passwordEncoder.matches(password, user.getPassword());
         if (permiso) {
-            detalleFactura.setDescuentoDetalle(BigDecimal.ZERO);
-            BigDecimal monto = detalleFactura.getProducto().getPrecioVenta().multiply(BigDecimal.valueOf(detalleFactura.getCantidadDetalle()));
-            detalleFactura.setTotalDetalle(monto);
-            detalleFacturaDAO.update(detalleFactura);
-            List<DetalleFactura> detallesFactura = detalleFacturaDAO.facturaDetalle(detalleFactura.getFactura().getIdFactura());
-            BigDecimal sumMonto = new BigDecimal(BigInteger.ZERO);
-            Factura factura = facturaDAO.searchById(detalleFactura.getFactura().getIdFactura());
-            for (DetalleFactura detailList : detallesFactura) {
-                sumMonto = sumMonto.add(detailList.getTotalDetalle());
+            if (user.getRoles().getIdRol() == 1 || user.getRoles().getIdRol() == 6) {
+                detalleFactura.setDescuentoDetalle(BigDecimal.ZERO);
+                BigDecimal monto = detalleFactura.getProducto().getPrecioVenta().multiply(BigDecimal.valueOf(detalleFactura.getCantidadDetalle()));
+                detalleFactura.setTotalDetalle(monto);
+                detalleFacturaDAO.update(detalleFactura);
+                List<DetalleFactura> detallesFactura = detalleFacturaDAO.facturaDetalle(detalleFactura.getFactura().getIdFactura());
+                BigDecimal sumMonto = new BigDecimal(BigInteger.ZERO);
+                Factura factura = facturaDAO.searchById(detalleFactura.getFactura().getIdFactura());
+                for (DetalleFactura detailList : detallesFactura) {
+                    sumMonto = sumMonto.add(detailList.getTotalDetalle());
+                }
+                factura.setTotal(sumMonto);
+                factura.setFechaModificacion(new Date());
+                factura.setUsuarioModificacion(user.getIdUsuario());
+                facturaDAO.update(factura);
+                JsonResponse msg = new JsonResponse("Success", "Descuento eliminado con exito.");
+                return new ResponseEntity<>(msg, HttpStatus.OK);
+            } else {
+                JsonResponse msg = new JsonResponse("Error", "No tienes los permisos necesarios para realizar esta operacion.");
+                return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
             }
-            factura.setTotal(sumMonto);
-            factura.setFechaModificacion(new Date());
-            factura.setUsuarioModificacion(user.getIdUsuario());
-            facturaDAO.update(factura);
-            JsonResponse msg = new JsonResponse("Success", "Descuento eliminado con exito.");
-            return new ResponseEntity<>(msg, HttpStatus.OK);
         } else {
             JsonResponse msg = new JsonResponse("Error", "No tienes los permisos necesarios para realizar esta operacion.");
             return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
