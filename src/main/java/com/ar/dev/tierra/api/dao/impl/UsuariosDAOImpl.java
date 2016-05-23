@@ -6,7 +6,6 @@
 package com.ar.dev.tierra.api.dao.impl;
 
 import com.ar.dev.tierra.api.dao.UsuariosDAO;
-import com.ar.dev.tierra.api.model.DetalleFactura;
 import com.ar.dev.tierra.api.model.Usuarios;
 import java.util.List;
 import org.hibernate.Criteria;
@@ -90,6 +89,7 @@ public class UsuariosDAOImpl implements UsuariosDAO {
     public Usuarios findUsuarioByDNI(Integer dni) {
         Criteria criteria = getSession().createCriteria(Usuarios.class);
         criteria.add(Restrictions.eq("dni", dni));
+        criteria.add(Restrictions.eq("estado", true));
         Usuarios us = (Usuarios) criteria.uniqueResult();
         return us;
     }

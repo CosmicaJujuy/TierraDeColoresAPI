@@ -26,6 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,6 +56,9 @@ public class DetalleFacturaController implements Serializable {
 
     @Autowired
     StockDAO stockDAO;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
@@ -197,6 +201,35 @@ public class DetalleFacturaController implements Serializable {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/factura", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteDiscount(@RequestParam("dni") int dni,
+            @RequestParam("password") String password,
+            @RequestBody DetalleFactura detalleFactura) {
+        Usuarios user = usuariosDAO.findUsuarioByDNI(dni);
+        boolean permiso = passwordEncoder.matches(password, user.getPassword());
+        if (permiso) {
+            detalleFactura.setDescuentoDetalle(BigDecimal.ZERO);
+            BigDecimal monto = detalleFactura.getProducto().getPrecioVenta().multiply(BigDecimal.valueOf(detalleFactura.getCantidadDetalle()));
+            detalleFactura.setTotalDetalle(monto);
+            detalleFacturaDAO.update(detalleFactura);
+            List<DetalleFactura> detallesFactura = detalleFacturaDAO.facturaDetalle(detalleFactura.getFactura().getIdFactura());
+            BigDecimal sumMonto = new BigDecimal(BigInteger.ZERO);
+            Factura factura = facturaDAO.searchById(detalleFactura.getFactura().getIdFactura());
+            for (DetalleFactura detailList : detallesFactura) {
+                sumMonto = sumMonto.add(detailList.getTotalDetalle());
+            }
+            factura.setTotal(sumMonto);
+            factura.setFechaModificacion(new Date());
+            factura.setUsuarioModificacion(user.getIdUsuario());
+            facturaDAO.update(factura);
+            JsonResponse msg = new JsonResponse("Success", "Descuento eliminado con exito.");
+            return new ResponseEntity<>(msg, HttpStatus.OK);
+        } else {
+            JsonResponse msg = new JsonResponse("Error", "No tienes los permisos necesarios para realizar esta operacion.");
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
     }
 
