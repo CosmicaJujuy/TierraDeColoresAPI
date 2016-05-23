@@ -204,7 +204,7 @@ public class DetalleFacturaController implements Serializable {
         }
     }
 
-    @RequestMapping(value = "/delete/discount", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/delete/discount", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteDiscount(@RequestParam("dni") int dni,
             @RequestParam("password") String password,
             @RequestBody DetalleFactura detalleFactura) {
