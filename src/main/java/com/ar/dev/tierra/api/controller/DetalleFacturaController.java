@@ -18,6 +18,7 @@ import com.ar.dev.tierra.api.model.Usuarios;
 import com.ar.dev.tierra.api.model.stock.WrapperStock;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,6 +133,14 @@ public class DetalleFacturaController implements Serializable {
                 stockDAO.update(stock);
                 /*Insertamos el nuevo detalle*/
                 detalleFacturaDAO.add(detalleFactura);
+                /*Traemos lista de detalles, calculamos su nuevo total y actualizamos*/
+                List<DetalleFactura> detallesFactura = detalleFacturaDAO.facturaDetalle(idFactura);
+                BigDecimal updateMonto = new BigDecimal(BigInteger.ZERO);
+                for (DetalleFactura detailList : detallesFactura) {
+                    updateMonto = updateMonto.add(detailList.getTotalDetalle());
+                }
+                factura.setTotal(updateMonto);
+                facturaDAO.update(factura);                
                 JsonResponse msg = new JsonResponse("Success", "Detalle agregado con exito");
                 return new ResponseEntity<>(msg, HttpStatus.OK);
             } else {
