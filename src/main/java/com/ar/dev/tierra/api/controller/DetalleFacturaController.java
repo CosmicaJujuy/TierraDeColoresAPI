@@ -179,18 +179,6 @@ public class DetalleFacturaController implements Serializable {
         factura.setFechaModificacion(new Date());
         factura.setUsuarioModificacion(user.getIdUsuario());
         facturaDAO.update(factura);
-        
-        WrapperStock stock = stockDAO.searchStockById(detalleFactura.getIdStock(), user.getUsuarioSucursal().getIdSucursal());
-        if(stock.getStockTierra()!=null){
-            stock.getStockTierra().setCantidad(stock.getStockTierra().getCantidad() + detalleFactura.getCantidadDetalle());
-        }else{
-            if(stock.getStockBebelandia() != null){
-                stock.getStockBebelandia().setCantidad(stock.getStockBebelandia().getCantidad() + detalleFactura.getCantidadDetalle());
-            }else{
-                stock.getStockLibertador().setCantidad(stock.getStockLibertador().getCantidad() + detalleFactura.getCantidadDetalle());
-            }
-        }
-        stockDAO.update(stock);
         JsonResponse msg = new JsonResponse("Success", "Detalle modificado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -215,7 +203,15 @@ public class DetalleFacturaController implements Serializable {
         factura.setFechaModificacion(new Date());
         factura.setUsuarioModificacion(user.getIdUsuario());
         facturaDAO.update(factura);
-
+        WrapperStock stock = stockDAO.searchStockById(detalleFactura.getIdStock(), user.getUsuarioSucursal().getIdSucursal());
+        if (stock.getStockTierra() != null) {
+            stock.getStockTierra().setCantidad(stock.getStockTierra().getCantidad() + detalleFactura.getCantidadDetalle());
+        } else if (stock.getStockBebelandia() != null) {
+            stock.getStockBebelandia().setCantidad(stock.getStockBebelandia().getCantidad() + detalleFactura.getCantidadDetalle());
+        } else {
+            stock.getStockLibertador().setCantidad(stock.getStockLibertador().getCantidad() + detalleFactura.getCantidadDetalle());
+        }
+        stockDAO.update(stock);
         JsonResponse msg = new JsonResponse("Success", "Detalle eliminado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
