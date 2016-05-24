@@ -217,6 +217,10 @@ public class DetalleFacturaController implements Serializable {
             stock.getStockLibertador().setCantidad(cantidadActual + detalleFactura.getCantidadDetalle());
         }
         stockDAO.update(stock);
+        Producto prodRest = productoDAO.findById(detalleFactura.getProducto().getIdProducto());
+        int cantProd = prodRest.getCantidadTotal();
+        prodRest.setCantidadTotal(cantProd + detalleFactura.getCantidadDetalle());
+        productoDAO.update(prodRest);
         JsonResponse msg = new JsonResponse("Success", "Detalle eliminado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
