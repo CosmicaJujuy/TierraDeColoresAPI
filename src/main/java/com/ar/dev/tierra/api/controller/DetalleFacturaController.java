@@ -203,13 +203,18 @@ public class DetalleFacturaController implements Serializable {
         factura.setFechaModificacion(new Date());
         factura.setUsuarioModificacion(user.getIdUsuario());
         facturaDAO.update(factura);
+        @SuppressWarnings("UnusedAssignment")
+        int cantidadActual = 0;
         WrapperStock stock = stockDAO.searchStockById(detalleFactura.getIdStock(), user.getUsuarioSucursal().getIdSucursal());
         if (stock.getStockTierra() != null) {
-            stock.getStockTierra().setCantidad(stock.getStockTierra().getCantidad() + detalleFactura.getCantidadDetalle());
+            cantidadActual = stock.getStockTierra().getCantidad();
+            stock.getStockTierra().setCantidad(cantidadActual + detalleFactura.getCantidadDetalle());
         } else if (stock.getStockBebelandia() != null) {
-            stock.getStockBebelandia().setCantidad(stock.getStockBebelandia().getCantidad() + detalleFactura.getCantidadDetalle());
+            cantidadActual = stock.getStockBebelandia().getCantidad();
+            stock.getStockBebelandia().setCantidad(cantidadActual + detalleFactura.getCantidadDetalle());
         } else {
-            stock.getStockLibertador().setCantidad(stock.getStockLibertador().getCantidad() + detalleFactura.getCantidadDetalle());
+            cantidadActual = stock.getStockLibertador().getCantidad();
+            stock.getStockLibertador().setCantidad(cantidadActual + detalleFactura.getCantidadDetalle());
         }
         stockDAO.update(stock);
         JsonResponse msg = new JsonResponse("Success", "Detalle eliminado con exito");
