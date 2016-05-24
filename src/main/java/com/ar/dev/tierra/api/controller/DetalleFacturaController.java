@@ -131,6 +131,8 @@ public class DetalleFacturaController implements Serializable {
                 detalleFactura.setDescuentoDetalle(BigDecimal.ZERO);
                 /*seteamos la cantidad de items en el detalle*/
                 detalleFactura.setCantidadDetalle(cantidadItem);
+                /*Indicamos el idStock del detalle*/
+                detalleFactura.setIdStock(idItem);
                 /*Actualizamos producto*/
                 productoDAO.update(prod);
                 /*Actualizamos el stock*/
@@ -177,6 +179,18 @@ public class DetalleFacturaController implements Serializable {
         factura.setFechaModificacion(new Date());
         factura.setUsuarioModificacion(user.getIdUsuario());
         facturaDAO.update(factura);
+        
+        WrapperStock stock = stockDAO.searchStockById(detalleFactura.getIdStock(), user.getUsuarioSucursal().getIdSucursal());
+        if(stock.getStockTierra()!=null){
+            stock.getStockTierra().setCantidad(stock.getStockTierra().getCantidad() + detalleFactura.getCantidadDetalle());
+        }else{
+            if(stock.getStockBebelandia() != null){
+                stock.getStockBebelandia().setCantidad(stock.getStockBebelandia().getCantidad() + detalleFactura.getCantidadDetalle());
+            }else{
+                stock.getStockLibertador().setCantidad(stock.getStockLibertador().getCantidad() + detalleFactura.getCantidadDetalle());
+            }
+        }
+        stockDAO.update(stock);
         JsonResponse msg = new JsonResponse("Success", "Detalle modificado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -190,6 +204,18 @@ public class DetalleFacturaController implements Serializable {
         detalleFactura.setUsuarioModificacion(user.getIdUsuario());
         detalleFactura.setFechaModificacion(new Date());
         detalleFacturaDAO.update(detalleFactura);
+        /*Traemos lista de detalles, calculamos su nuevo total y actualizamos*/
+        Factura factura = facturaDAO.searchById(detalleFactura.getFactura().getIdFactura());
+        List<DetalleFactura> detallesFactura = detalleFacturaDAO.facturaDetalle(detalleFactura.getFactura().getIdFactura());
+        BigDecimal sumMonto = new BigDecimal(BigInteger.ZERO);
+        for (DetalleFactura detailList : detallesFactura) {
+            sumMonto = sumMonto.add(detailList.getTotalDetalle());
+        }
+        factura.setTotal(sumMonto);
+        factura.setFechaModificacion(new Date());
+        factura.setUsuarioModificacion(user.getIdUsuario());
+        facturaDAO.update(factura);
+
         JsonResponse msg = new JsonResponse("Success", "Detalle eliminado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }

@@ -62,10 +62,13 @@ public class DetalleFactura implements Serializable {
     @Column(name = "fecha_modificacion", length = 35)
     private Date fechaModificacion;
 
+    @Column(name = "id_stock", nullable = false)
+    private int idStock;
+
     public DetalleFactura() {
     }
 
-    public DetalleFactura(int idDetalleFactura, Factura factura, Producto producto, int cantidadDetalle, BigDecimal totalDetalle, BigDecimal descuentoDetalle, boolean estadoDetalle, int usuarioCreacion, Integer usuarioModificacion, Date fechaCreacion, Date fechaModificacion) {
+    public DetalleFactura(int idDetalleFactura, Factura factura, Producto producto, int cantidadDetalle, BigDecimal totalDetalle, BigDecimal descuentoDetalle, boolean estadoDetalle, int usuarioCreacion, Integer usuarioModificacion, Date fechaCreacion, Date fechaModificacion, int idStock) {
         this.idDetalleFactura = idDetalleFactura;
         this.factura = factura;
         this.producto = producto;
@@ -77,6 +80,7 @@ public class DetalleFactura implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
         this.fechaCreacion = fechaCreacion;
         this.fechaModificacion = fechaModificacion;
+        this.idStock = idStock;
     }
 
     /**
@@ -231,6 +235,20 @@ public class DetalleFactura implements Serializable {
      */
     public void setFechaModificacion(Date fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
+    }
+
+    /**
+     * @return the idStock
+     */
+    public int getIdStock() {
+        return idStock;
+    }
+
+    /**
+     * @param idStock the idStock to set
+     */
+    public void setIdStock(int idStock) {
+        this.idStock = idStock;
     }
 
 }
