@@ -186,43 +186,57 @@ public class DetalleFacturaController implements Serializable {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<?> delete(OAuth2Authentication authentication,
-            @RequestBody DetalleFactura detalleFactura) {
+            @RequestBody DetalleFactura detalleFactura,
+            @RequestParam("dni") int dni,
+            @RequestParam("password") String password) {
+        Usuarios userAuth = usuariosDAO.findUsuarioByDNI(dni);
+        boolean permiso = passwordEncoder.matches(password, userAuth.getPassword());
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
-        detalleFactura.setEstadoDetalle(false);
-        detalleFactura.setUsuarioModificacion(user.getIdUsuario());
-        detalleFactura.setFechaModificacion(new Date());
-        detalleFacturaDAO.update(detalleFactura);
-        /*Traemos lista de detalles, calculamos su nuevo total y actualizamos*/
-        Factura factura = facturaDAO.searchById(detalleFactura.getFactura().getIdFactura());
-        List<DetalleFactura> detallesFactura = detalleFacturaDAO.facturaDetalle(detalleFactura.getFactura().getIdFactura());
-        BigDecimal sumMonto = new BigDecimal(BigInteger.ZERO);
-        for (DetalleFactura detailList : detallesFactura) {
-            sumMonto = sumMonto.add(detailList.getTotalDetalle());
-        }
-        factura.setTotal(sumMonto);
-        factura.setFechaModificacion(new Date());
-        factura.setUsuarioModificacion(user.getIdUsuario());
-        facturaDAO.update(factura);
-        @SuppressWarnings("UnusedAssignment")
-        int cantidadActual = 0;
-        WrapperStock stock = stockDAO.searchStockById(detalleFactura.getIdStock(), user.getUsuarioSucursal().getIdSucursal());
-        if (stock.getStockTierra() != null) {
-            cantidadActual = stock.getStockTierra().getCantidad();
-            stock.getStockTierra().setCantidad(cantidadActual + detalleFactura.getCantidadDetalle());
-        } else if (stock.getStockBebelandia() != null) {
-            cantidadActual = stock.getStockBebelandia().getCantidad();
-            stock.getStockBebelandia().setCantidad(cantidadActual + detalleFactura.getCantidadDetalle());
+        if (permiso) {
+            if (userAuth.getRoles().getIdRol() == 1 || userAuth.getRoles().getIdRol() == 6) {
+                detalleFactura.setEstadoDetalle(false);
+                detalleFactura.setUsuarioModificacion(user.getIdUsuario());
+                detalleFactura.setFechaModificacion(new Date());
+                detalleFacturaDAO.update(detalleFactura);
+                /*Traemos lista de detalles, calculamos su nuevo total y actualizamos*/
+                Factura factura = facturaDAO.searchById(detalleFactura.getFactura().getIdFactura());
+                List<DetalleFactura> detallesFactura = detalleFacturaDAO.facturaDetalle(detalleFactura.getFactura().getIdFactura());
+                BigDecimal sumMonto = new BigDecimal(BigInteger.ZERO);
+                for (DetalleFactura detailList : detallesFactura) {
+                    sumMonto = sumMonto.add(detailList.getTotalDetalle());
+                }
+                factura.setTotal(sumMonto);
+                factura.setFechaModificacion(new Date());
+                factura.setUsuarioModificacion(user.getIdUsuario());
+                facturaDAO.update(factura);
+                @SuppressWarnings("UnusedAssignment")
+                int cantidadActual = 0;
+                WrapperStock stock = stockDAO.searchStockById(detalleFactura.getIdStock(), user.getUsuarioSucursal().getIdSucursal());
+                if (stock.getStockTierra() != null) {
+                    cantidadActual = stock.getStockTierra().getCantidad();
+                    stock.getStockTierra().setCantidad(cantidadActual + detalleFactura.getCantidadDetalle());
+                } else if (stock.getStockBebelandia() != null) {
+                    cantidadActual = stock.getStockBebelandia().getCantidad();
+                    stock.getStockBebelandia().setCantidad(cantidadActual + detalleFactura.getCantidadDetalle());
+                } else {
+                    cantidadActual = stock.getStockLibertador().getCantidad();
+                    stock.getStockLibertador().setCantidad(cantidadActual + detalleFactura.getCantidadDetalle());
+                }
+                stockDAO.update(stock);
+                Producto prodRest = productoDAO.findById(detalleFactura.getProducto().getIdProducto());
+                int cantProd = prodRest.getCantidadTotal();
+                prodRest.setCantidadTotal(cantProd + detalleFactura.getCantidadDetalle());
+                productoDAO.update(prodRest);
+                JsonResponse msg = new JsonResponse("Success", "Detalle eliminado con exito");
+                return new ResponseEntity<>(msg, HttpStatus.OK);
+            } else {
+                JsonResponse msg = new JsonResponse("Error", "No tienes los permisos necesarios para realizar esta operacion.");
+                return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+            }
         } else {
-            cantidadActual = stock.getStockLibertador().getCantidad();
-            stock.getStockLibertador().setCantidad(cantidadActual + detalleFactura.getCantidadDetalle());
+            JsonResponse msg = new JsonResponse("Error", "No tienes los permisos necesarios para realizar esta operacion.");
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
-        stockDAO.update(stock);
-        Producto prodRest = productoDAO.findById(detalleFactura.getProducto().getIdProducto());
-        int cantProd = prodRest.getCantidadTotal();
-        prodRest.setCantidadTotal(cantProd + detalleFactura.getCantidadDetalle());
-        productoDAO.update(prodRest);
-        JsonResponse msg = new JsonResponse("Success", "Detalle eliminado con exito");
-        return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/factura", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
