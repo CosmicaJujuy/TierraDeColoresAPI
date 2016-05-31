@@ -117,4 +117,14 @@ public class MetodoPagoFacturaController implements Serializable {
         }
     }
 
+    @RequestMapping(value = "/day", method = RequestMethod.GET)
+    public ResponseEntity<?> getDay() {
+        List<MetodoPagoFactura> list = pagoFacturaDAO.getDay();
+        if (!list.isEmpty()) {
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

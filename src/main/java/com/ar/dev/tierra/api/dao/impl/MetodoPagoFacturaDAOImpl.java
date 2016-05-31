@@ -7,6 +7,8 @@ package com.ar.dev.tierra.api.dao.impl;
 
 import com.ar.dev.tierra.api.dao.MetodoPagoFacturaDAO;
 import com.ar.dev.tierra.api.model.MetodoPagoFactura;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -63,6 +65,24 @@ public class MetodoPagoFacturaDAOImpl implements MetodoPagoFacturaDAO {
         criteria.add(Restrictions.eq("estado", true));
         Criteria facturaCriteria = criteria.createCriteria("factura");
         facturaCriteria.add(Restrictions.eq("idFactura", idFactura));
+        List<MetodoPagoFactura> list = criteria.list();
+        return list;
+    }
+
+    @Override
+    public List<MetodoPagoFactura> getDay() {
+        Criteria criteria = getSession().createCriteria(MetodoPagoFactura.class);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        Date fromDate = calendar.getTime();
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        Date toDate = calendar.getTime();
+        criteria.add(Restrictions.between("fechaCreacion", fromDate, toDate));
+        criteria.addOrder(Order.asc("idMetodoPagoFactura"));
         List<MetodoPagoFactura> list = criteria.list();
         return list;
     }

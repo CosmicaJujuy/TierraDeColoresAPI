@@ -27,5 +27,7 @@ public interface MetodoPagoFacturaDAO {
     public void delete(MetodoPagoFactura pagoFactura);
 
     public List<MetodoPagoFactura> getFacturaMetodo(int idFactura);
+    
+    public List<MetodoPagoFactura> getDay();
 
 }
