@@ -7,6 +7,8 @@ package com.ar.dev.tierra.api.dao.impl;
 
 import com.ar.dev.tierra.api.dao.DetalleFacturaDAO;
 import com.ar.dev.tierra.api.model.DetalleFactura;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -64,6 +66,24 @@ public class DetalleFacturaDAOImpl implements DetalleFacturaDAO {
         Criteria facturaCriteria = detalleCriteria.createCriteria("factura");
         facturaCriteria.add(Restrictions.eq("idFactura", idFactura));
         List<DetalleFactura> list = detalleCriteria.list();
+        return list;
+    }
+
+    @Override
+    public List<DetalleFactura> getDay() {
+        Criteria criteria = getSession().createCriteria(DetalleFactura.class);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        Date fromDate = calendar.getTime();
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        Date toDate = calendar.getTime();
+        criteria.add(Restrictions.between("fechaCreacion", fromDate, toDate));
+        criteria.addOrder(Order.asc("idDetalleFactura"));
+        List<DetalleFactura> list = criteria.list();
         return list;
     }
 

@@ -106,7 +106,7 @@ public class FacturaController implements Serializable {
     }
 
     @RequestMapping(value = "/day", method = RequestMethod.GET)
-    public ResponseEntity<?> searchById() {
+    public ResponseEntity<?> getDay() {
         List<Factura> factura = facturaDAO.getDiary();
         if (factura != null) {
             return new ResponseEntity<>(factura, HttpStatus.OK);

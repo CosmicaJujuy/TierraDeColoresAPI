@@ -283,4 +283,14 @@ public class DetalleFacturaController implements Serializable {
         }
     }
 
+    @RequestMapping(value = "/day", method = RequestMethod.GET)
+    public ResponseEntity<?> getDay() {
+        List<DetalleFactura> list = detalleFacturaDAO.getDay();
+        if (list != null) {
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

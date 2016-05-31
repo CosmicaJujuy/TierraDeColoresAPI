@@ -27,5 +27,7 @@ public interface DetalleFacturaDAO {
     public void delete(DetalleFactura detalleFactura);
 
     public List<DetalleFactura> facturaDetalle(int idFactura);
+    
+    public List<DetalleFactura> getDay();
 
 }
