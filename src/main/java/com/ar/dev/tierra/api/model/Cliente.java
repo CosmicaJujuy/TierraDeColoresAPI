@@ -24,7 +24,7 @@ public class Cliente implements Serializable {
     @Column(name = "id_cliente", unique = true, nullable = false)
     private int idCliente;
 
-    @Column(name = "nombre_cliente", length = 45)
+    @Column(name = "nombre_completo", length = 45)
     private String nombreCliente;
 
     @Temporal(TemporalType.DATE)
