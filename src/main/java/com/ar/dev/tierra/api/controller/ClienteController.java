@@ -94,8 +94,8 @@ public class ClienteController implements Serializable {
     }
 
     @RequestMapping(value = "/searchApellido", method = RequestMethod.POST)
-    public ResponseEntity<?> searchByNombreApellido(@RequestParam("apellidoCliente") String apellidoCliente) {
-        List<Cliente> list = clienteDAO.searchByApellido(apellidoCliente);
+    public ResponseEntity<?> searchByNombre(@RequestParam("apellidoCliente") String apellidoCliente) {
+        List<Cliente> list = clienteDAO.searchByNombre(apellidoCliente);
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {

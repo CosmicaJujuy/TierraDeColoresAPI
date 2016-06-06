@@ -19,34 +19,58 @@ import javax.persistence.TemporalType;
 @Table(name = "cliente")
 public class Cliente implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id_cliente", unique = true, nullable = false)
     private int idCliente;
+
+    @Column(name = "nombre_cliente", length = 45)
     private String nombreCliente;
-    private String apellidoCliente;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "fecha_nacimiento", length = 13)
     private Date fechaNacimiento;
-    private String dniCuit;
+
+    @Column(name = "documento", unique = true, length = 15)
+    private String documento;
+
+    @Column(name = "domicilio", length = 100)
     private String domicilio;
+
+    @Column(name = "telefono", length = 100)
     private String telefono;
+
+    @Column(name = "email_cliente", length = 100)
     private String emailCliente;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "fecha_creacion", nullable = false, length = 13)
     private Date fechaCreacion;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "fecha_modificacion", length = 13)
     private Date fechaModificacion;
+
+    @Column(name = "usuario_creacion", nullable = false)
     private int usuarioCreacion;
+
+    @Column(name = "usuario_modificacion")
     private Integer usuarioModificacion;
+
+    @Column(name = "responsabilidad_iva", length = 1)
+    private String responsabilidadIva;
+
+    @Column(name = "tipo_documento", length = 1)
+    private String tipoDocumento;
 
     public Cliente() {
     }
 
-    public Cliente(int idCliente, Date fechaCreacion, int usuarioCreacion) {
-        this.idCliente = idCliente;
-        this.fechaCreacion = fechaCreacion;
-        this.usuarioCreacion = usuarioCreacion;
-    }
-
-    public Cliente(int idCliente, String nombreCliente, String apellidoCliente, Date fechaNacimiento, String dniCuit, String domicilio, String telefono, String emailCliente, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
+    public Cliente(int idCliente, String nombreCliente, Date fechaNacimiento, String documento, String domicilio, String telefono, String emailCliente, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion, String responsabilidadIva, String tipoDocumento) {
         this.idCliente = idCliente;
         this.nombreCliente = nombreCliente;
-        this.apellidoCliente = apellidoCliente;
         this.fechaNacimiento = fechaNacimiento;
-        this.dniCuit = dniCuit;
+        this.documento = documento;
         this.domicilio = domicilio;
         this.telefono = telefono;
         this.emailCliente = emailCliente;
@@ -54,118 +78,190 @@ public class Cliente implements Serializable {
         this.fechaModificacion = fechaModificacion;
         this.usuarioCreacion = usuarioCreacion;
         this.usuarioModificacion = usuarioModificacion;
+        this.responsabilidadIva = responsabilidadIva;
+        this.tipoDocumento = tipoDocumento;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id_cliente", unique = true, nullable = false)
+    /**
+     * @return the idCliente
+     */
     public int getIdCliente() {
-        return this.idCliente;
+        return idCliente;
     }
 
+    /**
+     * @param idCliente the idCliente to set
+     */
     public void setIdCliente(int idCliente) {
         this.idCliente = idCliente;
     }
 
-    @Column(name = "nombre_cliente", length = 100)
+    /**
+     * @return the nombreCliente
+     */
     public String getNombreCliente() {
-        return this.nombreCliente;
+        return nombreCliente;
     }
 
+    /**
+     * @param nombreCliente the nombreCliente to set
+     */
     public void setNombreCliente(String nombreCliente) {
         this.nombreCliente = nombreCliente;
     }
 
-    @Column(name = "apellido_cliente", length = 100)
-    public String getApellidoCliente() {
-        return this.apellidoCliente;
-    }
-
-    public void setApellidoCliente(String apellidoCliente) {
-        this.apellidoCliente = apellidoCliente;
-    }
-
-    @Temporal(TemporalType.DATE)
-    @Column(name = "fecha_nacimiento", length = 13)
+    /**
+     * @return the fechaNacimiento
+     */
     public Date getFechaNacimiento() {
-        return this.fechaNacimiento;
+        return fechaNacimiento;
     }
 
+    /**
+     * @param fechaNacimiento the fechaNacimiento to set
+     */
     public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    @Column(name = "dni_cuit", unique = true, length = 30)
-    public String getDniCuit() {
-        return this.dniCuit;
+    /**
+     * @return the documento
+     */
+    public String getDocumento() {
+        return documento;
     }
 
-    public void setDniCuit(String dniCuit) {
-        this.dniCuit = dniCuit;
+    /**
+     * @param documento the documento to set
+     */
+    public void setDocumento(String documento) {
+        this.documento = documento;
     }
 
-    @Column(name = "domicilio", length = 100)
+    /**
+     * @return the domicilio
+     */
     public String getDomicilio() {
-        return this.domicilio;
+        return domicilio;
     }
 
+    /**
+     * @param domicilio the domicilio to set
+     */
     public void setDomicilio(String domicilio) {
         this.domicilio = domicilio;
     }
 
-    @Column(name = "telefono", length = 100)
+    /**
+     * @return the telefono
+     */
     public String getTelefono() {
-        return this.telefono;
+        return telefono;
     }
 
+    /**
+     * @param telefono the telefono to set
+     */
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
 
-    @Column(name = "email_cliente", length = 100)
+    /**
+     * @return the emailCliente
+     */
     public String getEmailCliente() {
-        return this.emailCliente;
+        return emailCliente;
     }
 
+    /**
+     * @param emailCliente the emailCliente to set
+     */
     public void setEmailCliente(String emailCliente) {
         this.emailCliente = emailCliente;
     }
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "fecha_creacion", nullable = false, length = 13)
+    /**
+     * @return the fechaCreacion
+     */
     public Date getFechaCreacion() {
-        return this.fechaCreacion;
+        return fechaCreacion;
     }
 
+    /**
+     * @param fechaCreacion the fechaCreacion to set
+     */
     public void setFechaCreacion(Date fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "fecha_modificacion", length = 13)
+    /**
+     * @return the fechaModificacion
+     */
     public Date getFechaModificacion() {
-        return this.fechaModificacion;
+        return fechaModificacion;
     }
 
+    /**
+     * @param fechaModificacion the fechaModificacion to set
+     */
     public void setFechaModificacion(Date fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }
 
-    @Column(name = "usuario_creacion", nullable = false)
+    /**
+     * @return the usuarioCreacion
+     */
     public int getUsuarioCreacion() {
-        return this.usuarioCreacion;
+        return usuarioCreacion;
     }
 
+    /**
+     * @param usuarioCreacion the usuarioCreacion to set
+     */
     public void setUsuarioCreacion(int usuarioCreacion) {
         this.usuarioCreacion = usuarioCreacion;
     }
 
-    @Column(name = "usuario_modificacion")
+    /**
+     * @return the usuarioModificacion
+     */
     public Integer getUsuarioModificacion() {
-        return this.usuarioModificacion;
+        return usuarioModificacion;
     }
 
+    /**
+     * @param usuarioModificacion the usuarioModificacion to set
+     */
     public void setUsuarioModificacion(Integer usuarioModificacion) {
         this.usuarioModificacion = usuarioModificacion;
     }
+
+    /**
+     * @return the responsabilidadIva
+     */
+    public String getResponsabilidadIva() {
+        return responsabilidadIva;
+    }
+
+    /**
+     * @param responsabilidadIva the responsabilidadIva to set
+     */
+    public void setResponsabilidadIva(String responsabilidadIva) {
+        this.responsabilidadIva = responsabilidadIva;
+    }
+
+    /**
+     * @return the tipoDocumento
+     */
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    /**
+     * @param tipoDocumento the tipoDocumento to set
+     */
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
+
 }

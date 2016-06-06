@@ -28,6 +28,6 @@ public interface ClienteDAO {
 
     public Cliente searchById(int idCliente);
 
-    public List<Cliente> searchByApellido(String nombreApellido);
+    public List<Cliente> searchByNombre(String nombre);
 
 }

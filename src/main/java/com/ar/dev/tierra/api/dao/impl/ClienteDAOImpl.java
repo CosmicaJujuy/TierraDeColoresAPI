@@ -68,9 +68,9 @@ public class ClienteDAOImpl implements ClienteDAO {
     }
 
     @Override
-    public List<Cliente> searchByApellido(String nombreApellido) {
+    public List<Cliente> searchByNombre(String nombre) {
         Criteria criteria = getSession().createCriteria(Cliente.class);
-        criteria.add(Restrictions.ilike("apellidoCliente", nombreApellido, MatchMode.ANYWHERE));
+        criteria.add(Restrictions.ilike("nombreCliente", nombre, MatchMode.ANYWHERE));
         List<Cliente> list = criteria.list();
         return list;
     }
