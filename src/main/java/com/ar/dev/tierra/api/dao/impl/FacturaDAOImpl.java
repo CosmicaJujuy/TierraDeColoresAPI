@@ -28,14 +28,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class FacturaDAOImpl implements FacturaDAO {
-    
+
     @Autowired
     private SessionFactory sessionFactory;
-    
+
     private Session getSession() {
         return sessionFactory.getCurrentSession();
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public List<Factura> getAll() {
@@ -49,10 +49,11 @@ public class FacturaDAOImpl implements FacturaDAO {
 //                        Restrictions.in("estado", new String[]{"INICIADO", "CONFIRMADO"})));
 //        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 //        criteria.add(Restrictions.sqlRestriction("SELECT * FROM factura WHERE NOT estado IN ('INICIADO','CONFIRMADO')"));
-        List<Factura> list = criteria.list();
+        List<Factura> list = null;
+//        criteria.list();
         return list;
     }
-    
+
     @Override
     public List<Factura> getDiary() {
         Criteria criteria = getSession().createCriteria(Factura.class);
@@ -70,23 +71,23 @@ public class FacturaDAOImpl implements FacturaDAO {
         List<Factura> list = criteria.list();
         return list;
     }
-    
+
     @Override
     public void update(Factura factura) {
         getSession().update(factura);
     }
-    
+
     @Override
     public int add(Factura factura) {
         Serializable idFactura = getSession().save(factura);
         return (int) idFactura;
     }
-    
+
     @Override
     public void delete(Factura factura) {
         getSession().delete(factura);
     }
-    
+
     @Override
     public Factura searchById(int idFactura) {
         Criteria criteria = getSession().createCriteria(Factura.class);
@@ -94,5 +95,5 @@ public class FacturaDAOImpl implements FacturaDAO {
         Factura foundFactura = (Factura) criteria.uniqueResult();
         return foundFactura;
     }
-    
+
 }
