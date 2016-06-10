@@ -14,6 +14,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,9 +40,10 @@ public class FacturaDAOImpl implements FacturaDAO {
     @Override
     public List<Factura> getAll() {
         Criteria criteria = getSession().createCriteria(Factura.class);
-        criteria.addOrder(Order.desc("idFactura"));
-        criteria.add(Restrictions.eq("estado", "INICIADO"))
-                .add(Restrictions.eq("estado", "CONFIRMADO"));
+        Criterion criterion = Restrictions.conjunction().add(Restrictions.eq("estado", "INICIADO"))
+                                                        .add(Restrictions.eq("estado", "CONFIRMADO"));
+//        criteria.addOrder(Order.desc("idFactura"));
+        criteria.add(criterion);
         List<Factura> list = criteria.list();
         return list;
     }
