@@ -40,15 +40,10 @@ public class FacturaDAOImpl implements FacturaDAO {
     @Override
     public List<Factura> getAll() {
         Criteria criteria = getSession().createCriteria(Factura.class);
-//        Criterion criterion = Restrictions.conjunction().add(Restrictions.eq("estado", "INICIADO"))
-//                                                        .add(Restrictions.eq("estado", "CONFIRMADO"));
-//        criteria.addOrder(Order.desc("idFactura"));
-//        criteria.add(criterion);
-//        criteria.add(
-//                Restrictions.not(
-//                        Restrictions.in("estado", new String[]{"INICIADO", "CONFIRMADO"})));
-//        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-//        criteria.add(Restrictions.sqlRestriction("SELECT * FROM factura WHERE NOT estado IN ('INICIADO','CONFIRMADO')"));
+        criteria.add(
+                Restrictions.not(
+                        Restrictions.in("estado", new String[]{"RESERVADO"})));
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         List<Factura> list = criteria.list();
         return list;
     }
@@ -67,6 +62,72 @@ public class FacturaDAOImpl implements FacturaDAO {
         Date toDate = calendar.getTime();
         criteria.add(Restrictions.between("fechaCreacion", fromDate, toDate));
         criteria.addOrder(Order.asc("idFactura"));
+        criteria.add(
+                Restrictions.not(
+                        Restrictions.in("estado", new String[]{"RESERVADO"})));
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        List<Factura> list = criteria.list();
+        return list;
+    }
+
+    @Override
+    public List<Factura> getMonth() {
+        Criteria criteria = getSession().createCriteria(Factura.class);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        Date toDate = calendar.getTime();
+        calendar.set(Calendar.MONTH, -1);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        Date fromDate = calendar.getTime();
+        criteria.add(Restrictions.between("fechaCreacion", fromDate, toDate));
+        criteria.add(
+                Restrictions.not(
+                        Restrictions.in("estado", new String[]{"RESERVADO"})));
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        List<Factura> list = criteria.list();
+        return list;
+    }
+
+    @Override
+    public List<Factura> getDiaryReserva() {
+        Criteria criteria = getSession().createCriteria(Factura.class);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        Date fromDate = calendar.getTime();
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        Date toDate = calendar.getTime();
+        criteria.add(Restrictions.between("fechaCreacion", fromDate, toDate));
+        criteria.addOrder(Order.asc("idFactura"));
+        criteria.add(
+                Restrictions.not(
+                        Restrictions.in("estado", new String[]{"INICIADO", "CONFIRMADO"})));
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        List<Factura> list = criteria.list();
+        return list;
+    }
+
+    @Override
+    public List<Factura> getMonthReserva() {
+        Criteria criteria = getSession().createCriteria(Factura.class);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        Date toDate = calendar.getTime();
+        calendar.set(Calendar.MONTH, -1);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        Date fromDate = calendar.getTime();
+        criteria.add(Restrictions.between("fechaCreacion", fromDate, toDate));
         criteria.add(
                 Restrictions.not(
                         Restrictions.in("estado", new String[]{"INICIADO", "CONFIRMADO"})));
