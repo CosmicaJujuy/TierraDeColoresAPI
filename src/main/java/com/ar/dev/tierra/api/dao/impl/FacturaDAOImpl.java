@@ -40,10 +40,12 @@ public class FacturaDAOImpl implements FacturaDAO {
     @Override
     public List<Factura> getAll() {
         Criteria criteria = getSession().createCriteria(Factura.class);
-        Criterion criterion = Restrictions.conjunction().add(Restrictions.eq("estado", "INICIADO"))
-                                                        .add(Restrictions.eq("estado", "CONFIRMADO"));
-//        criteria.addOrder(Order.desc("idFactura"));
-        criteria.add(criterion);
+//        Criterion criterion = Restrictions.conjunction().add(Restrictions.eq("estado", "INICIADO"))
+//                                                        .add(Restrictions.eq("estado", "CONFIRMADO"));
+        criteria.addOrder(Order.desc("idFactura"));
+//        criteria.add(criterion);
+        criteria.add(Restrictions.not(Restrictions.in("estado", new String[] {"INICIADO", "CONFIRMADO"})));
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         List<Factura> list = criteria.list();
         return list;
     }
