@@ -42,10 +42,12 @@ public class FacturaDAOImpl implements FacturaDAO {
         Criteria criteria = getSession().createCriteria(Factura.class);
 //        Criterion criterion = Restrictions.conjunction().add(Restrictions.eq("estado", "INICIADO"))
 //                                                        .add(Restrictions.eq("estado", "CONFIRMADO"));
-        criteria.addOrder(Order.desc("idFactura"));
+//        criteria.addOrder(Order.desc("idFactura"));
 //        criteria.add(criterion);
-        criteria.add(Restrictions.not(Restrictions.in("estado", new String[] {"INICIADO", "CONFIRMADO"})));
-        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        criteria.add(
+                Restrictions.not(
+                        Restrictions.in("estado", new String[]{"INICIADO", "CONFIRMADO"})));
+//        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         List<Factura> list = criteria.list();
         return list;
     }
