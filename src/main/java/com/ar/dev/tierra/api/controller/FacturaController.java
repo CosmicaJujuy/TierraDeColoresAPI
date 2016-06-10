@@ -114,5 +114,15 @@ public class FacturaController implements Serializable {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+    
+    @RequestMapping(value = "/month", method = RequestMethod.GET)
+    public ResponseEntity<?> getMonth() {
+        List<Factura> factura = facturaDAO.getMonth();
+        if (factura != null) {
+            return new ResponseEntity<>(factura, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }
