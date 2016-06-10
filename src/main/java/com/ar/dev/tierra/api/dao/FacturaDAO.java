@@ -21,6 +21,12 @@ public interface FacturaDAO {
     public List<Factura> getAll();
     
     public List<Factura> getDiary();
+    
+    public List<Factura> getMonth();
+    
+    public List<Factura> getDiaryReserva();
+    
+    public List<Factura> getMonthReserva();
 
     public void update(Factura factura);
 
