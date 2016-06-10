@@ -49,8 +49,7 @@ public class FacturaDAOImpl implements FacturaDAO {
 //                        Restrictions.in("estado", new String[]{"INICIADO", "CONFIRMADO"})));
 //        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 //        criteria.add(Restrictions.sqlRestriction("SELECT * FROM factura WHERE NOT estado IN ('INICIADO','CONFIRMADO')"));
-        List<Factura> list = null;
-//        criteria.list();
+        List<Factura> list = criteria.list();
         return list;
     }
 
@@ -68,6 +67,10 @@ public class FacturaDAOImpl implements FacturaDAO {
         Date toDate = calendar.getTime();
         criteria.add(Restrictions.between("fechaCreacion", fromDate, toDate));
         criteria.addOrder(Order.asc("idFactura"));
+        criteria.add(
+                Restrictions.not(
+                        Restrictions.in("estado", new String[]{"INICIADO", "CONFIRMADO"})));
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         List<Factura> list = criteria.list();
         return list;
     }
