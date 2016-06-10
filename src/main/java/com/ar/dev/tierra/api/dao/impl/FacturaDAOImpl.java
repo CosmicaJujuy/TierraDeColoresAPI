@@ -40,6 +40,7 @@ public class FacturaDAOImpl implements FacturaDAO {
     public List<Factura> getAll() {
         Criteria criteria = getSession().createCriteria(Factura.class);
         criteria.addOrder(Order.desc("idFactura"));
+        criteria.add(Restrictions.neProperty("estado", "RESERVADO"));
         List<Factura> list = criteria.list();
         return list;
     }
