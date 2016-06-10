@@ -14,7 +14,6 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +65,7 @@ public class FacturaDAOImpl implements FacturaDAO {
                 Restrictions.not(
                         Restrictions.in("estado", new String[]{"RESERVADO"})));
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        criteria.addOrder(Order.desc("idFactura"));
         List<Factura> list = criteria.list();
         return list;
     }
@@ -74,20 +74,15 @@ public class FacturaDAOImpl implements FacturaDAO {
     public List<Factura> getMonth() {
         Criteria criteria = getSession().createCriteria(Factura.class);
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
         Date toDate = calendar.getTime();
-        calendar.set(Calendar.MONTH, -1);
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 59);
-        calendar.set(Calendar.SECOND, 59);
+        calendar.add(Calendar.MONTH, -1);
         Date fromDate = calendar.getTime();
         criteria.add(Restrictions.between("fechaCreacion", fromDate, toDate));
         criteria.add(
                 Restrictions.not(
                         Restrictions.in("estado", new String[]{"RESERVADO"})));
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        criteria.addOrder(Order.desc("idFactura"));
         List<Factura> list = criteria.list();
         return list;
     }
@@ -105,7 +100,7 @@ public class FacturaDAOImpl implements FacturaDAO {
         calendar.set(Calendar.SECOND, 59);
         Date toDate = calendar.getTime();
         criteria.add(Restrictions.between("fechaCreacion", fromDate, toDate));
-        criteria.addOrder(Order.asc("idFactura"));
+        criteria.addOrder(Order.desc("idFactura"));
         criteria.add(
                 Restrictions.not(
                         Restrictions.in("estado", new String[]{"INICIADO", "CONFIRMADO"})));
@@ -118,20 +113,15 @@ public class FacturaDAOImpl implements FacturaDAO {
     public List<Factura> getMonthReserva() {
         Criteria criteria = getSession().createCriteria(Factura.class);
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
         Date toDate = calendar.getTime();
-        calendar.set(Calendar.MONTH, -1);
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 59);
-        calendar.set(Calendar.SECOND, 59);
+        calendar.add(Calendar.MONTH, -1);
         Date fromDate = calendar.getTime();
         criteria.add(Restrictions.between("fechaCreacion", fromDate, toDate));
         criteria.add(
                 Restrictions.not(
                         Restrictions.in("estado", new String[]{"INICIADO", "CONFIRMADO"})));
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        criteria.addOrder(Order.desc("idFactura"));
         List<Factura> list = criteria.list();
         return list;
     }
