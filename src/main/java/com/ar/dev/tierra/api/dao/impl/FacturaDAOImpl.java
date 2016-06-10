@@ -48,7 +48,7 @@ public class FacturaDAOImpl implements FacturaDAO {
 //                Restrictions.not(
 //                        Restrictions.in("estado", new String[]{"INICIADO", "CONFIRMADO"})));
 //        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-        criteria.add(Restrictions.sqlRestriction("SELECT * FROM factura WHERE NOT estado IN ('INICIADO','CONFIRMADO')"));
+//        criteria.add(Restrictions.sqlRestriction("SELECT * FROM factura WHERE NOT estado IN ('INICIADO','CONFIRMADO')"));
         List<Factura> list = criteria.list();
         return list;
     }
