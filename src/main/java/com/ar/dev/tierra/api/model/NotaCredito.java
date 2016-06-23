@@ -22,7 +22,7 @@ import javax.persistence.TemporalType;
  * @author PauloGaldo
  */
 @Entity
-@Table(name = "categoria")
+@Table(name = "nota_credito")
 public class NotaCredito implements Serializable {
 
     @Id
