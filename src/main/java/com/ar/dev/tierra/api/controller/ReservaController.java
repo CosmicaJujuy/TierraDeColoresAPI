@@ -71,7 +71,7 @@ public class ReservaController implements Serializable {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    
+
     @RequestMapping(value = "/month", method = RequestMethod.GET)
     public ResponseEntity<?> getMonth() {
         List<Factura> list = facturaDAO.getMonthReserva();
