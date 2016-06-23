@@ -98,4 +98,12 @@ public class NotaCreditoDAOImpl implements NotaCreditoDAO {
         return list;
     }
 
+    @Override
+    public NotaCredito getByNumero(String numero) {
+        Criteria criteria = getSession().createCriteria(NotaCredito.class);
+        criteria.add(Restrictions.eq("numero", numero));
+        NotaCredito notaCredito = (NotaCredito) criteria.uniqueResult();
+        return notaCredito;
+    }
+
 }
