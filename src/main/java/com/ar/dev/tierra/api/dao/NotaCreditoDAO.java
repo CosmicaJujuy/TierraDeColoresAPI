@@ -20,7 +20,7 @@ public interface NotaCreditoDAO {
 
     public List<NotaCredito> getAll();
 
-    public void add(NotaCredito notaCredito);
+    public int add(NotaCredito notaCredito);
 
     public void update(NotaCredito notaCredito);
 

@@ -7,6 +7,7 @@ package com.ar.dev.tierra.api.dao.impl;
 
 import com.ar.dev.tierra.api.dao.NotaCreditoDAO;
 import com.ar.dev.tierra.api.model.NotaCredito;
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -44,8 +45,9 @@ public class NotaCreditoDAOImpl implements NotaCreditoDAO {
     }
 
     @Override
-    public void add(NotaCredito notaCredito) {
-        getSession().save(notaCredito);
+    public int add(NotaCredito notaCredito) {
+        Serializable idNotaCredito = getSession().save(notaCredito);
+        return (int) idNotaCredito;
     }
 
     @Override
