@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,6 +36,13 @@ public class NotaCreditoController implements Serializable {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public ResponseEntity<?> add(@RequestBody NotaCredito notaCredito) {
+        notaCreditoDAO.add(notaCredito);
+        
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
