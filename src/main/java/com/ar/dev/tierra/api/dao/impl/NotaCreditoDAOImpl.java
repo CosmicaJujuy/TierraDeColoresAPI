@@ -107,5 +107,13 @@ public class NotaCreditoDAOImpl implements NotaCreditoDAO {
         NotaCredito notaCredito = (NotaCredito) criteria.uniqueResult();
         return notaCredito;
     }
+    
+    @Override
+    public NotaCredito getById(int idNota) {
+        Criteria criteria = getSession().createCriteria(NotaCredito.class);
+        criteria.add(Restrictions.eq("idNotaCredito", idNota));
+        NotaCredito notaCredito = (NotaCredito) criteria.uniqueResult();
+        return notaCredito;
+    }
 
 }

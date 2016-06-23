@@ -24,6 +24,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -48,6 +49,16 @@ public class NotaCreditoController implements Serializable {
         List<NotaCredito> list = notaCreditoDAO.getAll();
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    @RequestMapping(value = "/search/id", method = RequestMethod.GET)
+    public ResponseEntity<?> getById(@RequestParam("idNota")int idNota) {
+        NotaCredito notaCredito = notaCreditoDAO.getById(idNota);
+        if (notaCredito != null) {
+            return new ResponseEntity<>(notaCredito, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
