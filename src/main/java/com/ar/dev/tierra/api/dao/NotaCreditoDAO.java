@@ -31,5 +31,7 @@ public interface NotaCreditoDAO {
     public List<NotaCredito> getDaily();
 
     public List<NotaCredito> getMonth();
+    
+    public NotaCredito getByNumero(String numero);
 
 }
