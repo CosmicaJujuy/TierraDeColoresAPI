@@ -62,10 +62,13 @@ public class DetalleNotaCredito implements Serializable {
     @Column(name = "usuario_modificacion")
     private Integer usuarioModificacion;
 
+    @Column(name = "cantidad")
+    private Integer cantidad;
+
     public DetalleNotaCredito() {
     }
 
-    public DetalleNotaCredito(int idDetalleNotaCredito, Producto producto, Factura factura, NotaCredito notaCredito, BigDecimal monto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
+    public DetalleNotaCredito(int idDetalleNotaCredito, Producto producto, Factura factura, NotaCredito notaCredito, BigDecimal monto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion, Integer cantidad) {
         this.idDetalleNotaCredito = idDetalleNotaCredito;
         this.producto = producto;
         this.factura = factura;
@@ -75,6 +78,7 @@ public class DetalleNotaCredito implements Serializable {
         this.fechaModificacion = fechaModificacion;
         this.usuarioCreacion = usuarioCreacion;
         this.usuarioModificacion = usuarioModificacion;
+        this.cantidad = cantidad;
     }
 
     /**
@@ -201,6 +205,20 @@ public class DetalleNotaCredito implements Serializable {
      */
     public void setUsuarioModificacion(Integer usuarioModificacion) {
         this.usuarioModificacion = usuarioModificacion;
+    }
+
+    /**
+     * @return the cantidad
+     */
+    public Integer getCantidad() {
+        return cantidad;
+    }
+
+    /**
+     * @param cantidad the cantidad to set
+     */
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
     }
 
 }

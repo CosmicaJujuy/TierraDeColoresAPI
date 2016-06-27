@@ -70,7 +70,7 @@ public class NotaCreditoController implements Serializable {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
         notaCredito.setUsuarioCreacion(user.getIdUsuario());
         notaCredito.setFechaCreacion(new Date());
-        notaCredito.setEstadoUso("SIN USO");
+        notaCredito.setEstadoUso("CARGANDO");
         int idNota = notaCreditoDAO.add(notaCredito);
         JsonResponse msg = new JsonResponse("Success", String.valueOf(idNota));
         return new ResponseEntity<>(msg, HttpStatus.OK);
