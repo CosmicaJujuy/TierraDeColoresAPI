@@ -6,11 +6,13 @@
 package com.ar.dev.tierra.api.dao.impl;
 
 import com.ar.dev.tierra.api.dao.DetalleNotaCreditoDAO;
+import com.ar.dev.tierra.api.model.DetalleFactura;
 import com.ar.dev.tierra.api.model.DetalleNotaCredito;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +58,17 @@ public class DetalleNotaCreditoDAOImpl implements DetalleNotaCreditoDAO {
     @Override
     public void delete(DetalleNotaCredito detalleNotaCredito) {
         getSession().delete(detalleNotaCredito);
+    }
+
+    @Override
+    public List<DetalleFactura> getByBarcodeOnFactura(String barcode) {
+        Criteria criteria = getSession().createCriteria(DetalleFactura.class);
+        Criteria factura = criteria.createCriteria("factura");
+        factura.add(Restrictions.eq("estado", "CONFIRMADO"));
+        Criteria producto = criteria.createCriteria("producto");
+        producto.add(Restrictions.ilike("codigoProducto", barcode, MatchMode.START));
+        List<DetalleFactura> list = criteria.list();
+        return list;
     }
 
 }
