@@ -5,6 +5,7 @@
  */
 package com.ar.dev.tierra.api.dao;
 
+import com.ar.dev.tierra.api.model.DetalleFactura;
 import com.ar.dev.tierra.api.model.DetalleNotaCredito;
 import java.util.List;
 import org.springframework.stereotype.Component;
@@ -25,5 +26,7 @@ public interface DetalleNotaCreditoDAO {
     public void update(DetalleNotaCredito detalleNotaCredito);
 
     public void delete(DetalleNotaCredito detalleNotaCredito);
+    
+    public List<DetalleFactura> getByBarcodeOnFactura(String barcode);
 
 }
