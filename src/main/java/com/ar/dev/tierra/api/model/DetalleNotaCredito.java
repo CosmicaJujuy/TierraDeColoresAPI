@@ -38,8 +38,8 @@ public class DetalleNotaCredito implements Serializable {
     private Producto producto;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_factura", nullable = false)
-    private Factura factura;
+    @JoinColumn(name = "id_detalle_factura", nullable = false)
+    private DetalleFactura detalleFactura;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_nota_credito", nullable = false)
@@ -68,10 +68,10 @@ public class DetalleNotaCredito implements Serializable {
     public DetalleNotaCredito() {
     }
 
-    public DetalleNotaCredito(int idDetalleNotaCredito, Producto producto, Factura factura, NotaCredito notaCredito, BigDecimal monto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion, Integer cantidad) {
+    public DetalleNotaCredito(int idDetalleNotaCredito, Producto producto, DetalleFactura detalleFactura, NotaCredito notaCredito, BigDecimal monto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion, Integer cantidad) {
         this.idDetalleNotaCredito = idDetalleNotaCredito;
         this.producto = producto;
-        this.factura = factura;
+        this.detalleFactura = detalleFactura;
         this.notaCredito = notaCredito;
         this.monto = monto;
         this.fechaCreacion = fechaCreacion;
@@ -107,20 +107,6 @@ public class DetalleNotaCredito implements Serializable {
      */
     public void setProducto(Producto producto) {
         this.producto = producto;
-    }
-
-    /**
-     * @return the factura
-     */
-    public Factura getFactura() {
-        return factura;
-    }
-
-    /**
-     * @param factura the factura to set
-     */
-    public void setFactura(Factura factura) {
-        this.factura = factura;
     }
 
     /**
@@ -219,6 +205,20 @@ public class DetalleNotaCredito implements Serializable {
      */
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
+    }
+
+    /**
+     * @return the detalleFactura
+     */
+    public DetalleFactura getDetalleFactura() {
+        return detalleFactura;
+    }
+
+    /**
+     * @param detalleFactura the detalleFactura to set
+     */
+    public void setDetalleFactura(DetalleFactura detalleFactura) {
+        this.detalleFactura = detalleFactura;
     }
 
 }
