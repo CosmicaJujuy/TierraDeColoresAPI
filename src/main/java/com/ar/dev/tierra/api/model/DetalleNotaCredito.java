@@ -34,10 +34,6 @@ public class DetalleNotaCredito implements Serializable {
     private int idDetalleNotaCredito;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_producto", nullable = false)
-    private Producto producto;
-
-    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_detalle_factura", nullable = false)
     private DetalleFactura detalleFactura;
 
@@ -68,9 +64,8 @@ public class DetalleNotaCredito implements Serializable {
     public DetalleNotaCredito() {
     }
 
-    public DetalleNotaCredito(int idDetalleNotaCredito, Producto producto, DetalleFactura detalleFactura, NotaCredito notaCredito, BigDecimal monto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion, Integer cantidad) {
+    public DetalleNotaCredito(int idDetalleNotaCredito, DetalleFactura detalleFactura, NotaCredito notaCredito, BigDecimal monto, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion, Integer cantidad) {
         this.idDetalleNotaCredito = idDetalleNotaCredito;
-        this.producto = producto;
         this.detalleFactura = detalleFactura;
         this.notaCredito = notaCredito;
         this.monto = monto;
@@ -93,20 +88,6 @@ public class DetalleNotaCredito implements Serializable {
      */
     public void setIdDetalleNotaCredito(int idDetalleNotaCredito) {
         this.idDetalleNotaCredito = idDetalleNotaCredito;
-    }
-
-    /**
-     * @return the producto
-     */
-    public Producto getProducto() {
-        return producto;
-    }
-
-    /**
-     * @param producto the producto to set
-     */
-    public void setProducto(Producto producto) {
-        this.producto = producto;
     }
 
     /**
