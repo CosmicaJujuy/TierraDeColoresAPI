@@ -62,7 +62,6 @@ public class DetalleFacturaDAOImpl implements DetalleFacturaDAO {
     @Override
     public List<DetalleFactura> facturaDetalle(int idFactura) {
         Criteria detalleCriteria = getSession().createCriteria(DetalleFactura.class);
-        detalleCriteria.add(Restrictions.eq("estadoDetalle", true));
         Criteria facturaCriteria = detalleCriteria.createCriteria("factura");
         facturaCriteria.add(Restrictions.eq("idFactura", idFactura));
         List<DetalleFactura> list = detalleCriteria.list();
