@@ -76,7 +76,14 @@ public class DetalleNotaCreditoController implements Serializable {
         detalleNotaCredito.setFechaModificacion(new Date());
         detalleNotaCredito.setUsuarioModificacion(user.getIdUsuario());
         detalleNotaCreditoDAO.update(detalleNotaCredito);
-        JsonResponse msg = new JsonResponse("Success", "Detalle agregado con exito");
+        JsonResponse msg = new JsonResponse("Success", "Detalle modificado con exito");
+        return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public ResponseEntity<?> delete(@RequestBody DetalleNotaCredito detalleNotaCredito) {
+        detalleNotaCreditoDAO.delete(detalleNotaCredito);
+        JsonResponse msg = new JsonResponse("Success", "Detalle eliminado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 }
