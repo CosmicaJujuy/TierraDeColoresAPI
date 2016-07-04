@@ -89,4 +89,13 @@ public class DetalleTransferenciaDAOimpl implements DetalleTransferenciaDAO {
         getSession().delete(detalleTransferencia);
     }
 
+    @Override
+    public List<DetalleTransferencia> getByTransferencia(int idTransferencia) {
+        Criteria criteria = getSession().createCriteria(DetalleTransferencia.class);
+        Criteria transferencia = criteria.createCriteria("idTransferencia");
+        transferencia.add(Restrictions.eq("idTransferencia", idTransferencia));
+        List<DetalleTransferencia> list = criteria.list();
+        return list;
+    }
+
 }

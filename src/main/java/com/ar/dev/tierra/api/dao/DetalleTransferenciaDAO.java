@@ -30,4 +30,6 @@ public interface DetalleTransferenciaDAO {
 
     public void delete(DetalleTransferencia detalleTransferencia);
     
+    public List<DetalleTransferencia> getByTransferencia(int idTransferencia);
+    
 }
