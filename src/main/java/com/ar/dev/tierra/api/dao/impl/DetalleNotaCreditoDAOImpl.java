@@ -8,6 +8,8 @@ package com.ar.dev.tierra.api.dao.impl;
 import com.ar.dev.tierra.api.dao.DetalleNotaCreditoDAO;
 import com.ar.dev.tierra.api.model.DetalleFactura;
 import com.ar.dev.tierra.api.model.DetalleNotaCredito;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -63,6 +65,11 @@ public class DetalleNotaCreditoDAOImpl implements DetalleNotaCreditoDAO {
     @Override
     public List<DetalleFactura> getByBarcodeOnFactura(String barcode) {
         Criteria criteria = getSession().createCriteria(DetalleFactura.class);
+        Calendar calendar = Calendar.getInstance();
+        Date toDate = calendar.getTime();
+        calendar.add(Calendar.MONTH, -1);
+        Date fromDate = calendar.getTime();
+        criteria.add(Restrictions.between("fechaCreacion", fromDate, toDate));
         Criteria factura = criteria.createCriteria("factura");
         factura.add(Restrictions.eq("estado", "CONFIRMADO"));
         Criteria producto = criteria.createCriteria("producto");

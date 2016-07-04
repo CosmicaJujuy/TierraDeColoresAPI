@@ -53,9 +53,9 @@ public class NotaCreditoController implements Serializable {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    
+
     @RequestMapping(value = "/search/id", method = RequestMethod.GET)
-    public ResponseEntity<?> getById(@RequestParam("idNota")int idNota) {
+    public ResponseEntity<?> getById(@RequestParam("idNota") int idNota) {
         NotaCredito notaCredito = notaCreditoDAO.getById(idNota);
         if (notaCredito != null) {
             return new ResponseEntity<>(notaCredito, HttpStatus.OK);
@@ -91,6 +91,26 @@ public class NotaCreditoController implements Serializable {
         notaCreditoDAO.update(notaCredito);
         JsonResponse msg = new JsonResponse("Success", "Nota de credito modificada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/day", method = RequestMethod.GET)
+    public ResponseEntity<?> getDay() {
+        List<NotaCredito> list = notaCreditoDAO.getDaily();
+        if (list != null) {
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/month", method = RequestMethod.GET)
+    public ResponseEntity<?> getMonth() {
+        List<NotaCredito> list = notaCreditoDAO.getMonth();
+        if (list != null) {
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 }
