@@ -20,6 +20,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -41,6 +42,16 @@ public class TransferenciaController implements Serializable {
         List<Transferencia> list = transferenciaDAO.getAll();
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    public ResponseEntity<?> getById(@RequestParam("idTransferencia") int idTransferencia) {
+        Transferencia trans = transferenciaDAO.getById(idTransferencia);
+        if (trans != null) {
+            return new ResponseEntity<>(trans, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
