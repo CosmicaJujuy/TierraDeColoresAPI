@@ -76,12 +76,12 @@ public class DetalleTransferenciaDAOimpl implements DetalleTransferenciaDAO {
 
     @Override
     public void update(DetalleTransferencia detalleTransferencia) {
-        getSession().save(detalleTransferencia);
+        getSession().update(detalleTransferencia);
     }
 
     @Override
     public void add(DetalleTransferencia detalleTransferencia) {
-        getSession().update(detalleTransferencia);
+        getSession().save(detalleTransferencia);
     }
 
     @Override

@@ -7,6 +7,7 @@ package com.ar.dev.tierra.api.dao.impl;
 
 import com.ar.dev.tierra.api.dao.TransferenciaDAO;
 import com.ar.dev.tierra.api.model.Transferencia;
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -76,17 +77,26 @@ public class TransferenciaDAOImpl implements TransferenciaDAO {
 
     @Override
     public void update(Transferencia transferencia) {
-        getSession().save(transferencia);
+        getSession().update(transferencia);
     }
 
     @Override
-    public void add(Transferencia transferencia) {
-        getSession().update(transferencia);
+    public int add(Transferencia transferencia) {
+        Serializable Idtrasferencia = getSession().save(transferencia);
+        return (int)Idtrasferencia;
     }
 
     @Override
     public void delete(Transferencia transferencia) {
         getSession().delete(transferencia);
+    }
+
+    @Override
+    public Transferencia getById(int idTransferencia) {
+        Criteria criteria = getSession().createCriteria(Transferencia.class);
+        criteria.add(Restrictions.eq("idTransferencia", idTransferencia));
+        Transferencia trans = (Transferencia) criteria.uniqueResult();
+        return trans;
     }
 
 }
