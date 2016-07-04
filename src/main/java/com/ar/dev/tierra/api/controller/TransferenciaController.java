@@ -57,7 +57,7 @@ public class TransferenciaController implements Serializable {
         }
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<?> add(@RequestBody Transferencia transferencia,
             OAuth2Authentication authentication) {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
@@ -69,7 +69,7 @@ public class TransferenciaController implements Serializable {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.GET)
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<?> update(@RequestBody Transferencia transferencia,
             OAuth2Authentication authentication) {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
