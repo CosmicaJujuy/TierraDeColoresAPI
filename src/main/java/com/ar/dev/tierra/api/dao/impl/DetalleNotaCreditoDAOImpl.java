@@ -70,6 +70,7 @@ public class DetalleNotaCreditoDAOImpl implements DetalleNotaCreditoDAO {
         calendar.add(Calendar.MONTH, -1);
         Date fromDate = calendar.getTime();
         criteria.add(Restrictions.between("fechaCreacion", fromDate, toDate));
+        criteria.add(Restrictions.eq("estadoDetalle", true));
         Criteria factura = criteria.createCriteria("factura");
         factura.add(Restrictions.eq("estado", "CONFIRMADO"));
         Criteria producto = criteria.createCriteria("producto");
