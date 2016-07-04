@@ -47,7 +47,7 @@ public class TransferenciaController implements Serializable {
         }
     }
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    @RequestMapping(value = "/id", method = RequestMethod.GET)
     public ResponseEntity<?> getById(@RequestParam("idTransferencia") int idTransferencia) {
         Transferencia trans = transferenciaDAO.getById(idTransferencia);
         if (trans != null) {
