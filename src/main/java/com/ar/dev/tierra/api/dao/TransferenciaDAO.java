@@ -26,8 +26,10 @@ public interface TransferenciaDAO {
 
     public void update(Transferencia transferencia);
 
-    public void add(Transferencia transferencia);
+    public int add(Transferencia transferencia);
 
     public void delete(Transferencia transferencia);
+    
+    public Transferencia getById(int idTransferencia);
 
 }
