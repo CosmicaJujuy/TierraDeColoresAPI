@@ -35,6 +35,10 @@ public class DetalleTransferencia implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_transferencia", nullable = false)
     private Transferencia idTransferencia;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "producto", nullable = false)
+    private Producto producto;
 
     @Column(name = "id_stock", unique = true, nullable = false)
     private int idStock;
@@ -62,9 +66,10 @@ public class DetalleTransferencia implements Serializable {
     public DetalleTransferencia() {
     }
 
-    public DetalleTransferencia(int idDetalleTransferencia, Transferencia idTransferencia, int idStock, int idSucursal, int cantidad, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
+    public DetalleTransferencia(int idDetalleTransferencia, Transferencia idTransferencia, Producto producto, int idStock, int idSucursal, int cantidad, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion) {
         this.idDetalleTransferencia = idDetalleTransferencia;
         this.idTransferencia = idTransferencia;
+        this.producto = producto;
         this.idStock = idStock;
         this.idSucursal = idSucursal;
         this.cantidad = cantidad;
@@ -73,6 +78,7 @@ public class DetalleTransferencia implements Serializable {
         this.usuarioCreacion = usuarioCreacion;
         this.usuarioModificacion = usuarioModificacion;
     }
+
 
     /**
      * @return the idDetalleTransferencia
@@ -198,6 +204,20 @@ public class DetalleTransferencia implements Serializable {
      */
     public void setUsuarioModificacion(Integer usuarioModificacion) {
         this.usuarioModificacion = usuarioModificacion;
+    }
+
+    /**
+     * @return the producto
+     */
+    public Producto getProducto() {
+        return producto;
+    }
+
+    /**
+     * @param producto the producto to set
+     */
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
 
 }
