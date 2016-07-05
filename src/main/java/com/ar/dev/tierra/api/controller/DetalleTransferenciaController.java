@@ -8,8 +8,12 @@ package com.ar.dev.tierra.api.controller;
 import com.ar.dev.tierra.api.dao.DetalleTransferenciaDAO;
 import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.DetalleTransferencia;
+import com.ar.dev.tierra.api.model.stock.StockBebelandia;
+import com.ar.dev.tierra.api.model.stock.StockLibertador;
+import com.ar.dev.tierra.api.model.stock.StockTierra;
 import com.ar.dev.tierra.api.model.stock.WrapperStock;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,10 +57,32 @@ public class DetalleTransferenciaController implements Serializable {
             @RequestParam("sucursal") int sucursal
     ) {
         List<WrapperStock> list = detalleTransferenciaDAO.findByParams(descripcion, marca, talla, codigo, categoria, sucursal);
-        if (!list.isEmpty()) {
-            return new ResponseEntity<>(list, HttpStatus.OK);
+        List<StockTierra> tierra = new ArrayList<>();
+        List<StockBebelandia> bebelandia = new ArrayList<>();
+        List<StockLibertador> libertador = new ArrayList<>();
+        switch (sucursal) {
+            case 1:
+                for (WrapperStock wrapperStock : list) {
+                    tierra.add(wrapperStock.getStockTierra());
+                }
+                break;
+            case 2:
+                for (WrapperStock wrapperStock : list) {
+                    bebelandia.add(wrapperStock.getStockBebelandia());
+                }
+                break;
+            case 3:
+                for (WrapperStock wrapperStock : list) {
+                    libertador.add(wrapperStock.getStockLibertador());
+                }
+                break;
+        }
+        if (tierra.isEmpty() && bebelandia.isEmpty()) {
+            return new ResponseEntity<>(libertador, HttpStatus.OK);
+        } else if (bebelandia.isEmpty() && libertador.isEmpty()) {
+            return new ResponseEntity<>(tierra, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(bebelandia, HttpStatus.OK);
         }
     }
 }
