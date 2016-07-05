@@ -8,6 +8,7 @@ package com.ar.dev.tierra.api.controller;
 import com.ar.dev.tierra.api.dao.DetalleTransferenciaDAO;
 import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.DetalleTransferencia;
+import com.ar.dev.tierra.api.model.stock.WrapperStock;
 import java.io.Serializable;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,23 @@ public class DetalleTransferenciaController implements Serializable {
     @RequestMapping(value = "/trans", method = RequestMethod.GET)
     public ResponseEntity<?> getByTransferencia(@RequestParam("idTransferencia") int idTransferencia) {
         List<DetalleTransferencia> list = detalleTransferenciaDAO.getByTransferencia(idTransferencia);
+        if (!list.isEmpty()) {
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public ResponseEntity<?> findByParams(
+            @RequestParam("descripcion") String descripcion,
+            @RequestParam("marca") String marca,
+            @RequestParam("talla") String talla,
+            @RequestParam("codigo") String codigo,
+            @RequestParam("categoria") String categoria,
+            @RequestParam("sucursal") int sucursal
+    ) {
+        List<WrapperStock> list = detalleTransferenciaDAO.findByParams(descripcion, marca, talla, codigo, categoria, sucursal);
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
