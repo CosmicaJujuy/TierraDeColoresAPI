@@ -8,6 +8,7 @@ package com.ar.dev.tierra.api.controller;
 import com.ar.dev.tierra.api.dao.DetalleTransferenciaDAO;
 import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.DetalleTransferencia;
+import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Usuarios;
 import com.ar.dev.tierra.api.model.stock.StockBebelandia;
 import com.ar.dev.tierra.api.model.stock.StockLibertador;
@@ -15,11 +16,13 @@ import com.ar.dev.tierra.api.model.stock.StockTierra;
 import com.ar.dev.tierra.api.model.stock.WrapperStock;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,6 +50,36 @@ public class DetalleTransferenciaController implements Serializable {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public ResponseEntity<?> add(OAuth2Authentication authentication,
+            @RequestBody DetalleTransferencia detalleTransferencia) {
+        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        detalleTransferencia.setUsuarioCreacion(user.getIdUsuario());
+        detalleTransferencia.setFechaCreacion(new Date());
+        detalleTransferenciaDAO.add(detalleTransferencia);
+        JsonResponse msg = new JsonResponse("Success", "Detalle agregado con exito");
+        return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public ResponseEntity<?> update(OAuth2Authentication authentication,
+            @RequestBody DetalleTransferencia detalleTransferencia) {
+        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        detalleTransferencia.setUsuarioModificacion(user.getIdUsuario());
+        detalleTransferencia.setFechaModificacion(new Date());
+        detalleTransferenciaDAO.update(detalleTransferencia);
+        JsonResponse msg = new JsonResponse("Success", "Detalle modificado con exito");
+        return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public ResponseEntity<?> delete(OAuth2Authentication authentication,
+            @RequestBody DetalleTransferencia detalleTransferencia) {
+        detalleTransferenciaDAO.delete(detalleTransferencia);
+        JsonResponse msg = new JsonResponse("Success", "Detalle eliminado con exito");
+        return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
@@ -90,7 +123,7 @@ public class DetalleTransferenciaController implements Serializable {
             } else {
                 return new ResponseEntity<>(bebelandia, HttpStatus.OK);
             }
-        }else{
+        } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

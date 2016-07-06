@@ -35,7 +35,7 @@ public class DetalleTransferencia implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_transferencia", nullable = false)
     private Transferencia idTransferencia;
-    
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "producto", nullable = false)
     private Producto producto;
@@ -79,6 +79,13 @@ public class DetalleTransferencia implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
     }
 
+    public DetalleTransferencia(Transferencia idTransferencia, Producto producto, int idStock, int idSucursal, int cantidad) {
+        this.idTransferencia = idTransferencia;
+        this.producto = producto;
+        this.idStock = idStock;
+        this.idSucursal = idSucursal;
+        this.cantidad = cantidad;
+    }
 
     /**
      * @return the idDetalleTransferencia
