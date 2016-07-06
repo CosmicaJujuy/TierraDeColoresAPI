@@ -6,6 +6,7 @@
 package com.ar.dev.tierra.api.controller;
 
 import com.ar.dev.tierra.api.dao.DetalleTransferenciaDAO;
+import com.ar.dev.tierra.api.dao.StockDAO;
 import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.DetalleTransferencia;
 import com.ar.dev.tierra.api.model.JsonResponse;
@@ -40,6 +41,9 @@ public class DetalleTransferenciaController implements Serializable {
     DetalleTransferenciaDAO detalleTransferenciaDAO;
 
     @Autowired
+    StockDAO stockDAO;
+
+    @Autowired
     UsuariosDAO usuariosDAO;
 
     @RequestMapping(value = "/trans", method = RequestMethod.GET)
@@ -66,12 +70,30 @@ public class DetalleTransferenciaController implements Serializable {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<?> update(OAuth2Authentication authentication,
             @RequestBody DetalleTransferencia detalleTransferencia) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
-        detalleTransferencia.setUsuarioModificacion(user.getIdUsuario());
-        detalleTransferencia.setFechaModificacion(new Date());
-        detalleTransferenciaDAO.update(detalleTransferencia);
-        JsonResponse msg = new JsonResponse("Success", "Detalle modificado con exito");
-        return new ResponseEntity<>(msg, HttpStatus.OK);
+        boolean cantidadMax = true;
+        WrapperStock stock = stockDAO.searchStockById(detalleTransferencia.getIdStock(), detalleTransferencia.getIdSucursal());
+        if (stock.getStockTierra() != null) {
+            if (detalleTransferencia.getCantidad() > stock.getStockTierra().getCantidad()) {
+                cantidadMax = false;
+            }
+        } else if (stock.getStockBebelandia() != null) {
+            if (detalleTransferencia.getCantidad() > stock.getStockBebelandia().getCantidad()) {
+                cantidadMax = false;
+            }
+        } else if (detalleTransferencia.getCantidad() > stock.getStockLibertador().getCantidad()) {
+            cantidadMax = false;
+        }
+        if (cantidadMax) {
+            Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+            detalleTransferencia.setUsuarioModificacion(user.getIdUsuario());
+            detalleTransferencia.setFechaModificacion(new Date());
+            detalleTransferenciaDAO.update(detalleTransferencia);
+            JsonResponse msg = new JsonResponse("Success", "Detalle modificado con exito");
+            return new ResponseEntity<>(msg, HttpStatus.OK);
+        } else {
+            JsonResponse msg = new JsonResponse("Success", "La cantidad no puede superar al stock");
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
