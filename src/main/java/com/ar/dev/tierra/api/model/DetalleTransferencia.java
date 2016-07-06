@@ -28,7 +28,7 @@ import javax.persistence.TemporalType;
 public class DetalleTransferencia implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_detalle_transferencia", unique = true, nullable = false)
     private int idDetalleTransferencia;
 
