@@ -8,6 +8,7 @@ package com.ar.dev.tierra.api.controller;
 import com.ar.dev.tierra.api.dao.DetalleTransferenciaDAO;
 import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.DetalleTransferencia;
+import com.ar.dev.tierra.api.model.Usuarios;
 import com.ar.dev.tierra.api.model.stock.StockBebelandia;
 import com.ar.dev.tierra.api.model.stock.StockLibertador;
 import com.ar.dev.tierra.api.model.stock.StockTierra;
@@ -18,6 +19,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,35 +56,42 @@ public class DetalleTransferenciaController implements Serializable {
             @RequestParam("talla") String talla,
             @RequestParam("codigo") String codigo,
             @RequestParam("categoria") String categoria,
-            @RequestParam("sucursal") int sucursal
+            @RequestParam("sucursal") int sucursal,
+            OAuth2Authentication authentication
     ) {
-        List<WrapperStock> list = detalleTransferenciaDAO.findByParams(descripcion, marca, talla, codigo, categoria, sucursal);
-        List<StockTierra> tierra = new ArrayList<>();
-        List<StockBebelandia> bebelandia = new ArrayList<>();
-        List<StockLibertador> libertador = new ArrayList<>();
-        switch (sucursal) {
-            case 1:
-                for (WrapperStock wrapperStock : list) {
-                    tierra.add(wrapperStock.getStockTierra());
-                }
-                break;
-            case 2:
-                for (WrapperStock wrapperStock : list) {
-                    bebelandia.add(wrapperStock.getStockBebelandia());
-                }
-                break;
-            case 3:
-                for (WrapperStock wrapperStock : list) {
-                    libertador.add(wrapperStock.getStockLibertador());
-                }
-                break;
-        }
-        if (tierra.isEmpty() && bebelandia.isEmpty()) {
-            return new ResponseEntity<>(libertador, HttpStatus.OK);
-        } else if (bebelandia.isEmpty() && libertador.isEmpty()) {
-            return new ResponseEntity<>(tierra, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(bebelandia, HttpStatus.OK);
+        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        if (user.getUsuarioSucursal().getIdSucursal() != sucursal) {
+
+            List<WrapperStock> list = detalleTransferenciaDAO.findByParams(descripcion, marca, talla, codigo, categoria, sucursal);
+            List<StockTierra> tierra = new ArrayList<>();
+            List<StockBebelandia> bebelandia = new ArrayList<>();
+            List<StockLibertador> libertador = new ArrayList<>();
+            switch (sucursal) {
+                case 1:
+                    for (WrapperStock wrapperStock : list) {
+                        tierra.add(wrapperStock.getStockTierra());
+                    }
+                    break;
+                case 2:
+                    for (WrapperStock wrapperStock : list) {
+                        bebelandia.add(wrapperStock.getStockBebelandia());
+                    }
+                    break;
+                case 3:
+                    for (WrapperStock wrapperStock : list) {
+                        libertador.add(wrapperStock.getStockLibertador());
+                    }
+                    break;
+            }
+            if (tierra.isEmpty() && bebelandia.isEmpty()) {
+                return new ResponseEntity<>(libertador, HttpStatus.OK);
+            } else if (bebelandia.isEmpty() && libertador.isEmpty()) {
+                return new ResponseEntity<>(tierra, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(bebelandia, HttpStatus.OK);
+            }
+        }else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }
