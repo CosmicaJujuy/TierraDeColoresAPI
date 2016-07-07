@@ -169,6 +169,7 @@ public class TransferenciaController implements Serializable {
                 transferencia.setFechaModificacion(new Date());
                 transferencia.setUsuarioModificacion(user.getIdUsuario());
                 transferencia.setEstadoPedido(true);
+                transferenciaDAO.update(transferencia);
                 JsonResponse msg = new JsonResponse("Exito", "Tu pedido fue aprobado.");
                 return new ResponseEntity<>(msg, HttpStatus.OK);
             } else {
