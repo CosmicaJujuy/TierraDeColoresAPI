@@ -5,11 +5,15 @@
  */
 package com.ar.dev.tierra.api.controller;
 
+import com.ar.dev.tierra.api.dao.DetalleTransferenciaDAO;
+import com.ar.dev.tierra.api.dao.StockDAO;
 import com.ar.dev.tierra.api.dao.TransferenciaDAO;
 import com.ar.dev.tierra.api.dao.UsuariosDAO;
+import com.ar.dev.tierra.api.model.DetalleTransferencia;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Transferencia;
 import com.ar.dev.tierra.api.model.Usuarios;
+import com.ar.dev.tierra.api.model.stock.WrapperStock;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +37,12 @@ public class TransferenciaController implements Serializable {
 
     @Autowired
     TransferenciaDAO transferenciaDAO;
+
+    @Autowired
+    StockDAO stockDAO;
+
+    @Autowired
+    DetalleTransferenciaDAO detalleTransferenciaDAO;
 
     @Autowired
     UsuariosDAO usuariosDAO;
@@ -103,6 +113,63 @@ public class TransferenciaController implements Serializable {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/approve", method = RequestMethod.GET)
+    public ResponseEntity<?> approve(@RequestParam("idTransferencia") int idTransferencia,
+            OAuth2Authentication authentication) {
+        Transferencia transferencia = transferenciaDAO.getById(idTransferencia);
+        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        List<DetalleTransferencia> list = detalleTransferenciaDAO.getByTransferencia(idTransferencia);
+        if (user.getRoles().getIdRol() == 1 || user.getUsuarioSucursal().getIdSucursal() != transferencia.getSucursalPedido()) {
+            boolean rest = true;
+            for (DetalleTransferencia detalleTransferencia : list) {
+                WrapperStock wrapperStock = stockDAO.searchStockById(detalleTransferencia.getIdStock(), detalleTransferencia.getIdSucursal());
+                if (wrapperStock.getStockBebelandia() != null) {
+                    if (wrapperStock.getStockBebelandia().getCantidad() < detalleTransferencia.getCantidad()) {
+                        rest = false;
+                    }
+                }
+                if (wrapperStock.getStockLibertador() != null) {
+                    if (wrapperStock.getStockLibertador().getCantidad() < detalleTransferencia.getCantidad()) {
+                        rest = false;
+                    }
+                }
+                if (wrapperStock.getStockTierra() != null) {
+                    if (wrapperStock.getStockTierra().getCantidad() < detalleTransferencia.getCantidad()) {
+                        rest = false;
+                    }
+                }
+            }
+            if (rest) {
+                for (DetalleTransferencia detalleTransferencia : list) {
+                    @SuppressWarnings("UnusedAssignment")
+                    int cantUpdate = 0;
+                    WrapperStock wrapperStock = stockDAO.searchStockById(detalleTransferencia.getIdStock(), detalleTransferencia.getIdSucursal());
+                    if (wrapperStock.getStockBebelandia() != null) {
+                        cantUpdate = wrapperStock.getStockBebelandia().getCantidad();
+                        wrapperStock.getStockBebelandia().setCantidad(cantUpdate - detalleTransferencia.getCantidad());
+                    }
+                    if (wrapperStock.getStockLibertador() != null) {
+                        cantUpdate = wrapperStock.getStockLibertador().getCantidad();
+                        wrapperStock.getStockLibertador().setCantidad(cantUpdate - detalleTransferencia.getCantidad());
+                    }
+                    if (wrapperStock.getStockTierra() != null) {
+                        cantUpdate = wrapperStock.getStockTierra().getCantidad();
+                        wrapperStock.getStockTierra().setCantidad(cantUpdate - detalleTransferencia.getCantidad());
+                    }
+                    stockDAO.update(wrapperStock);
+                }
+                JsonResponse msg = new JsonResponse("Exito", "Tu pedido fue aprobado.");
+                return new ResponseEntity<>(msg, HttpStatus.OK);
+            } else {
+                JsonResponse msg = new JsonResponse("Error", "Stock insuficiente, revisa tu pedido de nuevo.");
+                return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            JsonResponse msg = new JsonResponse("Error", "No puedes aceptar tu propio pedido.");
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
     }
 
