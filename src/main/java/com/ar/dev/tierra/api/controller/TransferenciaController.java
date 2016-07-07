@@ -161,6 +161,14 @@ public class TransferenciaController implements Serializable {
                     }
                     stockDAO.update(wrapperStock);
                 }
+                if(user.getRoles().getIdRol() == 1){
+                    transferencia.setSucursalRespuesta(0);
+                }else{
+                    transferencia.setSucursalRespuesta(user.getUsuarioSucursal().getIdSucursal());
+                }
+                transferencia.setFechaModificacion(new Date());
+                transferencia.setUsuarioModificacion(user.getIdUsuario());
+                transferencia.setEstadoPedido(true);
                 JsonResponse msg = new JsonResponse("Exito", "Tu pedido fue aprobado.");
                 return new ResponseEntity<>(msg, HttpStatus.OK);
             } else {
