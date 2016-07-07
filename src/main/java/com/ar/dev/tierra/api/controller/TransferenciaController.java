@@ -116,7 +116,7 @@ public class TransferenciaController implements Serializable {
         }
     }
 
-    @RequestMapping(value = "/approve", method = RequestMethod.GET)
+    @RequestMapping(value = "/approve", method = RequestMethod.POST)
     public ResponseEntity<?> approve(@RequestParam("idTransferencia") int idTransferencia,
             OAuth2Authentication authentication) {
         Transferencia transferencia = transferenciaDAO.getById(idTransferencia);
