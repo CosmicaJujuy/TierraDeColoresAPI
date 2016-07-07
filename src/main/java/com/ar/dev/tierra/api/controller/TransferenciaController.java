@@ -162,7 +162,7 @@ public class TransferenciaController implements Serializable {
                     stockDAO.update(wrapperStock);
                 }
                 if(user.getRoles().getIdRol() == 1){
-                    transferencia.setSucursalRespuesta(0);
+                    transferencia.setSucursalRespuesta(4);
                 }else{
                     transferencia.setSucursalRespuesta(user.getUsuarioSucursal().getIdSucursal());
                 }
