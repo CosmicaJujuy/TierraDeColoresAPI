@@ -41,19 +41,19 @@ public class UsuariosDAOImpl implements UsuariosDAO {
         Criteria criteria = getSession().createCriteria(Usuarios.class);
         criteria.addOrder(Order.asc("idUsuario"));
         ProjectionList projList = Projections.projectionList();
-        projList.add(Projections.property("idUsuario"));
-        projList.add(Projections.property("roles"));
-        projList.add(Projections.property("nombre"));
-        projList.add(Projections.property("apellido"));
-        projList.add(Projections.property("dni"));
-        projList.add(Projections.property("telefono"));
-        projList.add(Projections.property("email"));
-        projList.add(Projections.property("fechaNacimiento"));
-        projList.add(Projections.property("domicilio"));
-        projList.add(Projections.property("estado"));
+        projList.add(Projections.property("idUsuario"), "idUsuario");
+        projList.add(Projections.property("roles"), "roles");
+        projList.add(Projections.property("nombre"), "nombre");
+        projList.add(Projections.property("apellido"), "apellido");
+        projList.add(Projections.property("dni"), "dni");
+        projList.add(Projections.property("telefono"), "telefono");
+        projList.add(Projections.property("email"), "email");
+        projList.add(Projections.property("fechaNacimiento"), "fechaNacimiento");
+        projList.add(Projections.property("domicilio"), "domicilio");
+        projList.add(Projections.property("estado"), "estado");
         criteria.setProjection(Projections.distinct(projList));
         criteria.setResultTransformer(Transformers.aliasToBean(Usuarios.class));
-        List<Usuarios> us = criteria.list();
+        List<Usuarios> us = criteria.list();        
         return us;
     }
 
