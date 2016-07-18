@@ -195,14 +195,19 @@ public class UsuariosController implements Serializable {
     @RequestMapping(value = "/changeStatus", method = RequestMethod.POST)
     public ResponseEntity<?> changeStatus(OAuth2Authentication authentication,
             @RequestParam("status") boolean status,
-            @RequestBody Usuarios usuario) {
+            @RequestParam("dni") int dni) {
         Usuarios userAdmin = usuariosDAO.findUsuarioByUsername(authentication.getName());
-        Usuarios user = usuariosDAO.findUsuarioByUsername(usuario.getUsername());
-        user.setEstado(status);
-        user.setFechaModificacion(new Date());
-        user.setIdUsuarioModificacion(userAdmin.getIdUsuario());
-        usuariosDAO.updateUsuario(user);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Usuarios user = usuariosDAO.findUsuarioByDNI(dni);
+        if (userAdmin.getDni() != dni) {
+            user.setEstado(status);
+            user.setFechaModificacion(new Date());
+            user.setIdUsuarioModificacion(userAdmin.getIdUsuario());
+            usuariosDAO.updateUsuario(user);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            JsonResponse msg = new JsonResponse("Error", "No puedes cambiar tu propio estado.");
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -245,7 +250,7 @@ public class UsuariosController implements Serializable {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-    
+
     @RequestMapping(value = "/sucursal/list", method = RequestMethod.GET)
     public ResponseEntity<?> sucursalList() {
         List<Sucursal> list = sucursalDAO.getAll();
