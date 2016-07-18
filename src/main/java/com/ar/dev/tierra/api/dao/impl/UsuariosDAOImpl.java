@@ -98,9 +98,9 @@ public class UsuariosDAOImpl implements UsuariosDAO {
     }
     
     @Override
-    public Usuarios findUsuarioById(Integer id) {
+    public Usuarios findUsuarioById(int idUsuario) {
         Criteria criteria = getSession().createCriteria(Usuarios.class);
-        criteria.add(Restrictions.eq("idUsuario", id));
+        criteria.add(Restrictions.eq("idUsuario", idUsuario));
         Usuarios us = (Usuarios) criteria.uniqueResult();
         return us;
     }

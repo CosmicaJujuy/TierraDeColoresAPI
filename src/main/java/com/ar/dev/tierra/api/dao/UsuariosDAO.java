@@ -30,6 +30,6 @@ public interface UsuariosDAO {
 
     public Usuarios findUsuarioByDNI(Integer dni);
 
-    public Usuarios findUsuarioById(Integer id);
+    public Usuarios findUsuarioById(int idUsuario);
 
 }
