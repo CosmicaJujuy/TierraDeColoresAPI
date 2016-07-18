@@ -195,10 +195,10 @@ public class UsuariosController implements Serializable {
     @RequestMapping(value = "/changeStatus", method = RequestMethod.POST)
     public ResponseEntity<?> changeStatus(OAuth2Authentication authentication,
             @RequestParam("status") boolean status,
-            @RequestParam("dni") int dni) {
+            @RequestParam("id") int id) {
         Usuarios userAdmin = usuariosDAO.findUsuarioByUsername(authentication.getName());
-        Usuarios user = usuariosDAO.findUsuarioByDNI(dni);
-        if (userAdmin.getDni() != dni) {
+        Usuarios user = usuariosDAO.findUsuarioById(id);
+        if (userAdmin.getDni() != id) {
             user.setEstado(status);
             user.setFechaModificacion(new Date());
             user.setIdUsuarioModificacion(userAdmin.getIdUsuario());
