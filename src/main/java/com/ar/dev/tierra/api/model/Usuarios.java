@@ -116,7 +116,7 @@ public class Usuarios implements Serializable {
         this.usuarioSucursal = usuarioSucursal;
     }
 
-    public Usuarios(int idUsuario, Roles roles, String nombre, String apellido, Date fechaNacimiento, int dni, String email, String telefono, String domicilio, boolean estado) {
+    public Usuarios(int idUsuario, Roles roles, String nombre, String apellido, Date fechaNacimiento, int dni, String email, String telefono, String domicilio, boolean estado, Date ultimaConexion, Sucursal usuarioSucursal) {
         this.idUsuario = idUsuario;
         this.roles = roles;
         this.nombre = nombre;
@@ -127,10 +127,10 @@ public class Usuarios implements Serializable {
         this.telefono = telefono;
         this.domicilio = domicilio;
         this.estado = estado;
+        this.ultimaConexion = ultimaConexion;
+        this.usuarioSucursal = usuarioSucursal;
     }
 
-    
-    
     /**
      * @return the idUsuario
      */
