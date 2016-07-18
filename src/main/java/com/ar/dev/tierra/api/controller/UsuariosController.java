@@ -211,6 +211,22 @@ public class UsuariosController implements Serializable {
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @RequestMapping(value = "/changeSucursal", method = RequestMethod.POST)
+    public ResponseEntity<?> changeSucursal(OAuth2Authentication authentication,
+            @RequestParam("status") boolean status,
+            @RequestParam("idUsuario") int idUsuario,
+            @RequestBody Sucursal sucursal) {
+        Usuarios userAdmin = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = usuariosDAO.findUsuarioById(idUsuario);
+        user.setEstado(status);
+        user.setFechaModificacion(new Date());
+        user.setUsuarioSucursal(sucursal);
+        user.setIdUsuarioModificacion(userAdmin.getIdUsuario());
+        usuariosDAO.updateUsuario(user);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @RequestMapping(value = "/logged", method = RequestMethod.POST)
     public ResponseEntity<?> isLogged(OAuth2Authentication authentication) {
         String credential = (String) authentication.getCredentials();
