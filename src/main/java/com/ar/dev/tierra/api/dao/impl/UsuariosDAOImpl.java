@@ -54,7 +54,7 @@ public class UsuariosDAOImpl implements UsuariosDAO {
         projList.add(Projections.property("ultimaConexion"), "ultimaConexion");
         projList.add(Projections.property("usuarioSucursal"), "usuarioSucursal");
         criteria.setProjection(Projections.distinct(projList));
-//        criteria.setResultTransformer(Transformers.aliasToBean(Usuarios.class));
+        criteria.setResultTransformer(Transformers.aliasToBean(Usuarios.class));
         List<Usuarios> us = criteria.list();
         return us;
     }
