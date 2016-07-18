@@ -15,6 +15,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,9 +50,9 @@ public class UsuariosDAOImpl implements UsuariosDAO {
         projList.add(Projections.property("email"));
         projList.add(Projections.property("fechaNacimiento"));
         projList.add(Projections.property("domicilio"));
-        projList.add(Projections.property("provincia"));
         projList.add(Projections.property("estado"));
-//        criteria.setProjection(Projections.distinct(projList));
+        criteria.setProjection(Projections.distinct(projList));
+        criteria.setResultTransformer(Transformers.aliasToBean(Usuarios.class));
         List<Usuarios> us = criteria.list();
         return us;
     }
