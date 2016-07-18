@@ -225,6 +225,25 @@ public class UsuariosController implements Serializable {
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @RequestMapping(value = "/changeRol", method = RequestMethod.POST)
+    public ResponseEntity<?> changeRol(OAuth2Authentication authentication,
+            @RequestParam("idUsuario") int idUsuario,
+            @RequestBody Roles rol) {
+        Usuarios userAdmin = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = usuariosDAO.findUsuarioById(idUsuario);
+        if (userAdmin.getIdUsuario() != idUsuario) {
+            user.setFechaModificacion(new Date());
+            user.setRoles(rol);
+            user.setIdUsuarioModificacion(userAdmin.getIdUsuario());
+            usuariosDAO.updateUsuario(user);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            JsonResponse msg = new JsonResponse("Error", "No puedes cambiar tu propio rol.");
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @RequestMapping(value = "/logged", method = RequestMethod.POST)
     public ResponseEntity<?> isLogged(OAuth2Authentication authentication) {
         String credential = (String) authentication.getCredentials();
