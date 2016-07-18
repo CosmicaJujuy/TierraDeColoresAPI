@@ -116,6 +116,21 @@ public class Usuarios implements Serializable {
         this.usuarioSucursal = usuarioSucursal;
     }
 
+    public Usuarios(int idUsuario, Roles roles, String nombre, String apellido, Date fechaNacimiento, int dni, String email, String telefono, String domicilio, boolean estado) {
+        this.idUsuario = idUsuario;
+        this.roles = roles;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.fechaNacimiento = fechaNacimiento;
+        this.dni = dni;
+        this.email = email;
+        this.telefono = telefono;
+        this.domicilio = domicilio;
+        this.estado = estado;
+    }
+
+    
+    
     /**
      * @return the idUsuario
      */
