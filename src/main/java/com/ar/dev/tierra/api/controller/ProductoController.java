@@ -50,9 +50,9 @@ public class ProductoController implements Serializable {
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
-        List<Producto> categorias = productoDAO.getAll();
-        if (!categorias.isEmpty()) {
-            return new ResponseEntity<>(categorias, HttpStatus.OK);
+        List<Producto> list = productoDAO.getAll();
+        if (!list.isEmpty()) {
+            return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

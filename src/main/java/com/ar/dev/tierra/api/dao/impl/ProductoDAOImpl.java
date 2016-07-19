@@ -13,7 +13,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,8 +40,17 @@ public class ProductoDAOImpl implements ProductoDAO {
     @Override
     public List<Producto> getAll() {
         Criteria criteria = getSession().createCriteria(Producto.class);
+        ProjectionList projList = Projections.projectionList();
+        projList.add(Projections.property("idProducto"), "idProducto");
+        projList.add(Projections.property("marcas"), "marcas");
+        projList.add(Projections.property("descripcion"), "descripcion");
+        projList.add(Projections.property("colorProducto"), "colorProducto");
+        projList.add(Projections.property("cantidadTotal"), "cantidadTotal");
+        projList.add(Projections.property("talla"), "talla");
         criteria.add(Restrictions.eq("estadoProducto", true));
         criteria.addOrder(Order.desc("idProducto"));
+        criteria.setProjection(Projections.distinct(projList));
+        criteria.setResultTransformer(Transformers.aliasToBean(Producto.class));
         List<Producto> list = criteria.list();
         return list;
     }
