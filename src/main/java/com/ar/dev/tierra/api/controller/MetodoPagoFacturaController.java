@@ -64,7 +64,7 @@ public class MetodoPagoFacturaController implements Serializable {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @SuppressWarnings("StringEquality")
     public ResponseEntity<?> add(OAuth2Authentication authentication,
-            @RequestBody MetodoPagoFactura pagoFactura) {
+            @RequestBody MetodoPagoFactura pagoFactura) throws Exception {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
         if (pagoFactura.getPlanPago() == null) {
             PlanPago plan = new PlanPago(1, null, "CONTADO", 1, new Date(2016 - 02 - 02), 0, true, new Date(2016 - 02 - 02), 1);
@@ -76,8 +76,7 @@ public class MetodoPagoFacturaController implements Serializable {
             if (pagoFactura.getMontoPago().equals(notaCredito.getMontoTotal())) {
                 pagoFactura.setPlanPago(planNotaCredito);
             } else {
-                JsonResponse msg = new JsonResponse("Error", "Monto de la nota de credito invalido.");
-                return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+                throw new Exception("Monto de la nota de credito invalido");
             }
         }
         Factura factura = facturaDAO.searchById(pagoFactura.getFactura().getIdFactura());
