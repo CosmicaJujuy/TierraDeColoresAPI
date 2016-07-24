@@ -8,6 +8,7 @@ package com.ar.dev.tierra.api.controller;
 import com.ar.dev.tierra.api.dao.FacturaDAO;
 import com.ar.dev.tierra.api.dao.MetodoPagoFacturaDAO;
 import com.ar.dev.tierra.api.dao.NotaCreditoDAO;
+import com.ar.dev.tierra.api.dao.PlanPagoDAO;
 import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.Factura;
 import com.ar.dev.tierra.api.model.JsonResponse;
@@ -51,6 +52,9 @@ public class MetodoPagoFacturaController implements Serializable {
     @Autowired
     NotaCreditoDAO notaCreditoDAO;
 
+    @Autowired
+    PlanPagoDAO planPagoDAO;
+
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
         List<MetodoPagoFactura> list = pagoFacturaDAO.getAll();
@@ -66,35 +70,54 @@ public class MetodoPagoFacturaController implements Serializable {
     public ResponseEntity<?> add(OAuth2Authentication authentication,
             @RequestBody MetodoPagoFactura pagoFactura) throws Exception {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
-        if (pagoFactura.getPlanPago() == null) {
-//            PlanPago plan = new PlanPago(1, null, "CONTADO", 1, new Date(2050 - 02 - 02), 0, true, new Date(2016 - 02 - 02), 1);
-//            pagoFactura.setPlanPago(plan);
+        boolean control = true;
+        JsonResponse msg = new JsonResponse();
+        @SuppressWarnings("UnusedAssignment")
+        NotaCredito notaCredito = new NotaCredito();
+        switch (pagoFactura.getPlanPago().getIdPlanesPago()) {
+            case 1:
+                PlanPago plan = planPagoDAO.searchById(1);
+                pagoFactura.setPlanPago(plan);
+                break;
+            case 4:
+                PlanPago planNota = planPagoDAO.searchById(4);
+                notaCredito = notaCreditoDAO.getByNumero(pagoFactura.getComprobante());
+                if (pagoFactura.getMontoPago().equals(notaCredito.getMontoTotal())) {
+                    if (notaCredito.getEstadoUso() == "SIN USO") {
+                        pagoFactura.setPlanPago(planNota);
+                    } else {
+                        msg.setMsg("Ya ha sido usada la nota de credito.");
+                        msg.setStatus("Error");
+                        control = false;
+                    }
+                } else {
+                    msg.setMsg("Monto de la nota de credito invalido.");
+                    msg.setStatus("Error");
+                    control = false;
+                }
         }
-        if (pagoFactura.getComprobante() != "" && pagoFactura.getPlanPago() == null) {
-            NotaCredito notaCredito = notaCreditoDAO.getByNumero(pagoFactura.getComprobante());
-            PlanPago planNotaCredito = new PlanPago(2, null, "NOTA CREDITO", 1, new Date(2050 - 02 - 02), 0, true, new Date(2016 - 02 - 02), 1);
-            if (pagoFactura.getMontoPago().equals(notaCredito.getMontoTotal())) {
-                pagoFactura.setPlanPago(planNotaCredito);
-            } else {
-                throw new Exception("Monto de la nota de credito invalido");
+        if (control) {
+            Factura factura = facturaDAO.searchById(pagoFactura.getFactura().getIdFactura());
+            List<MetodoPagoFactura> list = pagoFacturaDAO.getFacturaMetodo(factura.getIdFactura());
+            /*POSIBLE FALLA, DECIMAL INMUTABLE NO SE SUMAN ENTRE SI, NECESITA TEST*/
+            BigDecimal totalFactura = BigDecimal.ZERO;
+            for (MetodoPagoFactura metodoPagoFactura : list) {
+                totalFactura = totalFactura.add(metodoPagoFactura.getMontoPago());
             }
-        }
-        Factura factura = facturaDAO.searchById(pagoFactura.getFactura().getIdFactura());
-        List<MetodoPagoFactura> list = pagoFacturaDAO.getFacturaMetodo(factura.getIdFactura());
-        /*POSIBLE FALLA, DECIMAL INMUTABLE NO SE SUMAN ENTRE SI, NECESITA TEST*/
-        BigDecimal totalFactura = BigDecimal.ZERO;
-        for (MetodoPagoFactura metodoPagoFactura : list) {
-            totalFactura = totalFactura.add(metodoPagoFactura.getMontoPago());
-        }
-        if (factura.getTotal().longValue() > totalFactura.longValue()) {
-            pagoFactura.setUsuarioCreacion(user.getIdUsuario());
-            pagoFactura.setFechaCreacion(new Date());
-            pagoFactura.setEstado(true);
-            pagoFacturaDAO.add(pagoFactura);
-            JsonResponse msg = new JsonResponse("Success", "Metodo de pago agregado con exito");
-            return new ResponseEntity<>(msg, HttpStatus.OK);
+            if (factura.getTotal().longValue() > totalFactura.longValue()) {
+                notaCredito.setEstadoUso("USADO");
+                pagoFactura.setUsuarioCreacion(user.getIdUsuario());
+                pagoFactura.setFechaCreacion(new Date());
+                pagoFactura.setEstado(true);
+                notaCreditoDAO.update(notaCredito);
+                pagoFacturaDAO.add(pagoFactura);
+                msg = new JsonResponse("Success", "Metodo de pago agregado con exito");
+                return new ResponseEntity<>(msg, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
         } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
     }
 

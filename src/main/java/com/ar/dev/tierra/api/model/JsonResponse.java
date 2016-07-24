@@ -10,13 +10,16 @@ package com.ar.dev.tierra.api.model;
  * @author PauloGaldo
  */
 public class JsonResponse {
-    
+
     private String status;
     private String msg;
 
     public JsonResponse(String status, String msg) {
         this.status = status;
         this.msg = msg;
+    }
+
+    public JsonResponse() {
     }
 
     /**
@@ -46,7 +49,5 @@ public class JsonResponse {
     public void setMsg(String msg) {
         this.msg = msg;
     }
-    
-    
-    
+
 }

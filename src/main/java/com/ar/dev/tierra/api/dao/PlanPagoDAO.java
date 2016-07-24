@@ -27,5 +27,7 @@ public interface PlanPagoDAO {
     public void delete(PlanPago planPago);
 
     public List<PlanPago> searchPlanByTarjeta(int idTarjeta);
+    
+    public PlanPago searchById(int idPlanPago);
 
 }

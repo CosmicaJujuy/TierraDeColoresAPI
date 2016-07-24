@@ -66,4 +66,12 @@ public class PlanPagoDAOImpl implements PlanPagoDAO {
         List<PlanPago> list = criteria.list();
         return list;
     }
+
+    @Override
+    public PlanPago searchById(int idPlanPago) {
+        Criteria criteria = getSession().createCriteria(PlanPago.class);
+        criteria.add(Restrictions.eq("idPlanesPago", idPlanPago));
+        PlanPago plan = (PlanPago) criteria.uniqueResult();
+        return plan;
+    }
 }
