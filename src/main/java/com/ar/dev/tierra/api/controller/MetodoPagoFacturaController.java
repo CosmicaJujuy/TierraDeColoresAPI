@@ -82,17 +82,20 @@ public class MetodoPagoFacturaController implements Serializable {
             case 4:
                 PlanPago planNota = planPagoDAO.searchById(4);
                 notaCredito = notaCreditoDAO.getByNumero(pagoFactura.getComprobante());
-                if (pagoFactura.getMontoPago() == notaCredito.getMontoTotal()) {
-                    if (notaCredito.getEstadoUso() == "SIN USO") {
-                        pagoFactura.setPlanPago(planNota);
+                if (notaCredito != null) {
+                    if (pagoFactura.getMontoPago().compareTo(notaCredito.getMontoTotal()) == 0) {
+                        if (notaCredito.getEstadoUso() == "SIN USO") {
+                            pagoFactura.setPlanPago(planNota);
+                        } else {
+                            msg = new JsonResponse("Error", "Ya ha sido usada la nota de credito.");
+                            control = false;
+                        }
                     } else {
-                        msg.setMsg("Ya ha sido usada la nota de credito.");
-                        msg.setStatus("Error");
+                        msg = new JsonResponse("Error", "Monto de la nota de credito invalido.");
                         control = false;
                     }
                 } else {
-                    msg.setMsg("Monto de la nota de credito invalido.");
-                    msg.setStatus("Error");
+                    msg = new JsonResponse("Error", "Nota de credito invalida.");
                     control = false;
                 }
         }
