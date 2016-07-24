@@ -70,7 +70,7 @@ public class MetodoPagoFacturaController implements Serializable {
             PlanPago plan = new PlanPago(1, null, "CONTADO", 1, new Date(2016 - 02 - 02), 0, true, new Date(2016 - 02 - 02), 1);
             pagoFactura.setPlanPago(plan);
         }
-        if (!pagoFactura.getComprobante().equals("") && pagoFactura.getPlanPago() == null) {
+        if (pagoFactura.getComprobante() != "" && pagoFactura.getPlanPago() == null) {
             NotaCredito notaCredito = notaCreditoDAO.getByNumero(pagoFactura.getComprobante());
             PlanPago planNotaCredito = new PlanPago(2, null, "NOTA CREDITO", 1, new Date(2016 - 02 - 02), 0, true, new Date(2016 - 02 - 02), 1);
             if (pagoFactura.getMontoPago().equals(notaCredito.getMontoTotal())) {
