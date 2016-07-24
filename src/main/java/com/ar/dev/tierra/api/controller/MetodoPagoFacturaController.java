@@ -73,7 +73,7 @@ public class MetodoPagoFacturaController implements Serializable {
         boolean control = true;
         JsonResponse msg = new JsonResponse();
         @SuppressWarnings("UnusedAssignment")
-        NotaCredito notaCredito = new NotaCredito();
+        NotaCredito notaCredito = null;
         switch (pagoFactura.getPlanPago().getIdPlanesPago()) {
             case 1:
                 PlanPago plan = planPagoDAO.searchById(1);
@@ -105,11 +105,13 @@ public class MetodoPagoFacturaController implements Serializable {
                 totalFactura = totalFactura.add(metodoPagoFactura.getMontoPago());
             }
             if (factura.getTotal().longValue() > totalFactura.longValue()) {
-                notaCredito.setEstadoUso("USADO");
                 pagoFactura.setUsuarioCreacion(user.getIdUsuario());
                 pagoFactura.setFechaCreacion(new Date());
                 pagoFactura.setEstado(true);
-                notaCreditoDAO.update(notaCredito);
+                if (notaCredito != null) {
+                    notaCredito.setEstadoUso("USADO");
+                    notaCreditoDAO.update(notaCredito);
+                }
                 pagoFacturaDAO.add(pagoFactura);
                 msg = new JsonResponse("Success", "Metodo de pago agregado con exito");
                 return new ResponseEntity<>(msg, HttpStatus.OK);
