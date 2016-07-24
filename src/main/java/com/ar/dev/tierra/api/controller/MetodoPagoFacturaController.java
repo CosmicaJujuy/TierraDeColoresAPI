@@ -7,10 +7,12 @@ package com.ar.dev.tierra.api.controller;
 
 import com.ar.dev.tierra.api.dao.FacturaDAO;
 import com.ar.dev.tierra.api.dao.MetodoPagoFacturaDAO;
+import com.ar.dev.tierra.api.dao.NotaCreditoDAO;
 import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.Factura;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.MetodoPagoFactura;
+import com.ar.dev.tierra.api.model.NotaCredito;
 import com.ar.dev.tierra.api.model.PlanPago;
 import com.ar.dev.tierra.api.model.Usuarios;
 import java.io.Serializable;
@@ -46,6 +48,9 @@ public class MetodoPagoFacturaController implements Serializable {
     @Autowired
     FacturaDAO facturaDAO;
 
+    @Autowired
+    NotaCreditoDAO notaCreditoDAO;
+
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
         List<MetodoPagoFactura> list = pagoFacturaDAO.getAll();
@@ -57,12 +62,23 @@ public class MetodoPagoFacturaController implements Serializable {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @SuppressWarnings("StringEquality")
     public ResponseEntity<?> add(OAuth2Authentication authentication,
             @RequestBody MetodoPagoFactura pagoFactura) {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
         if (pagoFactura.getPlanPago() == null) {
-            PlanPago plan = new PlanPago(1, null, "Pago contado", 1, new Date(2016 - 02 - 02), 0, true, new Date(2016 - 02 - 02), 1);
+            PlanPago plan = new PlanPago(1, null, "CONTADO", 1, new Date(2016 - 02 - 02), 0, true, new Date(2016 - 02 - 02), 1);
             pagoFactura.setPlanPago(plan);
+        }
+        if (!pagoFactura.getComprobante().equals("") && pagoFactura.getPlanPago() == null) {
+            NotaCredito notaCredito = notaCreditoDAO.getByNumero(pagoFactura.getComprobante());
+            PlanPago planNotaCredito = new PlanPago(2, null, "NOTA CREDITO", 1, new Date(2016 - 02 - 02), 0, true, new Date(2016 - 02 - 02), 1);
+            if (pagoFactura.getMontoPago().equals(notaCredito.getMontoTotal())) {
+                pagoFactura.setPlanPago(planNotaCredito);
+            } else {
+                JsonResponse msg = new JsonResponse("Error", "Monto de la nota de credito invalido.");
+                return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+            }
         }
         Factura factura = facturaDAO.searchById(pagoFactura.getFactura().getIdFactura());
         List<MetodoPagoFactura> list = pagoFacturaDAO.getFacturaMetodo(factura.getIdFactura());

@@ -56,10 +56,13 @@ public class NotaCredito implements Serializable {
     @Column(name = "id_cliente")
     private Integer idCliente;
 
+    @Column(name = "fatura_uso")
+    private Integer facturaUso;
+
     public NotaCredito() {
     }
 
-    public NotaCredito(int idNotaCredito, String numero, String estadoUso, BigDecimal montoTotal, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion, Integer idCliente) {
+    public NotaCredito(int idNotaCredito, String numero, String estadoUso, BigDecimal montoTotal, Date fechaCreacion, Date fechaModificacion, int usuarioCreacion, Integer usuarioModificacion, Integer idCliente, Integer facturaUso) {
         this.idNotaCredito = idNotaCredito;
         this.numero = numero;
         this.estadoUso = estadoUso;
@@ -69,6 +72,7 @@ public class NotaCredito implements Serializable {
         this.usuarioCreacion = usuarioCreacion;
         this.usuarioModificacion = usuarioModificacion;
         this.idCliente = idCliente;
+        this.facturaUso = facturaUso;
     }
 
     /**
@@ -195,6 +199,20 @@ public class NotaCredito implements Serializable {
      */
     public void setIdCliente(Integer idCliente) {
         this.idCliente = idCliente;
+    }
+
+    /**
+     * @return the facturaUso
+     */
+    public Integer getFacturaUso() {
+        return facturaUso;
+    }
+
+    /**
+     * @param facturaUso the facturaUso to set
+     */
+    public void setFacturaUso(Integer facturaUso) {
+        this.facturaUso = facturaUso;
     }
 
 }
