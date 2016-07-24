@@ -80,7 +80,7 @@ public class MetodoPagoFacturaController implements Serializable {
                 pagoFactura.setPlanPago(plan);
                 break;
             case 4:
-                PlanPago planNota = planPagoDAO.searchById(4);
+                PlanPago planNota = planPagoDAO.searchById(2);
                 notaCredito = notaCreditoDAO.getByNumero(pagoFactura.getComprobante());
                 if (notaCredito != null) {
                     if (pagoFactura.getMontoPago().compareTo(notaCredito.getMontoTotal()) == 0) {
