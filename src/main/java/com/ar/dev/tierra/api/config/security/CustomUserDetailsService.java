@@ -62,6 +62,18 @@ public class CustomUserDetailsService implements UserDetailsService {
             case "VENDEDOR":
                 authority = "ROLE_VENDEDOR";
                 break;
+            case "CAJERO":
+                authority = "ROLE_CAJERO";
+                break;
+            case "CONTADOR":
+                authority = "ROLE_CONTADOR";
+                break;
+            case "REPOSITOR":
+                authority = "ROLE_REPOSITOR";
+                break;
+            case "ENCARGADO/VENDEDOR":
+                authority = "ROLE_ENCARGADO/VENDEDOR";
+                break;
             default:
                 authority = "ROLE_NONE";
                 break;

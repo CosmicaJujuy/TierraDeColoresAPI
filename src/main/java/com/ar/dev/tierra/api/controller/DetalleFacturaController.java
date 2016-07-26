@@ -183,7 +183,7 @@ public class DetalleFacturaController implements Serializable {
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<?> delete(OAuth2Authentication authentication,
             @RequestBody DetalleFactura detalleFactura,
