@@ -55,23 +55,23 @@ public class CustomUserDetailsService implements UserDetailsService {
         userRepository.updateUsuario(userFromDatabase);
         Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         String authority;
-        switch (userFromDatabase.getRoles().getNombreRol()) {
-            case "ADMINISTRADOR":
+        switch (userFromDatabase.getRoles().getIdRol()) {
+            case 1:
                 authority = "ROLE_ADMIN";
                 break;
-            case "VENDEDOR":
+            case 2:
                 authority = "ROLE_VENDEDOR";
                 break;
-            case "CAJERO":
+            case 3:
                 authority = "ROLE_CAJERO";
                 break;
-            case "CONTADOR":
+            case 4:
                 authority = "ROLE_CONTADOR";
                 break;
-            case "REPOSITOR":
+            case 5:
                 authority = "ROLE_REPOSITOR";
                 break;
-            case "ENCARGADO/VENDEDOR":
+            case 6:
                 authority = "ROLE_ENCARGADO/VENDEDOR";
                 break;
             default:
