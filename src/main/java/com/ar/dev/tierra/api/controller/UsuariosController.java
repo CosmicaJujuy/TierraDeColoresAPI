@@ -243,7 +243,6 @@ public class UsuariosController implements Serializable {
         }
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @RequestMapping(value = "/logged", method = RequestMethod.POST)
     public ResponseEntity<?> isLogged(OAuth2Authentication authentication) {
         String credential = (String) authentication.getCredentials();
