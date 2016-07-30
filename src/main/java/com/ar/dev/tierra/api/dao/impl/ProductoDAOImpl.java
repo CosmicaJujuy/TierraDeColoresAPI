@@ -34,7 +34,7 @@ public class ProductoDAOImpl implements ProductoDAO {
 
     private Session getSession() {
         return sessionFactory.getCurrentSession();
-    }
+    }    
 
     @SuppressWarnings("unchecked")
     @Override
