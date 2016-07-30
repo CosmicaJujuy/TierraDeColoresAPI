@@ -126,6 +126,17 @@ public class Producto implements Serializable {
         this.estadoDistribucion = estadoDistribucion;
     }
 
+    public Producto(int idProducto, String codigoProducto, Marcas marcas, String descripcion, String colorProducto, String talla, boolean estadoProducto) {
+        this.idProducto = idProducto;
+        this.codigoProducto = codigoProducto;
+        this.marcas = marcas;
+        this.descripcion = descripcion;
+        this.colorProducto = colorProducto;
+        this.talla = talla;
+        this.estadoProducto = estadoProducto;
+    }
+    
+
     /**
      * @return the idProducto
      */
