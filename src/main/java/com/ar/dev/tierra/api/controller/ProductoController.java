@@ -8,6 +8,7 @@ package com.ar.dev.tierra.api.controller;
 import com.ar.dev.tierra.api.dao.ProductoDAO;
 import com.ar.dev.tierra.api.dao.StockDAO;
 import com.ar.dev.tierra.api.dao.UsuariosDAO;
+import com.ar.dev.tierra.api.service.ProductoService;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Producto;
 import com.ar.dev.tierra.api.model.stock.StockTierra;
@@ -19,7 +20,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +33,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -48,6 +54,9 @@ public class ProductoController implements Serializable {
     @Autowired
     StockDAO stockDAO;
 
+    @Autowired
+    ProductoService productoService;
+
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
         List<Producto> list = productoDAO.getAll();
@@ -55,6 +64,19 @@ public class ProductoController implements Serializable {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/paged", method = RequestMethod.GET)
+    public ResponseEntity<?> getAllHotels(
+            @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
+            HttpServletRequest request, HttpServletResponse response) {
+        Page paged = productoService.getAllProdutos(page, size);
+        if (paged.getSize() != 0) {
+            return new ResponseEntity<>(paged, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
