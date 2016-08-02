@@ -28,7 +28,7 @@ public class FacturaService {
         Date toDate = calendar.getTime();
         calendar.add(Calendar.MONTH, -1);
         Date fromDate = calendar.getTime();
-        Page facturas = facturaRepository.findByEstadoNotAndFechaCreacionBetween("RESERVADO", fromDate, toDate, new PageRequest(page, size));
+        Page facturas = facturaRepository.findByEstadoNotAndFechaCreacionBetweenDesc("RESERVADO", fromDate, toDate, new PageRequest(page, size));
         return facturas;
     }
 
