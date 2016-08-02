@@ -18,11 +18,13 @@ import com.ar.dev.tierra.api.model.MetodoPagoFactura;
 import com.ar.dev.tierra.api.model.Producto;
 import com.ar.dev.tierra.api.model.Usuarios;
 import com.ar.dev.tierra.api.model.stock.WrapperStock;
+import com.ar.dev.tierra.api.service.FacturaService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +61,9 @@ public class FacturaController implements Serializable {
 
     @Autowired
     StockDAO stockDAO;
+    
+    @Autowired
+    FacturaService facturaService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
@@ -166,6 +171,18 @@ public class FacturaController implements Serializable {
     @RequestMapping(value = "/month", method = RequestMethod.GET)
     public ResponseEntity<?> getMonth() {
         List<Factura> factura = facturaDAO.getMonth();
+        if (factura != null) {
+            return new ResponseEntity<>(factura, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/month/paged", method = RequestMethod.GET)
+    public ResponseEntity<?> getMonthPaged(
+            @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
+        Page factura = facturaService.getFacturasMonth(page, size);
         if (factura != null) {
             return new ResponseEntity<>(factura, HttpStatus.OK);
         } else {
