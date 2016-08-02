@@ -7,11 +7,17 @@ package com.ar.dev.tierra.api.controller;
 
 import com.ar.dev.tierra.api.dao.DetalleFacturaDAO;
 import com.ar.dev.tierra.api.dao.FacturaDAO;
+import com.ar.dev.tierra.api.dao.MetodoPagoFacturaDAO;
 import com.ar.dev.tierra.api.dao.ProductoDAO;
+import com.ar.dev.tierra.api.dao.StockDAO;
 import com.ar.dev.tierra.api.dao.UsuariosDAO;
+import com.ar.dev.tierra.api.model.DetalleFactura;
 import com.ar.dev.tierra.api.model.Factura;
 import com.ar.dev.tierra.api.model.JsonResponse;
+import com.ar.dev.tierra.api.model.MetodoPagoFactura;
+import com.ar.dev.tierra.api.model.Producto;
 import com.ar.dev.tierra.api.model.Usuarios;
+import com.ar.dev.tierra.api.model.stock.WrapperStock;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -46,7 +52,13 @@ public class FacturaController implements Serializable {
     ProductoDAO productoDAO;
 
     @Autowired
+    MetodoPagoFacturaDAO metodoPagoFacturaDAO;
+
+    @Autowired
     DetalleFacturaDAO detalleFacturaDAO;
+
+    @Autowired
+    StockDAO stockDAO;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
@@ -83,16 +95,52 @@ public class FacturaController implements Serializable {
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN, ROLE_ENCARGADO/VENDEDOR')")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<?> delete(OAuth2Authentication authentication,
-            @RequestBody Factura factura) {
+            @RequestParam("idFactura") int idFactura) {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
-        factura.setUsuarioModificacion(user.getIdUsuario());
-        factura.setFechaModificacion(new Date());
-        facturaDAO.delete(factura);
-        JsonResponse msg = new JsonResponse("Success", "Factura eliminada con exito");
-        return new ResponseEntity<>(msg, HttpStatus.OK);
+        List<DetalleFactura> detalles = detalleFacturaDAO.facturaDetalle(idFactura);
+        List<MetodoPagoFactura> metodos = metodoPagoFacturaDAO.getFacturaMetodo(idFactura);
+        if (metodos.isEmpty()) {
+            if (!detalles.isEmpty()) {
+                for (DetalleFactura detalleFactura : detalles) {
+                    detalleFactura.setEstadoDetalle(false);
+                    detalleFactura.setUsuarioModificacion(user.getIdUsuario());
+                    detalleFactura.setFechaModificacion(new Date());
+                    detalleFacturaDAO.update(detalleFactura);
+                    @SuppressWarnings("UnusedAssignment")
+                    int cantidadActual = 0;
+                    WrapperStock stock = stockDAO.searchStockById(detalleFactura.getIdStock(), user.getUsuarioSucursal().getIdSucursal());
+                    if (stock.getStockTierra() != null) {
+                        cantidadActual = stock.getStockTierra().getCantidad();
+                        stock.getStockTierra().setCantidad(cantidadActual + detalleFactura.getCantidadDetalle());
+                    } else if (stock.getStockBebelandia() != null) {
+                        cantidadActual = stock.getStockBebelandia().getCantidad();
+                        stock.getStockBebelandia().setCantidad(cantidadActual + detalleFactura.getCantidadDetalle());
+                    } else {
+                        cantidadActual = stock.getStockLibertador().getCantidad();
+                        stock.getStockLibertador().setCantidad(cantidadActual + detalleFactura.getCantidadDetalle());
+                    }
+                    stockDAO.update(stock);
+                    Producto prodRest = productoDAO.findById(detalleFactura.getProducto().getIdProducto());
+                    int cantProd = prodRest.getCantidadTotal();
+                    prodRest.setCantidadTotal(cantProd + detalleFactura.getCantidadDetalle());
+                    productoDAO.update(prodRest);
+                }
+            }
+            Factura factura = facturaDAO.searchById(idFactura);
+            factura.setEstado("CANCELADO");
+            factura.setFechaModificacion(new Date());
+            factura.setTotal(BigDecimal.ZERO);
+            factura.setUsuarioModificacion(user.getIdUsuario());
+            facturaDAO.update(factura);
+            JsonResponse msg = new JsonResponse("Success", "Factura cancelada con exito.");
+            return new ResponseEntity<>(msg, HttpStatus.OK);
+        } else {
+            JsonResponse msg = new JsonResponse("Error", "No puedes eliminar una factura con pagos realizados");
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
@@ -114,7 +162,7 @@ public class FacturaController implements Serializable {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-    
+
     @RequestMapping(value = "/month", method = RequestMethod.GET)
     public ResponseEntity<?> getMonth() {
         List<Factura> factura = facturaDAO.getMonth();
