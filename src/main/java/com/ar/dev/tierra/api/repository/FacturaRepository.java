@@ -17,8 +17,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  */
 public interface FacturaRepository extends PagingAndSortingRepository<Factura, String> {
 
-    Page<Factura> findByEstadoNotAndFechaCreacionBetweenAndOrderByFacturaIdDesc(String estado, Date from, Date to, Pageable pageable);
+    Page<Factura> findByEstadoNotAndFechaCreacionBetween(String estado, Date from, Date to, Pageable pageable);
 
-    Page<Factura> findByEstadoAndFechaCreacionBetweenAndOrderByFacturaIdDesc(String estado, Date from, Date to, Pageable pageable);
+    Page<Factura> findByEstadoAndFechaCreacionBetween(String estado, Date from, Date to, Pageable pageable);
 
 }
