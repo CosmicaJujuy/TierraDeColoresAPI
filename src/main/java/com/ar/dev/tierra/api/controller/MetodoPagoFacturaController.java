@@ -86,6 +86,9 @@ public class MetodoPagoFacturaController implements Serializable {
                     if (pagoFactura.getMontoPago().compareTo(notaCredito.getMontoTotal()) == 0) {
                         if (notaCredito.getEstadoUso().equals("SIN USO")) {
                             pagoFactura.setPlanPago(planNota);
+                        } else if (notaCredito.getEstadoUso().equals("CANCELADO")) {
+                            msg = new JsonResponse("Error", "Nota de credito cancelada.");
+                            control = false;
                         } else {
                             msg = new JsonResponse("Error", "Ya ha sido usada la nota de credito.");
                             control = false;
