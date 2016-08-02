@@ -103,7 +103,7 @@ public class FacturaDAOImpl implements FacturaDAO {
         criteria.addOrder(Order.desc("idFactura"));
         criteria.add(
                 Restrictions.not(
-                        Restrictions.in("estado", new String[]{"INICIADO", "CONFIRMADO"})));
+                        Restrictions.in("estado", new String[]{"INICIADO", "CONFIRMADO", "CANCELADO"})));
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         List<Factura> list = criteria.list();
         return list;
@@ -119,7 +119,7 @@ public class FacturaDAOImpl implements FacturaDAO {
         criteria.add(Restrictions.between("fechaCreacion", fromDate, toDate));
         criteria.add(
                 Restrictions.not(
-                        Restrictions.in("estado", new String[]{"INICIADO", "CONFIRMADO"})));
+                        Restrictions.in("estado", new String[]{"INICIADO", "CONFIRMADO", "CANCELADO"})));
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         criteria.addOrder(Order.desc("idFactura"));
         List<Factura> list = criteria.list();
