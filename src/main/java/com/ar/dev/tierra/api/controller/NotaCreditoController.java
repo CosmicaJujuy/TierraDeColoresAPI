@@ -75,6 +75,25 @@ public class NotaCreditoController implements Serializable {
         JsonResponse msg = new JsonResponse("Success", String.valueOf(idNota));
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
+    
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public ResponseEntity<?> delete(OAuth2Authentication authentication,
+            @RequestParam("idNota") int notaCredito) {
+        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        List<DetalleNotaCredito> list = detalleNotaCreditoDAO.getByNotaCredito(notaCredito);
+        NotaCredito nota = notaCreditoDAO.getById(notaCredito);
+        if(!list.isEmpty()){
+            for (DetalleNotaCredito detalleNotaCredito : list) {
+                detalleNotaCreditoDAO.delete(detalleNotaCredito);
+            }
+        }
+        nota.setUsuarioCreacion(user.getIdUsuario());       
+        nota.setFechaCreacion(new Date());
+        nota.setEstadoUso("CANCELADO");
+        notaCreditoDAO.update(nota);
+        JsonResponse msg = new JsonResponse("Success", "Nota de credito cancelada.");
+        return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<?> update(OAuth2Authentication authentication,
