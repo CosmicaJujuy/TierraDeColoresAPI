@@ -116,6 +116,19 @@ public class TransferenciaController implements Serializable {
         }
     }
 
+    @RequestMapping(value = "/cancel", method = RequestMethod.GET)
+    public ResponseEntity<?> cancel(@RequestBody Transferencia transferencia,
+            OAuth2Authentication authentication) {
+        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        transferencia.setEstadoPedido(false);
+        transferencia.setSucursalRespuesta(5);
+        transferencia.setUsuarioModificacion(user.getIdUsuario());
+        transferencia.setFechaModificacion(new Date());
+        transferenciaDAO.update(transferencia);
+        JsonResponse msg = new JsonResponse("Exito", "Transferencia cancelada.");
+        return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/approve", method = RequestMethod.POST)
     public ResponseEntity<?> approve(@RequestParam("idTransferencia") int idTransferencia,
             OAuth2Authentication authentication) {
@@ -161,9 +174,9 @@ public class TransferenciaController implements Serializable {
                     }
                     stockDAO.update(wrapperStock);
                 }
-                if(user.getRoles().getIdRol() == 1){
+                if (user.getRoles().getIdRol() == 1) {
                     transferencia.setSucursalRespuesta(4);
-                }else{
+                } else {
                     transferencia.setSucursalRespuesta(user.getUsuarioSucursal().getIdSucursal());
                 }
                 transferencia.setFechaModificacion(new Date());
