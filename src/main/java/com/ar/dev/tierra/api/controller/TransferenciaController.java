@@ -116,7 +116,7 @@ public class TransferenciaController implements Serializable {
         }
     }
 
-    @RequestMapping(value = "/cancel", method = RequestMethod.GET)
+    @RequestMapping(value = "/cancel", method = RequestMethod.POST)
     public ResponseEntity<?> cancel(@RequestBody Transferencia transferencia,
             OAuth2Authentication authentication) {
         Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
