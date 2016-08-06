@@ -33,4 +33,6 @@ public interface ProductoDAO {
     public List<Producto> findByBarcode(String barcode);
     
     public List<Producto> findByIdFactura(int idFacturaPRoducto);
+    
+    public List<Producto> advancedSearch(String descripcion, String marca, String talla, String codigo, String categoria);
 }

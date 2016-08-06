@@ -34,7 +34,7 @@ public class ProductoDAOImpl implements ProductoDAO {
 
     private Session getSession() {
         return sessionFactory.getCurrentSession();
-    }    
+    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -104,6 +104,20 @@ public class ProductoDAOImpl implements ProductoDAO {
         facturaProducto.add(Restrictions.eq("idFacturaProducto", idFacturaPRoducto));
         criteria.addOrder(Order.desc("idProducto"));
         List<Producto> list = criteria.list();
+        return list;
+    }
+
+    @Override
+    public List<Producto> advancedSearch(String descripcion, String marca, String talla, String codigo, String categoria) {
+        Criteria producto = getSession().createCriteria(Producto.class);
+        producto.add(Restrictions.ilike("descripcion", descripcion, MatchMode.ANYWHERE));
+        producto.add(Restrictions.ilike("talla", talla, MatchMode.ANYWHERE));
+        producto.add(Restrictions.ilike("codigoProducto", codigo, MatchMode.ANYWHERE));
+        Criteria marcas = producto.createCriteria("marcas");
+        marcas.add(Restrictions.ilike("nombreMarca", marca, MatchMode.ANYWHERE));
+        Criteria categorias = producto.createCriteria("categoria");
+        categorias.add(Restrictions.ilike("nombreCategoria", categoria, MatchMode.ANYWHERE));
+        List<Producto> list = producto.list();
         return list;
     }
 

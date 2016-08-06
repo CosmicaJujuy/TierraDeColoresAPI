@@ -67,6 +67,22 @@ public class ProductoController implements Serializable {
         }
     }
 
+    @RequestMapping(value = "/advanced", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> advanced(
+            @RequestParam(value = "descripcion", required = false, defaultValue = "") String descripcion,
+            @RequestParam(value = "marca", required = false, defaultValue = "") String marca,
+            @RequestParam(value = "talla", required = false, defaultValue = "") String talla,
+            @RequestParam(value = "codigo", required = false, defaultValue = "") String codigo,
+            @RequestParam(value = "categoria", required = false, defaultValue = "") String categoria
+    ) {
+        List<Producto> list = productoDAO.advancedSearch(descripcion, marca, talla, codigo, categoria);
+        if (!list.isEmpty()) {
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @RequestMapping(value = "/paged", method = RequestMethod.GET)
     public ResponseEntity<?> getAllHotels(
             @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
