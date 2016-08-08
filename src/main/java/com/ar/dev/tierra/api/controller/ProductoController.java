@@ -73,13 +73,15 @@ public class ProductoController implements Serializable {
             @RequestParam(value = "marca", required = false, defaultValue = "") String marca,
             @RequestParam(value = "talla", required = false, defaultValue = "") String talla,
             @RequestParam(value = "codigo", required = false, defaultValue = "") String codigo,
-            @RequestParam(value = "categoria", required = false, defaultValue = "") String categoria
+            @RequestParam(value = "categoria", required = false, defaultValue = "") String categoria,
+            @RequestParam(value = "page", required = false, defaultValue = "") Integer page,
+            @RequestParam(value = "size", required = false, defaultValue = "") Integer size
     ) {
-        List<Producto> list = productoDAO.advancedSearch(descripcion, marca, talla, codigo, categoria);
-        if (!list.isEmpty()) {
-            return new ResponseEntity<>(list, HttpStatus.OK);
+        Page paged = productoService.getByParams(descripcion, marca, talla, codigo, categoria, page, size);
+        if (paged.getSize() != 0) {
+            return new ResponseEntity<>(paged, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
