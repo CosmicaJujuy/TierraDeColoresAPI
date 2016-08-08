@@ -26,4 +26,16 @@ public class ProductoService {
         Page pageOfProductos = productoRepository.findByEstadoProductoOrderByIdProductoDesc(true, new PageRequest(page, size));
         return pageOfProductos;
     }
+
+    public Page<Producto> getByParams(
+            String descripcion,
+            String marca,
+            String talla,
+            String codigo, 
+            String categoria,                       
+            Integer page,
+            Integer size) {
+        Page pageParams = productoRepository.findByParams(descripcion, marca, talla, codigo, categoria, new PageRequest(page, size));
+        return pageParams;
+    }
 }
