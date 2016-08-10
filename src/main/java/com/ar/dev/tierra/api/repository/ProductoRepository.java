@@ -39,10 +39,10 @@ public interface ProductoRepository extends Repository<Producto, String> {
             @Param("categoria") String categoria,
             Pageable pageable);
 
-    @Query("SELECT p FROM Producto "
+    @Query("SELECT p FROM Producto p "
             + "INNER JOIN p.facturaProducto fp "
             + "WHERE fp.idFacturaProducto = :idFactura AND "
             + "p.estadoProducto = true "
-            + "ORDER BY´p.idProducto DESC")
+            + "ORDER BY p.idProducto DESC")
     Page<Producto> findByIdFactura(@Param("idFactura") int idFactura, Pageable pageable);
 }
