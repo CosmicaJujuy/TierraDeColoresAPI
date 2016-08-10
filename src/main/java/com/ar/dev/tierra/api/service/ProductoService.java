@@ -31,11 +31,16 @@ public class ProductoService {
             String descripcion,
             String marca,
             String talla,
-            String codigo, 
-            String categoria,                       
+            String codigo,
+            String categoria,
             Integer page,
             Integer size) {
         Page pageParams = productoRepository.findByParams(descripcion, marca, talla, codigo, categoria, new PageRequest(page, size));
         return pageParams;
+    }
+
+    public Page<Producto> findByFactura(Integer page, Integer size, int idFactura) {
+        Page paged = productoRepository.findByIdFactura(idFactura, new PageRequest(page, size));
+        return paged;
     }
 }

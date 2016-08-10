@@ -31,11 +31,18 @@ public interface ProductoRepository extends Repository<Producto, String> {
             + "p.talla LIKE %:talla% AND p.estadoProducto = true "
             + "ORDER BY p.idProducto DESC"
     )
-    Page<Producto> findByParams(@Param(
-            "descripcion") String descripcion,
+    Page<Producto> findByParams(
+            @Param("descripcion") String descripcion,
             @Param("marca") String marca,
             @Param("talla") String talla,
             @Param("codigo") String codigo,
             @Param("categoria") String categoria,
             Pageable pageable);
+
+    @Query("SELECT p FROM Producto "
+            + "INNER JOIN p.facturaProducto fp "
+            + "WHERE fp.idFacturaProducto = :idFactura AND "
+            + "p.estadoProducto = true "
+            + "ORDER BY´p.idProducto DESC")
+    Page<Producto> findByIdFactura(@Param("idFactura") int idFactura, Pageable pageable);
 }

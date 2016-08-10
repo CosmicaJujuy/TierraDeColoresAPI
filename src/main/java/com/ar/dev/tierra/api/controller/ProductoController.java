@@ -210,6 +210,20 @@ public class ProductoController implements Serializable {
         }
     }
 
+    @RequestMapping(value = "/list/factura/paged", method = RequestMethod.POST)
+    public ResponseEntity<?> findByIdFacturaPaged(
+            @RequestParam("idFacturaProducto") int idFacturaProducto,
+            @RequestParam(value = "page", required = false, defaultValue = "") Integer page,
+            @RequestParam(value = "size", required = false, defaultValue = "") Integer size
+    ) {
+        Page<Producto> paged = productoService.findByFactura(page, size, idFacturaProducto);
+        if (paged.getSize() != 0) {
+            return new ResponseEntity<>(paged, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @RequestMapping(value = "/convert", method = RequestMethod.POST)
     public ResponseEntity<?> convert(@RequestParam("idFacturaProducto") int idFacturaProducto) {
         List<Producto> list = productoDAO.getAll();
