@@ -10,10 +10,13 @@ import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.FacturaProducto;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Usuarios;
+import com.ar.dev.tierra.api.repository.FacturaProductoRepository;
+import com.ar.dev.tierra.api.service.FacturaProductoService;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -39,11 +42,26 @@ public class FacturaProductoController implements Serializable {
     @Autowired
     private FacturaProductoDAO facturaProductoDAO;
 
+    @Autowired
+    FacturaProductoService facturaProductoService;
+
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
         List<FacturaProducto> list = facturaProductoDAO.getAll();
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/list/paged", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAllPaged(
+            @RequestParam(value = "page", required = false, defaultValue = "") Integer page,
+            @RequestParam(value = "size", required = false, defaultValue = "") Integer size) {
+        Page<FacturaProducto> paged = facturaProductoService.getAllPaged(page, size);
+        if (paged.getSize() != 0) {
+            return new ResponseEntity<>(paged, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
