@@ -13,7 +13,7 @@ import com.ar.dev.tierra.api.model.DetalleTransferencia;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Transferencia;
 import com.ar.dev.tierra.api.model.Usuarios;
-import com.ar.dev.tierra.api.model.stock.WrapperStock;
+import com.ar.dev.tierra.api.model.WrapperStock;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;

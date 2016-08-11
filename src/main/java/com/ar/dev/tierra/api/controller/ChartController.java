@@ -6,7 +6,7 @@
 package com.ar.dev.tierra.api.controller;
 
 import com.ar.dev.tierra.api.dao.ChartDAO;
-import com.ar.dev.tierra.api.model.chart.Chart;
+import com.ar.dev.tierra.api.model.Chart;
 import java.io.Serializable;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

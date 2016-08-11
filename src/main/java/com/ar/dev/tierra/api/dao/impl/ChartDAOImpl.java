@@ -9,7 +9,7 @@ import com.ar.dev.tierra.api.dao.ChartDAO;
 import com.ar.dev.tierra.api.model.DetalleFactura;
 import com.ar.dev.tierra.api.model.Factura;
 import com.ar.dev.tierra.api.model.MetodoPagoFactura;
-import com.ar.dev.tierra.api.model.chart.Chart;
+import com.ar.dev.tierra.api.model.Chart;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;

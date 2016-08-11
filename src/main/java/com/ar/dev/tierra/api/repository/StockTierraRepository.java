@@ -5,7 +5,7 @@
  */
 package com.ar.dev.tierra.api.repository;
 
-import com.ar.dev.tierra.api.model.stock.StockTierra;
+import com.ar.dev.tierra.api.model.StockTierra;
 import java.io.Serializable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

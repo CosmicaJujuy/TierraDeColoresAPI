@@ -5,9 +5,9 @@
  */
 package com.ar.dev.tierra.api.service;
 
-import com.ar.dev.tierra.api.model.stock.StockBebelandia;
-import com.ar.dev.tierra.api.model.stock.StockLibertador;
-import com.ar.dev.tierra.api.model.stock.StockTierra;
+import com.ar.dev.tierra.api.model.StockBebelandia;
+import com.ar.dev.tierra.api.model.StockLibertador;
+import com.ar.dev.tierra.api.model.StockTierra;
 import com.ar.dev.tierra.api.repository.StockBebelandiaRepository;
 import com.ar.dev.tierra.api.repository.StockLibertadorRepository;
 import com.ar.dev.tierra.api.repository.StockTierraRepository;

@@ -7,10 +7,10 @@ package com.ar.dev.tierra.api.dao.impl;
 
 import com.ar.dev.tierra.api.dao.DetalleTransferenciaDAO;
 import com.ar.dev.tierra.api.model.DetalleTransferencia;
-import com.ar.dev.tierra.api.model.stock.StockBebelandia;
-import com.ar.dev.tierra.api.model.stock.StockLibertador;
-import com.ar.dev.tierra.api.model.stock.StockTierra;
-import com.ar.dev.tierra.api.model.stock.WrapperStock;
+import com.ar.dev.tierra.api.model.StockBebelandia;
+import com.ar.dev.tierra.api.model.StockLibertador;
+import com.ar.dev.tierra.api.model.StockTierra;
+import com.ar.dev.tierra.api.model.WrapperStock;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;

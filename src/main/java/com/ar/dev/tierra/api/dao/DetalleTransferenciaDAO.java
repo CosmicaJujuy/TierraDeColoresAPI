@@ -6,7 +6,7 @@
 package com.ar.dev.tierra.api.dao;
 
 import com.ar.dev.tierra.api.model.DetalleTransferencia;
-import com.ar.dev.tierra.api.model.stock.WrapperStock;
+import com.ar.dev.tierra.api.model.WrapperStock;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;

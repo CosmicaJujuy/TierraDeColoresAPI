@@ -5,7 +5,7 @@
  */
 package com.ar.dev.tierra.api.dao;
 
-import com.ar.dev.tierra.api.model.chart.Chart;
+import com.ar.dev.tierra.api.model.Chart;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;

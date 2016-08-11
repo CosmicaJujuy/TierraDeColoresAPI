@@ -17,7 +17,7 @@ import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.MetodoPagoFactura;
 import com.ar.dev.tierra.api.model.Producto;
 import com.ar.dev.tierra.api.model.Usuarios;
-import com.ar.dev.tierra.api.model.stock.WrapperStock;
+import com.ar.dev.tierra.api.model.WrapperStock;
 import com.ar.dev.tierra.api.service.FacturaService;
 import java.io.Serializable;
 import java.math.BigDecimal;
