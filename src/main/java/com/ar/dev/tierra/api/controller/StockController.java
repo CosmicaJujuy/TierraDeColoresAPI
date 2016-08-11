@@ -13,11 +13,13 @@ import com.ar.dev.tierra.api.model.stock.StockBebelandia;
 import com.ar.dev.tierra.api.model.stock.StockLibertador;
 import com.ar.dev.tierra.api.model.stock.StockTierra;
 import com.ar.dev.tierra.api.model.stock.WrapperStock;
+import com.ar.dev.tierra.api.service.StockService;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -40,6 +42,9 @@ public class StockController implements Serializable {
 
     @Autowired
     UsuariosDAO usuariosDAO;
+
+    @Autowired
+    StockService stockService;
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public ResponseEntity<?> list(@RequestParam("idStock") int idStock) {
@@ -71,6 +76,27 @@ public class StockController implements Serializable {
         } else {
             return new ResponseEntity<>(bebelandia, HttpStatus.OK);
         }
+    }
+
+    @RequestMapping(value = "/list/paged", method = RequestMethod.GET)
+    @SuppressWarnings("UnusedAssignment")
+    public ResponseEntity<?> listPaged(
+            @RequestParam("idStock") int idStock,
+            @RequestParam(value = "page", required = false, defaultValue = "") Integer page,
+            @RequestParam(value = "size", required = false, defaultValue = "") Integer size) {
+        Page paged = null;
+        switch (idStock) {
+            case 1:
+                paged = stockService.getAllTierra(page, size);
+                break;
+            case 2:
+                paged = stockService.getAllBebelandia(page, size);
+                break;
+            case 3:
+                paged = stockService.getAllLibertador(page, size);
+                break;
+        }
+        return new ResponseEntity<>(paged, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -151,29 +177,31 @@ public class StockController implements Serializable {
     }
 
     @RequestMapping(value = "/tierra/search", method = RequestMethod.POST)
-    public ResponseEntity<?> searchByFacturaTierra(@RequestParam("idFactura")int idFactura) {
+    public ResponseEntity<?> searchByFacturaTierra(@RequestParam("idFactura") int idFactura) {
         List<StockTierra> tierra = stockDAO.searchByFacturaStockTierra(idFactura);
-        if(!tierra.isEmpty()){
+        if (!tierra.isEmpty()) {
             return new ResponseEntity<>(tierra, HttpStatus.OK);
-        }else {
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @RequestMapping(value = "/bebelandia/search", method = RequestMethod.POST)
-    public ResponseEntity<?> searchByFacturaBebelandia(@RequestParam("idFactura")int idFactura) {
+    public ResponseEntity<?> searchByFacturaBebelandia(@RequestParam("idFactura") int idFactura) {
         List<StockBebelandia> bebelandia = stockDAO.searchByFacturaStockBebelandia(idFactura);
-        if(!bebelandia.isEmpty()){
+        if (!bebelandia.isEmpty()) {
             return new ResponseEntity<>(bebelandia, HttpStatus.OK);
-        }else {
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @RequestMapping(value = "/libertador/search", method = RequestMethod.POST)
-    public ResponseEntity<?> searchByFacturaLibertador(@RequestParam("idFactura")int idFactura) {
+    public ResponseEntity<?> searchByFacturaLibertador(@RequestParam("idFactura") int idFactura) {
         List<StockLibertador> libertador = stockDAO.searchByFacturaStockLibertador(idFactura);
-        if(!libertador.isEmpty()){
+        if (!libertador.isEmpty()) {
             return new ResponseEntity<>(libertador, HttpStatus.OK);
-        }else {
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
