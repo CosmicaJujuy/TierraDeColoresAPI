@@ -7,6 +7,7 @@ package com.ar.dev.tierra.api.controller;
 
 import com.ar.dev.tierra.api.dao.TemporadaDAO;
 import com.ar.dev.tierra.api.model.Temporada;
+import com.ar.dev.tierra.api.resource.FacadeService;
 import java.io.Serializable;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class TemporadaController implements Serializable {
 
     @Autowired
-    TemporadaDAO temporadaDAO;
+    FacadeService facadeService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
-        List<Temporada> temporadas = temporadaDAO.getAll();
+        List<Temporada> temporadas = facadeService.getTemporadaDAO().getAll();
         if (!temporadas.isEmpty()) {
             return new ResponseEntity<>(temporadas, HttpStatus.OK);
         } else {

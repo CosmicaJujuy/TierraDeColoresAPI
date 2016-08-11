@@ -5,11 +5,10 @@
  */
 package com.ar.dev.tierra.api.controller;
 
-import com.ar.dev.tierra.api.dao.ProveedorDAO;
 import com.ar.dev.tierra.api.model.Proveedor;
-import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Usuarios;
+import com.ar.dev.tierra.api.resource.FacadeService;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -33,14 +32,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProveedorController implements Serializable {
 
     @Autowired
-    UsuariosDAO usuariosDAO;
-
-    @Autowired
-    ProveedorDAO proveedorDAO;
+    FacadeService facadeService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
-        List<Proveedor> proveedor = proveedorDAO.getAll();
+        List<Proveedor> proveedor = facadeService.getProveedorDAO().getAll();
         if (!proveedor.isEmpty()) {
             return new ResponseEntity<>(proveedor, HttpStatus.OK);
         } else {
@@ -51,11 +47,11 @@ public class ProveedorController implements Serializable {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<?> add(OAuth2Authentication authentication,
             @RequestBody Proveedor proveedor) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         proveedor.setUsuarioCreacion(user.getIdUsuario());
         proveedor.setFechaCreacion(new Date());
         proveedor.setEstadoProveedor(true);
-        proveedorDAO.add(proveedor);
+        facadeService.getProveedorDAO().add(proveedor);
         JsonResponse msg = new JsonResponse("success", "Proveedor agregado con exito.");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -63,10 +59,10 @@ public class ProveedorController implements Serializable {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<?> update(OAuth2Authentication authentication,
             @RequestBody Proveedor proveedor) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         proveedor.setUsuarioModificacion(user.getIdUsuario());
         proveedor.setFechaModificacion(new Date());
-        proveedorDAO.update(proveedor);
+        facadeService.getProveedorDAO().update(proveedor);
         JsonResponse msg = new JsonResponse("Success", "Categoria modificada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -74,28 +70,28 @@ public class ProveedorController implements Serializable {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<?> delete(OAuth2Authentication authentication,
             @RequestBody Proveedor proveedor) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         proveedor.setUsuarioModificacion(user.getIdUsuario());
         proveedor.setFechaModificacion(new Date());
         proveedor.setEstadoProveedor(false);
-        proveedorDAO.update(proveedor);
+        facadeService.getProveedorDAO().update(proveedor);
         JsonResponse msg = new JsonResponse("Success", "Categoria modificada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity<?> searchById(@RequestParam("id") int id) {
-        Proveedor proveedor = proveedorDAO.searchById(id);
+        Proveedor proveedor = facadeService.getProveedorDAO().searchById(id);
         if (proveedor != null) {
             return new ResponseEntity<>(proveedor, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-    
+
     @RequestMapping(value = "/searchText", method = RequestMethod.POST)
     public ResponseEntity<?> findByText(@RequestParam("text") String text) {
-        List<Proveedor> list = proveedorDAO.searchByText(text);
+        List<Proveedor> list = facadeService.getProveedorDAO().searchByText(text);
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {

@@ -5,12 +5,11 @@
  */
 package com.ar.dev.tierra.api.controller;
 
-import com.ar.dev.tierra.api.dao.DetalleNotaCreditoDAO;
-import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.DetalleFactura;
 import com.ar.dev.tierra.api.model.DetalleNotaCredito;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Usuarios;
+import com.ar.dev.tierra.api.resource.FacadeService;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -33,14 +32,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class DetalleNotaCreditoController implements Serializable {
 
     @Autowired
-    DetalleNotaCreditoDAO detalleNotaCreditoDAO;
-    
-    @Autowired
-    UsuariosDAO usuariosDAO;
+    FacadeService facadeService;
 
     @RequestMapping(value = "/nota", method = RequestMethod.GET)
     public ResponseEntity<?> getByNotaCredito(@RequestParam("idNota") int idNota) {
-        List<DetalleNotaCredito> list = detalleNotaCreditoDAO.getByNotaCredito(idNota);
+        List<DetalleNotaCredito> list = facadeService.getDetalleNotaCreditoDAO().getByNotaCredito(idNota);
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
@@ -50,7 +46,7 @@ public class DetalleNotaCreditoController implements Serializable {
 
     @RequestMapping(value = "/barcode", method = RequestMethod.GET)
     public ResponseEntity<?> getByProductoOnFactura(@RequestParam("barcode") String barcode) {
-        List<DetalleFactura> list = detalleNotaCreditoDAO.getByBarcodeOnFactura(barcode);
+        List<DetalleFactura> list = facadeService.getDetalleNotaCreditoDAO().getByBarcodeOnFactura(barcode);
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
@@ -61,10 +57,10 @@ public class DetalleNotaCreditoController implements Serializable {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<?> add(@RequestBody DetalleNotaCredito detalleNotaCredito, 
             OAuth2Authentication authentication) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         detalleNotaCredito.setFechaCreacion(new Date());
         detalleNotaCredito.setUsuarioCreacion(user.getIdUsuario());
-        detalleNotaCreditoDAO.add(detalleNotaCredito);
+        facadeService.getDetalleNotaCreditoDAO().add(detalleNotaCredito);
         JsonResponse msg = new JsonResponse("Success", "Detalle agregado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -72,17 +68,17 @@ public class DetalleNotaCreditoController implements Serializable {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<?> update(@RequestBody DetalleNotaCredito detalleNotaCredito, 
             OAuth2Authentication authentication) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         detalleNotaCredito.setFechaModificacion(new Date());
         detalleNotaCredito.setUsuarioModificacion(user.getIdUsuario());
-        detalleNotaCreditoDAO.update(detalleNotaCredito);
+        facadeService.getDetalleNotaCreditoDAO().update(detalleNotaCredito);
         JsonResponse msg = new JsonResponse("Success", "Detalle modificado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
     
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<?> delete(@RequestBody DetalleNotaCredito detalleNotaCredito) {
-        detalleNotaCreditoDAO.delete(detalleNotaCredito);
+        facadeService.getDetalleNotaCreditoDAO().delete(detalleNotaCredito);
         JsonResponse msg = new JsonResponse("Success", "Detalle eliminado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }

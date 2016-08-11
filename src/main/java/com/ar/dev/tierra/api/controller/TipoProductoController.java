@@ -5,11 +5,10 @@
  */
 package com.ar.dev.tierra.api.controller;
 
-import com.ar.dev.tierra.api.dao.TipoProductoDAO;
-import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.TipoProducto;
 import com.ar.dev.tierra.api.model.Usuarios;
+import com.ar.dev.tierra.api.resource.FacadeService;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -33,14 +32,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class TipoProductoController implements Serializable {
 
     @Autowired
-    TipoProductoDAO tipoProductoDAO;
-
-    @Autowired
-    UsuariosDAO usuariosDAO;
+    FacadeService facadeService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
-        List<TipoProducto> tipoProducto = tipoProductoDAO.getAll();
+        List<TipoProducto> tipoProducto = facadeService.getTipoProductoDAO().getAll();
         if (!tipoProducto.isEmpty()) {
             return new ResponseEntity<>(tipoProducto, HttpStatus.OK);
         } else {
@@ -51,11 +47,11 @@ public class TipoProductoController implements Serializable {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<?> add(OAuth2Authentication authentication,
             @RequestBody TipoProducto tipoProducto) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         tipoProducto.setUsuarioCreacion(user.getIdUsuario());
         tipoProducto.setFechaCreacion(new Date());
         tipoProducto.setEstado(true);
-        tipoProductoDAO.add(tipoProducto);
+        facadeService.getTipoProductoDAO().add(tipoProducto);
         JsonResponse msg = new JsonResponse("Success", "Tipo de Producto agregada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -63,10 +59,10 @@ public class TipoProductoController implements Serializable {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<?> update(OAuth2Authentication authentication,
             @RequestBody TipoProducto tipoProducto) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         tipoProducto.setUsuarioModificacion(user.getIdUsuario());
         tipoProducto.setFechaModificacion(new Date());
-        tipoProductoDAO.update(tipoProducto);
+        facadeService.getTipoProductoDAO().update(tipoProducto);
         JsonResponse msg = new JsonResponse("Success", "Tipo de Producto modificada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -75,11 +71,11 @@ public class TipoProductoController implements Serializable {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<?> delete(OAuth2Authentication authentication,
             @RequestBody TipoProducto tipoProducto) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         tipoProducto.setUsuarioModificacion(user.getIdUsuario());
         tipoProducto.setFechaModificacion(new Date());
         tipoProducto.setEstado(false);
-        tipoProductoDAO.update(tipoProducto);
+        facadeService.getTipoProductoDAO().update(tipoProducto);
         JsonResponse msg = new JsonResponse("Success", "Categoria eliminada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }

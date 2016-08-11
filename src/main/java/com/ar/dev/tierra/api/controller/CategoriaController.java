@@ -5,11 +5,10 @@
  */
 package com.ar.dev.tierra.api.controller;
 
-import com.ar.dev.tierra.api.dao.CategoriaDAO;
-import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.Categoria;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Usuarios;
+import com.ar.dev.tierra.api.resource.FacadeService;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -33,14 +32,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoriaController implements Serializable {
 
     @Autowired
-    CategoriaDAO categoriaDAO;
-
-    @Autowired
-    UsuariosDAO usuariosDAO;
+    FacadeService facadeService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
-        List<Categoria> categorias = categoriaDAO.getAll();
+        List<Categoria> categorias = facadeService.getCategoriaDAO().getAll();
         if (!categorias.isEmpty()) {
             return new ResponseEntity<>(categorias, HttpStatus.OK);
         } else {
@@ -51,11 +47,11 @@ public class CategoriaController implements Serializable {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<?> add(OAuth2Authentication authentication,
             @RequestBody Categoria categoria) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         categoria.setUsuarioCreacion(user.getIdUsuario());
         categoria.setFechaCreacion(new Date());
         categoria.setEstado(true);
-        categoriaDAO.add(categoria);
+        facadeService.getCategoriaDAO().add(categoria);
         JsonResponse msg = new JsonResponse("Success", "Categoria agregada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -63,10 +59,10 @@ public class CategoriaController implements Serializable {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<?> update(OAuth2Authentication authentication,
             @RequestBody Categoria categoria) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         categoria.setUsuarioModificacion(user.getIdUsuario());
         categoria.setFechaModificacion(new Date());
-        categoriaDAO.update(categoria);
+        facadeService.getCategoriaDAO().update(categoria);
         JsonResponse msg = new JsonResponse("Success", "Categoria modificada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -75,11 +71,11 @@ public class CategoriaController implements Serializable {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<?> delete(OAuth2Authentication authentication,
             @RequestBody Categoria categoria) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         categoria.setEstado(false);
         categoria.setUsuarioModificacion(user.getIdUsuario());
         categoria.setFechaModificacion(new Date());
-        categoriaDAO.update(categoria);
+        facadeService.getCategoriaDAO().update(categoria);
         JsonResponse msg = new JsonResponse("Success", "Categoria eliminada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }

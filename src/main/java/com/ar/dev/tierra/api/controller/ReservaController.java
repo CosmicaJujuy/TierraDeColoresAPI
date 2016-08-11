@@ -10,6 +10,7 @@ import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.Factura;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Usuarios;
+import com.ar.dev.tierra.api.resource.FacadeService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -32,21 +33,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReservaController implements Serializable {
 
     @Autowired
-    FacturaDAO facturaDAO;
-
-    @Autowired
-    UsuariosDAO usuariosDAO;
+    FacadeService facadeService;
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<?> add(OAuth2Authentication authentication,
             @RequestBody Factura factura) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         factura.setUsuarioCreacion(user.getIdUsuario());
         factura.setFechaCreacion(new Date());
         factura.setEstado("RESERVADO");
         factura.setIdSucursal(user.getUsuarioSucursal().getIdSucursal());
         factura.setTotal(BigDecimal.ZERO);
-        int idFactura = facturaDAO.add(factura);
+        int idFactura = facadeService.getFacturaDAO().add(factura);
         JsonResponse msg = new JsonResponse("Success", String.valueOf(idFactura));
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -54,17 +52,17 @@ public class ReservaController implements Serializable {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<?> update(OAuth2Authentication authentication,
             @RequestBody Factura factura) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         factura.setUsuarioModificacion(user.getIdUsuario());
         factura.setFechaModificacion(new Date());
-        facturaDAO.update(factura);
+        facadeService.getFacturaDAO().update(factura);
         JsonResponse msg = new JsonResponse("Success", "Reserva modificada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/day", method = RequestMethod.GET)
     public ResponseEntity<?> getDay() {
-        List<Factura> list = facturaDAO.getDiaryReserva();
+        List<Factura> list = facadeService.getFacturaDAO().getDiaryReserva();
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
@@ -74,7 +72,7 @@ public class ReservaController implements Serializable {
 
     @RequestMapping(value = "/month", method = RequestMethod.GET)
     public ResponseEntity<?> getMonth() {
-        List<Factura> list = facturaDAO.getMonthReserva();
+        List<Factura> list = facadeService.getFacturaDAO().getMonthReserva();
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {

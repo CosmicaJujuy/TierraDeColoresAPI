@@ -5,17 +5,13 @@
  */
 package com.ar.dev.tierra.api.controller;
 
-import com.ar.dev.tierra.api.dao.DetalleFacturaDAO;
-import com.ar.dev.tierra.api.dao.FacturaDAO;
-import com.ar.dev.tierra.api.dao.ProductoDAO;
-import com.ar.dev.tierra.api.dao.StockDAO;
-import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.DetalleFactura;
 import com.ar.dev.tierra.api.model.Factura;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Producto;
 import com.ar.dev.tierra.api.model.Usuarios;
 import com.ar.dev.tierra.api.model.WrapperStock;
+import com.ar.dev.tierra.api.resource.FacadeService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -25,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,26 +38,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class DetalleFacturaController implements Serializable {
 
     @Autowired
-    UsuariosDAO usuariosDAO;
-
-    @Autowired
-    DetalleFacturaDAO detalleFacturaDAO;
-
-    @Autowired
-    ProductoDAO productoDAO;
-
-    @Autowired
-    FacturaDAO facturaDAO;
-
-    @Autowired
-    StockDAO stockDAO;
+    FacadeService facadeService;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
-        List<DetalleFactura> list = detalleFacturaDAO.getAll();
+        List<DetalleFactura> list = facadeService.getDetalleFacturaDAO().getAll();
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
@@ -79,10 +62,10 @@ public class DetalleFacturaController implements Serializable {
         /*Instancia de nuevo detalle*/
         DetalleFactura detalleFactura = new DetalleFactura();
         /*Traemos los objectos necesarios para añadir el detalle*/
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
-        Producto prod = productoDAO.findById(idProducto);
-        WrapperStock stock = stockDAO.searchStockById(idItem, user.getUsuarioSucursal().getIdSucursal());
-        Factura factura = facturaDAO.searchById(idFactura);
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
+        Producto prod = facadeService.getProductoDAO().findById(idProducto);
+        WrapperStock stock = facadeService.getStockDAO().searchStockById(idItem, user.getUsuarioSucursal().getIdSucursal());
+        Factura factura = facadeService.getFacturaDAO().searchById(idFactura);
         /*Bandera de control*/
         boolean control = false;
         /*Variable de calculo de cantidad*/
@@ -134,13 +117,13 @@ public class DetalleFacturaController implements Serializable {
                 /*Indicamos el idStock del detalle*/
                 detalleFactura.setIdStock(idItem);
                 /*Actualizamos producto*/
-                productoDAO.update(prod);
+                facadeService.getProductoDAO().update(prod);
                 /*Actualizamos el stock*/
-                stockDAO.update(stock);
+                facadeService.getStockDAO().update(stock);
                 /*Insertamos el nuevo detalle*/
-                detalleFacturaDAO.add(detalleFactura);
+                facadeService.getDetalleFacturaDAO().add(detalleFactura);
                 /*Traemos lista de detalles, calculamos su nuevo total y actualizamos*/
-                List<DetalleFactura> detallesFactura = detalleFacturaDAO.facturaDetalle(idFactura);
+                List<DetalleFactura> detallesFactura = facadeService.getDetalleFacturaDAO().facturaDetalle(idFactura);
                 BigDecimal sumMonto = new BigDecimal(BigInteger.ZERO);
                 for (DetalleFactura detailList : detallesFactura) {
                     sumMonto = sumMonto.add(detailList.getTotalDetalle());
@@ -148,7 +131,7 @@ public class DetalleFacturaController implements Serializable {
                 factura.setTotal(sumMonto);
                 factura.setFechaModificacion(new Date());
                 factura.setUsuarioModificacion(user.getIdUsuario());
-                facturaDAO.update(factura);
+                facadeService.getFacturaDAO().update(factura);
                 JsonResponse msg = new JsonResponse("Success", "Detalle agregado con exito");
                 return new ResponseEntity<>(msg, HttpStatus.OK);
             } else {
@@ -164,13 +147,13 @@ public class DetalleFacturaController implements Serializable {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<?> update(OAuth2Authentication authentication,
             @RequestBody DetalleFactura detalleFactura) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
-        Factura factura = facturaDAO.searchById(detalleFactura.getFactura().getIdFactura());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
+        Factura factura = facadeService.getFacturaDAO().searchById(detalleFactura.getFactura().getIdFactura());
         detalleFactura.setUsuarioModificacion(user.getIdUsuario());
         detalleFactura.setFechaModificacion(new Date());
-        detalleFacturaDAO.update(detalleFactura);
+        facadeService.getDetalleFacturaDAO().update(detalleFactura);
         /*Traemos lista de detalles, calculamos su nuevo total y actualizamos*/
-        List<DetalleFactura> detallesFactura = detalleFacturaDAO.facturaDetalle(detalleFactura.getFactura().getIdFactura());
+        List<DetalleFactura> detallesFactura = facadeService.getDetalleFacturaDAO().facturaDetalle(detalleFactura.getFactura().getIdFactura());
         BigDecimal sumMonto = new BigDecimal(BigInteger.ZERO);
         for (DetalleFactura detailList : detallesFactura) {
             sumMonto = sumMonto.add(detailList.getTotalDetalle());
@@ -178,29 +161,28 @@ public class DetalleFacturaController implements Serializable {
         factura.setTotal(sumMonto);
         factura.setFechaModificacion(new Date());
         factura.setUsuarioModificacion(user.getIdUsuario());
-        facturaDAO.update(factura);
+        facadeService.getFacturaDAO().update(factura);
         JsonResponse msg = new JsonResponse("Success", "Detalle modificado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
-    
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<?> delete(OAuth2Authentication authentication,
             @RequestBody DetalleFactura detalleFactura,
             @RequestParam("dni") int dni,
             @RequestParam("password") String password) {
-        Usuarios userAuth = usuariosDAO.findUsuarioByDNI(dni);
+        Usuarios userAuth = facadeService.getUsuariosDAO().findUsuarioByDNI(dni);
         boolean permiso = passwordEncoder.matches(password, userAuth.getPassword());
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         if (permiso) {
             if (userAuth.getRoles().getIdRol() == 1 || userAuth.getRoles().getIdRol() == 6) {
                 detalleFactura.setEstadoDetalle(false);
                 detalleFactura.setUsuarioModificacion(user.getIdUsuario());
                 detalleFactura.setFechaModificacion(new Date());
-                detalleFacturaDAO.update(detalleFactura);
+                facadeService.getDetalleFacturaDAO().update(detalleFactura);
                 /*Traemos lista de detalles, calculamos su nuevo total y actualizamos*/
-                Factura factura = facturaDAO.searchById(detalleFactura.getFactura().getIdFactura());
-                List<DetalleFactura> detallesFactura = detalleFacturaDAO.facturaDetalle(detalleFactura.getFactura().getIdFactura());
+                Factura factura = facadeService.getFacturaDAO().searchById(detalleFactura.getFactura().getIdFactura());
+                List<DetalleFactura> detallesFactura = facadeService.getDetalleFacturaDAO().facturaDetalle(detalleFactura.getFactura().getIdFactura());
                 BigDecimal sumMonto = new BigDecimal(BigInteger.ZERO);
                 for (DetalleFactura detailList : detallesFactura) {
                     sumMonto = sumMonto.add(detailList.getTotalDetalle());
@@ -208,10 +190,10 @@ public class DetalleFacturaController implements Serializable {
                 factura.setTotal(sumMonto);
                 factura.setFechaModificacion(new Date());
                 factura.setUsuarioModificacion(user.getIdUsuario());
-                facturaDAO.update(factura);
+                facadeService.getFacturaDAO().update(factura);
                 @SuppressWarnings("UnusedAssignment")
                 int cantidadActual = 0;
-                WrapperStock stock = stockDAO.searchStockById(detalleFactura.getIdStock(), user.getUsuarioSucursal().getIdSucursal());
+                WrapperStock stock = facadeService.getStockDAO().searchStockById(detalleFactura.getIdStock(), user.getUsuarioSucursal().getIdSucursal());
                 if (stock.getStockTierra() != null) {
                     cantidadActual = stock.getStockTierra().getCantidad();
                     stock.getStockTierra().setCantidad(cantidadActual + detalleFactura.getCantidadDetalle());
@@ -222,11 +204,11 @@ public class DetalleFacturaController implements Serializable {
                     cantidadActual = stock.getStockLibertador().getCantidad();
                     stock.getStockLibertador().setCantidad(cantidadActual + detalleFactura.getCantidadDetalle());
                 }
-                stockDAO.update(stock);
-                Producto prodRest = productoDAO.findById(detalleFactura.getProducto().getIdProducto());
+                facadeService.getStockDAO().update(stock);
+                Producto prodRest = facadeService.getProductoDAO().findById(detalleFactura.getProducto().getIdProducto());
                 int cantProd = prodRest.getCantidadTotal();
                 prodRest.setCantidadTotal(cantProd + detalleFactura.getCantidadDetalle());
-                productoDAO.update(prodRest);
+                facadeService.getProductoDAO().update(prodRest);
                 JsonResponse msg = new JsonResponse("Success", "Detalle eliminado con exito");
                 return new ResponseEntity<>(msg, HttpStatus.OK);
             } else {
@@ -241,7 +223,7 @@ public class DetalleFacturaController implements Serializable {
 
     @RequestMapping(value = "/factura", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> listDetalleFactura(@RequestParam("idFactura") int idFactura) {
-        List<DetalleFactura> list = detalleFacturaDAO.facturaDetalle(idFactura);
+        List<DetalleFactura> list = facadeService.getDetalleFacturaDAO().facturaDetalle(idFactura);
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
@@ -253,24 +235,24 @@ public class DetalleFacturaController implements Serializable {
     public ResponseEntity<?> deleteDiscount(@RequestParam("dni") int dni,
             @RequestParam("password") String password,
             @RequestBody DetalleFactura detalleFactura) {
-        Usuarios user = usuariosDAO.findUsuarioByDNI(dni);
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByDNI(dni);
         boolean permiso = passwordEncoder.matches(password, user.getPassword());
         if (permiso) {
             if (user.getRoles().getIdRol() == 1 || user.getRoles().getIdRol() == 6) {
                 detalleFactura.setDescuentoDetalle(BigDecimal.ZERO);
                 BigDecimal monto = detalleFactura.getProducto().getPrecioVenta().multiply(BigDecimal.valueOf(detalleFactura.getCantidadDetalle()));
                 detalleFactura.setTotalDetalle(monto);
-                detalleFacturaDAO.update(detalleFactura);
-                List<DetalleFactura> detallesFactura = detalleFacturaDAO.facturaDetalle(detalleFactura.getFactura().getIdFactura());
+                facadeService.getDetalleFacturaDAO().update(detalleFactura);
+                List<DetalleFactura> detallesFactura = facadeService.getDetalleFacturaDAO().facturaDetalle(detalleFactura.getFactura().getIdFactura());
                 BigDecimal sumMonto = new BigDecimal(BigInteger.ZERO);
-                Factura factura = facturaDAO.searchById(detalleFactura.getFactura().getIdFactura());
+                Factura factura = facadeService.getFacturaDAO().searchById(detalleFactura.getFactura().getIdFactura());
                 for (DetalleFactura detailList : detallesFactura) {
                     sumMonto = sumMonto.add(detailList.getTotalDetalle());
                 }
                 factura.setTotal(sumMonto);
                 factura.setFechaModificacion(new Date());
                 factura.setUsuarioModificacion(user.getIdUsuario());
-                facturaDAO.update(factura);
+                facadeService.getFacturaDAO().update(factura);
                 JsonResponse msg = new JsonResponse("Success", "Descuento eliminado con exito.");
                 return new ResponseEntity<>(msg, HttpStatus.OK);
             } else {
@@ -285,7 +267,7 @@ public class DetalleFacturaController implements Serializable {
 
     @RequestMapping(value = "/day", method = RequestMethod.GET)
     public ResponseEntity<?> getDay() {
-        List<DetalleFactura> list = detalleFacturaDAO.getDay();
+        List<DetalleFactura> list = facadeService.getDetalleFacturaDAO().getDay();
         if (list != null) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {

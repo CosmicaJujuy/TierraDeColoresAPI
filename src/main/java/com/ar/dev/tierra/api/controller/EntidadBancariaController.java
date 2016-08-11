@@ -5,11 +5,10 @@
  */
 package com.ar.dev.tierra.api.controller;
 
-import com.ar.dev.tierra.api.dao.EntidadBancariaDAO;
-import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.EntidadBancaria;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Usuarios;
+import com.ar.dev.tierra.api.resource.FacadeService;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -33,14 +32,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class EntidadBancariaController implements Serializable {
 
     @Autowired
-    EntidadBancariaDAO entidadBancariaDAO;
-
-    @Autowired
-    UsuariosDAO usuariosDAO;
+    FacadeService facadeService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
-        List<EntidadBancaria> list = entidadBancariaDAO.getAll();
+        List<EntidadBancaria> list = facadeService.getEntidadBancariaDAO().getAll();
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
@@ -51,10 +47,10 @@ public class EntidadBancariaController implements Serializable {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<?> add(OAuth2Authentication authentication,
             @RequestBody EntidadBancaria bancaria) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         bancaria.setUsuarioCreacion(user.getIdUsuario());
         bancaria.setFechaCreaciion(new Date());
-        entidadBancariaDAO.add(bancaria);
+        facadeService.getEntidadBancariaDAO().add(bancaria);
         JsonResponse msg = new JsonResponse("Success", "Entidad agregada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -62,10 +58,10 @@ public class EntidadBancariaController implements Serializable {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<?> update(OAuth2Authentication authentication,
             @RequestBody EntidadBancaria bancaria) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         bancaria.setUsuarioModificacion(user.getIdUsuario());
         bancaria.setFechaModificacion(new Date());
-        entidadBancariaDAO.update(bancaria);
+        facadeService.getEntidadBancariaDAO().update(bancaria);
         JsonResponse msg = new JsonResponse("Success", "Entidad modificada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -74,11 +70,11 @@ public class EntidadBancariaController implements Serializable {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<?> delete(OAuth2Authentication authentication,
             @RequestBody EntidadBancaria bancaria) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         bancaria.setUsuarioModificacion(user.getIdUsuario());
         bancaria.setFechaModificacion(new Date());
         bancaria.setEstadoEntidad(false);
-        entidadBancariaDAO.update(bancaria);
+        facadeService.getEntidadBancariaDAO().update(bancaria);
         JsonResponse msg = new JsonResponse("Success", "Entidad eliminada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }

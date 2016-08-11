@@ -5,8 +5,8 @@
  */
 package com.ar.dev.tierra.api.controller;
 
-import com.ar.dev.tierra.api.dao.SexoDAO;
 import com.ar.dev.tierra.api.model.Sexo;
+import com.ar.dev.tierra.api.resource.FacadeService;
 import java.io.Serializable;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +26,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class SexoController implements Serializable {
 
     @Autowired
-    SexoDAO sexoDAO;
+    FacadeService facadeService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
-        List<Sexo> sexo = sexoDAO.getAll();
+        List<Sexo> sexo = facadeService.getSexoDAO().getAll();
         if (!sexo.isEmpty()) {
             return new ResponseEntity<>(sexo, HttpStatus.OK);
         } else {

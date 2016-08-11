@@ -5,11 +5,10 @@
  */
 package com.ar.dev.tierra.api.controller;
 
-import com.ar.dev.tierra.api.dao.MarcasDAO;
-import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Marcas;
 import com.ar.dev.tierra.api.model.Usuarios;
+import com.ar.dev.tierra.api.resource.FacadeService;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -34,14 +33,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class MarcasController implements Serializable {
 
     @Autowired
-    MarcasDAO marcasDAO;
-
-    @Autowired
-    UsuariosDAO usuariosDAO;
+    FacadeService facadeService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
-        List<Marcas> marcas = marcasDAO.getAll();
+        List<Marcas> marcas = facadeService.getMarcasDAO().getAll();
         if (!marcas.isEmpty()) {
             return new ResponseEntity<>(marcas, HttpStatus.OK);
         } else {
@@ -52,11 +48,11 @@ public class MarcasController implements Serializable {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<?> add(OAuth2Authentication authentication,
             @RequestBody Marcas marcas) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         marcas.setUsuarioCreacion(user.getIdUsuario());
         marcas.setFechaCreacion(new Date());
         marcas.setEstado(true);
-        marcasDAO.add(marcas);
+        facadeService.getMarcasDAO().add(marcas);
         JsonResponse msg = new JsonResponse("Success", "Marca agregada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -64,10 +60,10 @@ public class MarcasController implements Serializable {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<?> update(OAuth2Authentication authentication,
             @RequestBody Marcas marcas) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         marcas.setUsuarioModificacion(user.getIdUsuario());
         marcas.setFechaModificacion(new Date());
-        marcasDAO.update(marcas);
+        facadeService.getMarcasDAO().update(marcas);
         JsonResponse msg = new JsonResponse("Success", "Marca modificada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -76,19 +72,18 @@ public class MarcasController implements Serializable {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<?> delete(OAuth2Authentication authentication,
             @RequestBody Marcas marcas) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         marcas.setUsuarioModificacion(user.getIdUsuario());
         marcas.setFechaModificacion(new Date());
         marcas.setEstado(false);
-        marcasDAO.update(marcas);
+        facadeService.getMarcasDAO().update(marcas);
         JsonResponse msg = new JsonResponse("Success", "Marca eliminada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
-    
-    
+
     @RequestMapping(value = "/searchText", method = RequestMethod.POST)
     public ResponseEntity<?> findByText(@RequestParam("text") String text) {
-        List<Marcas> list = marcasDAO.searchByText(text);
+        List<Marcas> list = facadeService.getMarcasDAO().searchByText(text);
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {

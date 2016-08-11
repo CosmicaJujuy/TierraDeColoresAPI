@@ -12,6 +12,7 @@ import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Roles;
 import com.ar.dev.tierra.api.model.Sucursal;
 import com.ar.dev.tierra.api.model.Usuarios;
+import com.ar.dev.tierra.api.resource.FacadeService;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,13 +45,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UsuariosController implements Serializable {
 
     @Autowired
-    UsuariosDAO usuariosDAO;
-
-    @Autowired
-    RolesDAO rolesDAO;
-
-    @Autowired
-    SucursalDAO sucursalDAO;
+    FacadeService facadeService;    
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -58,7 +53,7 @@ public class UsuariosController implements Serializable {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllUsuarios() {
-        List<Usuarios> listUsuarios = usuariosDAO.allUsuarios();
+        List<Usuarios> listUsuarios = facadeService.getUsuariosDAO().allUsuarios();
         ResponseEntity responseEntity;
         if (listUsuarios.isEmpty()) {
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -78,8 +73,8 @@ public class UsuariosController implements Serializable {
         usuarios.setFechaCreacion(new Date());
         Usuarios replyUsername;
         Usuarios replyDNI;
-        replyUsername = usuariosDAO.findUsuarioByUsername(usuarios.getUsername());
-        replyDNI = usuariosDAO.findUsuarioByDNI(usuarios.getDni());
+        replyUsername = facadeService.getUsuariosDAO().findUsuarioByUsername(usuarios.getUsername());
+        replyDNI = facadeService.getUsuariosDAO().findUsuarioByDNI(usuarios.getDni());
         ResponseEntity responseEntity;
         if (replyDNI == null && replyUsername == null) {
             ClassLoader classloader = Thread.currentThread().getContextClassLoader();
@@ -92,7 +87,7 @@ public class UsuariosController implements Serializable {
             }
             buffer.flush();
             usuarios.setImagen(buffer.toByteArray());
-            usuariosDAO.addUsuario(usuarios);
+            facadeService.getUsuariosDAO().addUsuario(usuarios);
             responseEntity = new ResponseEntity(HttpStatus.OK);
         } else {
             JsonResponse msj;
@@ -114,7 +109,7 @@ public class UsuariosController implements Serializable {
             OAuth2Authentication authentication) {
         try {
             User user = (User) authentication.getPrincipal();
-            Usuarios u = usuariosDAO.findUsuarioByUsername(user.getUsername());
+            Usuarios u = facadeService.getUsuariosDAO().findUsuarioByUsername(user.getUsername());
             if (file.getName().isEmpty() == false) {
                 InputStream inputStream = file.getInputStream();
                 ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -125,7 +120,7 @@ public class UsuariosController implements Serializable {
                 }
                 buffer.flush();
                 u.setImagen(buffer.toByteArray());
-                usuariosDAO.updateUsuario(u);
+                facadeService.getUsuariosDAO().updateUsuario(u);
             }
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -137,14 +132,14 @@ public class UsuariosController implements Serializable {
     public ResponseEntity<?> uploadFile(@RequestBody Usuarios usuario, OAuth2Authentication authentication) {
         try {
             User user = (User) authentication.getPrincipal();
-            Usuarios u = usuariosDAO.findUsuarioByUsername(user.getUsername());
+            Usuarios u = facadeService.getUsuariosDAO().findUsuarioByUsername(user.getUsername());
             if (u.getIdUsuario() == usuario.getIdUsuario()
                     && u.getUsername().equals(usuario.getUsername())
                     && u.getRoles().getNombreRol().equals(usuario.getRoles().getNombreRol())
                     && u.getRoles().getIdRol() == usuario.getRoles().getIdRol()) {
                 usuario.setIdUsuarioModificacion(u.getIdUsuario());
                 usuario.setFechaModificacion(new Date());
-                usuariosDAO.updateUsuario(usuario);
+                facadeService.getUsuariosDAO().updateUsuario(usuario);
             } else {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
@@ -157,7 +152,7 @@ public class UsuariosController implements Serializable {
     @RequestMapping(value = "/detail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Usuarios> detailsUsuario(OAuth2Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        Usuarios u = usuariosDAO.findUsuarioByUsername(user.getUsername());
+        Usuarios u = facadeService.getUsuariosDAO().findUsuarioByUsername(user.getUsername());
         if (u == null) {
             throw new BadCredentialsException("Bad Credentials");
         } else {
@@ -171,14 +166,14 @@ public class UsuariosController implements Serializable {
             @RequestParam("newPw") String newPassword,
             @RequestParam("repPw") String repPassword) {
         String username = authentication.getName();
-        Usuarios user = usuariosDAO.findUsuarioByUsername(username);
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(username);
         boolean rightPassword = passwordEncoder.matches(oldPassword, user.getPassword());
         if (rightPassword) {
             if (newPassword.equals(repPassword)) {
                 user.setPassword(passwordEncoder.encode(newPassword));
                 user.setIdUsuarioModificacion(user.getIdUsuario());
                 user.setFechaModificacion(new Date());
-                usuariosDAO.updateUsuario(user);
+                facadeService.getUsuariosDAO().updateUsuario(user);
                 JsonResponse response = new JsonResponse("Success", "Contraseña cambiada con exito.");
                 return new ResponseEntity<>(response, HttpStatus.OK);
             } else {
@@ -196,13 +191,13 @@ public class UsuariosController implements Serializable {
     public ResponseEntity<?> changeStatus(OAuth2Authentication authentication,
             @RequestParam("status") boolean status,
             @RequestParam("idUsuario") int idUsuario) {
-        Usuarios userAdmin = usuariosDAO.findUsuarioByUsername(authentication.getName());
-        Usuarios user = usuariosDAO.findUsuarioById(idUsuario);
+        Usuarios userAdmin = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioById(idUsuario);
         if (userAdmin.getIdUsuario() != idUsuario) {
             user.setEstado(status);
             user.setFechaModificacion(new Date());
             user.setIdUsuarioModificacion(userAdmin.getIdUsuario());
-            usuariosDAO.updateUsuario(user);
+            facadeService.getUsuariosDAO().updateUsuario(user);
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             JsonResponse msg = new JsonResponse("Error", "No puedes cambiar tu propio estado.");
@@ -215,12 +210,12 @@ public class UsuariosController implements Serializable {
     public ResponseEntity<?> changeSucursal(OAuth2Authentication authentication,
             @RequestParam("idUsuario") int idUsuario,
             @RequestBody Sucursal sucursal) {
-        Usuarios userAdmin = usuariosDAO.findUsuarioByUsername(authentication.getName());
-        Usuarios user = usuariosDAO.findUsuarioById(idUsuario);
+        Usuarios userAdmin = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioById(idUsuario);
         user.setFechaModificacion(new Date());
         user.setUsuarioSucursal(sucursal);
         user.setIdUsuarioModificacion(userAdmin.getIdUsuario());
-        usuariosDAO.updateUsuario(user);
+        facadeService.getUsuariosDAO().updateUsuario(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -229,13 +224,13 @@ public class UsuariosController implements Serializable {
     public ResponseEntity<?> changeRol(OAuth2Authentication authentication,
             @RequestParam("idUsuario") int idUsuario,
             @RequestBody Roles rol) {
-        Usuarios userAdmin = usuariosDAO.findUsuarioByUsername(authentication.getName());
-        Usuarios user = usuariosDAO.findUsuarioById(idUsuario);
+        Usuarios userAdmin = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioById(idUsuario);
         if (userAdmin.getIdUsuario() != idUsuario) {
             user.setFechaModificacion(new Date());
             user.setRoles(rol);
             user.setIdUsuarioModificacion(userAdmin.getIdUsuario());
-            usuariosDAO.updateUsuario(user);
+            facadeService.getUsuariosDAO().updateUsuario(user);
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             JsonResponse msg = new JsonResponse("Error", "No puedes cambiar tu propio rol.");
@@ -251,7 +246,7 @@ public class UsuariosController implements Serializable {
 
     @RequestMapping(value = "/activeSession", method = RequestMethod.POST)
     public ResponseEntity<?> activeSession(OAuth2Authentication authentication) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         if (user.getRoles().getIdRol() == 1) {
             JsonResponse response = new JsonResponse("Admin", "home");
             return new ResponseEntity<>(response, HttpStatus.OK);
@@ -265,7 +260,7 @@ public class UsuariosController implements Serializable {
 
     @RequestMapping(value = "/vendedores", method = RequestMethod.GET)
     public ResponseEntity<?> listaVendedores() {
-        List<Usuarios> vendedores = usuariosDAO.getVendedores();
+        List<Usuarios> vendedores = facadeService.getUsuariosDAO().getVendedores();
         if (!vendedores.isEmpty()) {
             return new ResponseEntity<>(vendedores, HttpStatus.OK);
         } else {
@@ -275,7 +270,7 @@ public class UsuariosController implements Serializable {
 
     @RequestMapping(value = "/rol/list", method = RequestMethod.GET)
     public ResponseEntity<?> rolesList() {
-        List<Roles> list = rolesDAO.getAll();
+        List<Roles> list = facadeService.getRolesDAO().getAll();
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
@@ -285,7 +280,7 @@ public class UsuariosController implements Serializable {
 
     @RequestMapping(value = "/sucursal/list", method = RequestMethod.GET)
     public ResponseEntity<?> sucursalList() {
-        List<Sucursal> list = sucursalDAO.getAll();
+        List<Sucursal> list = facadeService.getSucursalDAO().getAll();
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {

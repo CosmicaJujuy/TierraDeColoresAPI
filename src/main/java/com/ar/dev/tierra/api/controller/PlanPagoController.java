@@ -5,11 +5,10 @@
  */
 package com.ar.dev.tierra.api.controller;
 
-import com.ar.dev.tierra.api.dao.PlanPagoDAO;
-import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.PlanPago;
 import com.ar.dev.tierra.api.model.Usuarios;
+import com.ar.dev.tierra.api.resource.FacadeService;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -34,14 +33,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class PlanPagoController implements Serializable {
 
     @Autowired
-    PlanPagoDAO planPagoDAO;
-
-    @Autowired
-    UsuariosDAO usuariosDAO;
+    FacadeService facadeService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
-        List<PlanPago> list = planPagoDAO.getAll();
+        List<PlanPago> list = facadeService.getPlanPagoDAO().getAll();
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
@@ -52,11 +48,11 @@ public class PlanPagoController implements Serializable {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<?> add(OAuth2Authentication authentication,
             @RequestBody PlanPago planPago) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         planPago.setUsuarioCreacion(user.getIdUsuario());
         planPago.setFechaCreacion(new Date());
         planPago.setEstadoPlanes(true);
-        planPagoDAO.add(planPago);
+        facadeService.getPlanPagoDAO().add(planPago);
         JsonResponse msg = new JsonResponse("Success", "Plan de pago agregado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -64,10 +60,10 @@ public class PlanPagoController implements Serializable {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<?> update(OAuth2Authentication authentication,
             @RequestBody PlanPago planPago) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         planPago.setUsuarioMoficacion(user.getIdUsuario());
         planPago.setFechaModificacion(new Date());
-        planPagoDAO.update(planPago);
+        facadeService.getPlanPagoDAO().update(planPago);
         JsonResponse msg = new JsonResponse("Success", "Plan de pago modificado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -76,11 +72,11 @@ public class PlanPagoController implements Serializable {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<?> delete(OAuth2Authentication authentication,
             @RequestBody PlanPago planPago) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         planPago.setEstadoPlanes(false);
         planPago.setUsuarioMoficacion(user.getIdUsuario());
         planPago.setFechaModificacion(new Date());
-        planPagoDAO.update(planPago);
+        facadeService.getPlanPagoDAO().update(planPago);
         JsonResponse msg = new JsonResponse("Success", "Plan de pago eliminado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -88,7 +84,7 @@ public class PlanPagoController implements Serializable {
     
     @RequestMapping(value = "/tarjeta", method = RequestMethod.GET)
     public ResponseEntity<?> searchByTarjeta(@RequestParam("idTarjeta")int idTarjeta){
-    List<PlanPago> list = planPagoDAO.searchPlanByTarjeta(idTarjeta);
+    List<PlanPago> list = facadeService.getPlanPagoDAO().searchPlanByTarjeta(idTarjeta);
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {

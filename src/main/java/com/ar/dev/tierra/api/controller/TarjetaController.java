@@ -5,11 +5,10 @@
  */
 package com.ar.dev.tierra.api.controller;
 
-import com.ar.dev.tierra.api.dao.TarjetaDAO;
-import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Tarjeta;
 import com.ar.dev.tierra.api.model.Usuarios;
+import com.ar.dev.tierra.api.resource.FacadeService;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -34,14 +33,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class TarjetaController implements Serializable {
 
     @Autowired
-    TarjetaDAO tarjetaDAO;
-
-    @Autowired
-    UsuariosDAO usuariosDAO;
+    FacadeService facadeService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
-        List<Tarjeta> categorias = tarjetaDAO.getAll();
+        List<Tarjeta> categorias = facadeService.getTarjetaDAO().getAll();
         if (!categorias.isEmpty()) {
             return new ResponseEntity<>(categorias, HttpStatus.OK);
         } else {
@@ -52,11 +48,11 @@ public class TarjetaController implements Serializable {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<?> add(OAuth2Authentication authentication,
             @RequestBody Tarjeta tarjeta) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         tarjeta.setUsuarioCreacion(user.getIdUsuario());
         tarjeta.setFechaCreacion(new Date());
         tarjeta.setEstadoTarjeta(true);
-        tarjetaDAO.add(tarjeta);
+        facadeService.getTarjetaDAO().add(tarjeta);
         JsonResponse msg = new JsonResponse("Success", "Tarjeta agregada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -64,10 +60,10 @@ public class TarjetaController implements Serializable {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<?> update(OAuth2Authentication authentication,
             @RequestBody Tarjeta tarjeta) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         tarjeta.setUsuarioModificacion(user.getIdUsuario());
         tarjeta.setFechaModificacion(new Date());
-        tarjetaDAO.update(tarjeta);
+        facadeService.getTarjetaDAO().update(tarjeta);
         JsonResponse msg = new JsonResponse("Success", "Tarjeta modificada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -76,11 +72,11 @@ public class TarjetaController implements Serializable {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<?> delete(OAuth2Authentication authentication,
             @RequestBody Tarjeta tarjeta) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         tarjeta.setEstadoTarjeta(false);
         tarjeta.setUsuarioModificacion(user.getIdUsuario());
         tarjeta.setFechaModificacion(new Date());
-        tarjetaDAO.update(tarjeta);
+        facadeService.getTarjetaDAO().update(tarjeta);
         JsonResponse msg = new JsonResponse("Success", "Tarjeta eliminada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -89,7 +85,7 @@ public class TarjetaController implements Serializable {
     public ResponseEntity<?> searchEntidad(
             @RequestParam("idEntidad") int idEntidad,
             @RequestParam("idMedio") int idMedio) {
-        List<Tarjeta> list = tarjetaDAO.searchEntidadMedio(idEntidad, idMedio);
+        List<Tarjeta> list = facadeService.getTarjetaDAO().searchEntidadMedio(idEntidad, idMedio);
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {

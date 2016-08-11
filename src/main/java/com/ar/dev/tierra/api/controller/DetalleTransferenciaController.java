@@ -5,9 +5,6 @@
  */
 package com.ar.dev.tierra.api.controller;
 
-import com.ar.dev.tierra.api.dao.DetalleTransferenciaDAO;
-import com.ar.dev.tierra.api.dao.StockDAO;
-import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.DetalleTransferencia;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Usuarios;
@@ -15,6 +12,7 @@ import com.ar.dev.tierra.api.model.StockBebelandia;
 import com.ar.dev.tierra.api.model.StockLibertador;
 import com.ar.dev.tierra.api.model.StockTierra;
 import com.ar.dev.tierra.api.model.WrapperStock;
+import com.ar.dev.tierra.api.resource.FacadeService;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,17 +36,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class DetalleTransferenciaController implements Serializable {
 
     @Autowired
-    DetalleTransferenciaDAO detalleTransferenciaDAO;
-
-    @Autowired
-    StockDAO stockDAO;
-
-    @Autowired
-    UsuariosDAO usuariosDAO;
+    FacadeService facadeService;
 
     @RequestMapping(value = "/trans", method = RequestMethod.GET)
     public ResponseEntity<?> getByTransferencia(@RequestParam("idTransferencia") int idTransferencia) {
-        List<DetalleTransferencia> list = detalleTransferenciaDAO.getByTransferencia(idTransferencia);
+        List<DetalleTransferencia> list = facadeService.getDetalleTransferenciaDAO().getByTransferencia(idTransferencia);
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
@@ -59,10 +51,10 @@ public class DetalleTransferenciaController implements Serializable {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<?> add(OAuth2Authentication authentication,
             @RequestBody DetalleTransferencia detalleTransferencia) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         detalleTransferencia.setUsuarioCreacion(user.getIdUsuario());
         detalleTransferencia.setFechaCreacion(new Date());
-        detalleTransferenciaDAO.add(detalleTransferencia);
+        facadeService.getDetalleTransferenciaDAO().add(detalleTransferencia);
         JsonResponse msg = new JsonResponse("Success", "Detalle agregado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -71,7 +63,7 @@ public class DetalleTransferenciaController implements Serializable {
     public ResponseEntity<?> update(OAuth2Authentication authentication,
             @RequestBody DetalleTransferencia detalleTransferencia) {
         boolean cantidadMax = true;
-        WrapperStock stock = stockDAO.searchStockById(detalleTransferencia.getIdStock(), detalleTransferencia.getIdSucursal());
+        WrapperStock stock = facadeService.getStockDAO().searchStockById(detalleTransferencia.getIdStock(), detalleTransferencia.getIdSucursal());
         if (stock.getStockTierra() != null) {
             if (detalleTransferencia.getCantidad() > stock.getStockTierra().getCantidad()) {
                 cantidadMax = false;
@@ -84,10 +76,10 @@ public class DetalleTransferenciaController implements Serializable {
             cantidadMax = false;
         }
         if (cantidadMax) {
-            Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+            Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
             detalleTransferencia.setUsuarioModificacion(user.getIdUsuario());
             detalleTransferencia.setFechaModificacion(new Date());
-            detalleTransferenciaDAO.update(detalleTransferencia);
+            facadeService.getDetalleTransferenciaDAO().update(detalleTransferencia);
             JsonResponse msg = new JsonResponse("Success", "Detalle modificado con exito");
             return new ResponseEntity<>(msg, HttpStatus.OK);
         } else {
@@ -99,7 +91,7 @@ public class DetalleTransferenciaController implements Serializable {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<?> delete(OAuth2Authentication authentication,
             @RequestBody DetalleTransferencia detalleTransferencia) {
-        detalleTransferenciaDAO.delete(detalleTransferencia);
+        facadeService.getDetalleTransferenciaDAO().delete(detalleTransferencia);
         JsonResponse msg = new JsonResponse("Success", "Detalle eliminado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -114,10 +106,10 @@ public class DetalleTransferenciaController implements Serializable {
             @RequestParam("sucursal") int sucursal,
             OAuth2Authentication authentication
     ) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         if (user.getUsuarioSucursal().getIdSucursal() != sucursal) {
 
-            List<WrapperStock> list = detalleTransferenciaDAO.findByParams(descripcion, marca, talla, codigo, categoria, sucursal);
+            List<WrapperStock> list = facadeService.getDetalleTransferenciaDAO().findByParams(descripcion, marca, talla, codigo, categoria, sucursal);
             List<StockTierra> tierra = new ArrayList<>();
             List<StockBebelandia> bebelandia = new ArrayList<>();
             List<StockLibertador> libertador = new ArrayList<>();

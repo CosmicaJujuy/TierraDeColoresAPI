@@ -5,17 +5,13 @@
  */
 package com.ar.dev.tierra.api.controller;
 
-import com.ar.dev.tierra.api.dao.FacturaDAO;
-import com.ar.dev.tierra.api.dao.MetodoPagoFacturaDAO;
-import com.ar.dev.tierra.api.dao.NotaCreditoDAO;
-import com.ar.dev.tierra.api.dao.PlanPagoDAO;
-import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.Factura;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.MetodoPagoFactura;
 import com.ar.dev.tierra.api.model.NotaCredito;
 import com.ar.dev.tierra.api.model.PlanPago;
 import com.ar.dev.tierra.api.model.Usuarios;
+import com.ar.dev.tierra.api.resource.FacadeService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -41,23 +37,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class MetodoPagoFacturaController implements Serializable {
 
     @Autowired
-    UsuariosDAO usuariosDAO;
-
-    @Autowired
-    MetodoPagoFacturaDAO pagoFacturaDAO;
-
-    @Autowired
-    FacturaDAO facturaDAO;
-
-    @Autowired
-    NotaCreditoDAO notaCreditoDAO;
-
-    @Autowired
-    PlanPagoDAO planPagoDAO;
+    FacadeService facadeService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
-        List<MetodoPagoFactura> list = pagoFacturaDAO.getAll();
+        List<MetodoPagoFactura> list = facadeService.getMetodoPagoFacturaDAO().getAll();
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
@@ -69,19 +53,19 @@ public class MetodoPagoFacturaController implements Serializable {
     @SuppressWarnings("StringEquality")
     public ResponseEntity<?> add(OAuth2Authentication authentication,
             @RequestBody MetodoPagoFactura pagoFactura) throws Exception {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         boolean control = true;
         JsonResponse msg = new JsonResponse();
         @SuppressWarnings("UnusedAssignment")
         NotaCredito notaCredito = null;
         switch (pagoFactura.getPlanPago().getIdPlanesPago()) {
             case 1:
-                PlanPago plan = planPagoDAO.searchById(1);
+                PlanPago plan = facadeService.getPlanPagoDAO().searchById(1);
                 pagoFactura.setPlanPago(plan);
                 break;
             case 4:
-                PlanPago planNota = planPagoDAO.searchById(2);
-                notaCredito = notaCreditoDAO.getByNumero(pagoFactura.getComprobante());
+                PlanPago planNota = facadeService.getPlanPagoDAO().searchById(2);
+                notaCredito = facadeService.getNotaCreditoDAO().getByNumero(pagoFactura.getComprobante());
                 if (notaCredito != null) {
                     if (pagoFactura.getMontoPago().compareTo(notaCredito.getMontoTotal()) == 0) {
                         if (notaCredito.getEstadoUso().equals("SIN USO")) {
@@ -103,8 +87,8 @@ public class MetodoPagoFacturaController implements Serializable {
                 }
         }
         if (control) {
-            Factura factura = facturaDAO.searchById(pagoFactura.getFactura().getIdFactura());
-            List<MetodoPagoFactura> list = pagoFacturaDAO.getFacturaMetodo(factura.getIdFactura());
+            Factura factura = facadeService.getFacturaDAO().searchById(pagoFactura.getFactura().getIdFactura());
+            List<MetodoPagoFactura> list = facadeService.getMetodoPagoFacturaDAO().getFacturaMetodo(factura.getIdFactura());
             /*POSIBLE FALLA, DECIMAL INMUTABLE NO SE SUMAN ENTRE SI, NECESITA TEST*/
             BigDecimal totalFactura = BigDecimal.ZERO;
             for (MetodoPagoFactura metodoPagoFactura : list) {
@@ -117,9 +101,9 @@ public class MetodoPagoFacturaController implements Serializable {
                 if (notaCredito != null) {
                     notaCredito.setFacturaUso(pagoFactura.getFactura().getIdFactura());
                     notaCredito.setEstadoUso("USADO");
-                    notaCreditoDAO.update(notaCredito);
+                    facadeService.getNotaCreditoDAO().update(notaCredito);
                 }
-                pagoFacturaDAO.add(pagoFactura);
+                facadeService.getMetodoPagoFacturaDAO().add(pagoFactura);
                 msg = new JsonResponse("Success", "Metodo de pago agregado con exito");
                 return new ResponseEntity<>(msg, HttpStatus.OK);
             } else {
@@ -133,10 +117,10 @@ public class MetodoPagoFacturaController implements Serializable {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<?> update(OAuth2Authentication authentication,
             @RequestBody MetodoPagoFactura pagoFactura) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         pagoFactura.setUsuarioModificacion(user.getIdUsuario());
         pagoFactura.setFechaModificacion(new Date());
-        pagoFacturaDAO.update(pagoFactura);
+        facadeService.getMetodoPagoFacturaDAO().update(pagoFactura);
         JsonResponse msg = new JsonResponse("Success", "Metodo de pago modificado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -145,18 +129,18 @@ public class MetodoPagoFacturaController implements Serializable {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<?> delete(OAuth2Authentication authentication,
             @RequestBody MetodoPagoFactura pagoFactura) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         pagoFactura.setEstado(false);
         pagoFactura.setUsuarioModificacion(user.getIdUsuario());
         pagoFactura.setFechaModificacion(new Date());
-        pagoFacturaDAO.update(pagoFactura);
+        facadeService.getMetodoPagoFacturaDAO().update(pagoFactura);
         JsonResponse msg = new JsonResponse("Success", "Metodo de pago eliminado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/factura", method = RequestMethod.GET)
     public ResponseEntity<?> getFacturaMetodo(@RequestParam("idFactura") int idFactura) {
-        List<MetodoPagoFactura> list = pagoFacturaDAO.getFacturaMetodo(idFactura);
+        List<MetodoPagoFactura> list = facadeService.getMetodoPagoFacturaDAO().getFacturaMetodo(idFactura);
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
@@ -166,7 +150,7 @@ public class MetodoPagoFacturaController implements Serializable {
 
     @RequestMapping(value = "/day", method = RequestMethod.GET)
     public ResponseEntity<?> getDay() {
-        List<MetodoPagoFactura> list = pagoFacturaDAO.getDay();
+        List<MetodoPagoFactura> list = facadeService.getMetodoPagoFacturaDAO().getDay();
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {

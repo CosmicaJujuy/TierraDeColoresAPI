@@ -5,8 +5,8 @@
  */
 package com.ar.dev.tierra.api.controller;
 
-import com.ar.dev.tierra.api.dao.MedioPagoDAO;
 import com.ar.dev.tierra.api.model.MedioPago;
+import com.ar.dev.tierra.api.resource.FacadeService;
 import java.io.Serializable;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +26,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class MedioPagoController implements Serializable {
 
     @Autowired
-    MedioPagoDAO medioPagoDAO;
+    FacadeService facadeService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
-        List<MedioPago> categorias = medioPagoDAO.getAll();
-        if (!categorias.isEmpty()) {
-            return new ResponseEntity<>(categorias, HttpStatus.OK);
+        List<MedioPago> list = facadeService.getMedioPagoDAO().getAll();
+        if (!list.isEmpty()) {
+            return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

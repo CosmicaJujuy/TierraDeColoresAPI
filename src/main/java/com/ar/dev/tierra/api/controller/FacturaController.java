@@ -5,12 +5,6 @@
  */
 package com.ar.dev.tierra.api.controller;
 
-import com.ar.dev.tierra.api.dao.DetalleFacturaDAO;
-import com.ar.dev.tierra.api.dao.FacturaDAO;
-import com.ar.dev.tierra.api.dao.MetodoPagoFacturaDAO;
-import com.ar.dev.tierra.api.dao.ProductoDAO;
-import com.ar.dev.tierra.api.dao.StockDAO;
-import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.DetalleFactura;
 import com.ar.dev.tierra.api.model.Factura;
 import com.ar.dev.tierra.api.model.JsonResponse;
@@ -18,7 +12,7 @@ import com.ar.dev.tierra.api.model.MetodoPagoFactura;
 import com.ar.dev.tierra.api.model.Producto;
 import com.ar.dev.tierra.api.model.Usuarios;
 import com.ar.dev.tierra.api.model.WrapperStock;
-import com.ar.dev.tierra.api.service.FacturaService;
+import com.ar.dev.tierra.api.resource.FacadeService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -45,29 +39,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class FacturaController implements Serializable {
 
     @Autowired
-    FacturaDAO facturaDAO;
-
-    @Autowired
-    UsuariosDAO usuariosDAO;
-
-    @Autowired
-    ProductoDAO productoDAO;
-
-    @Autowired
-    MetodoPagoFacturaDAO metodoPagoFacturaDAO;
-
-    @Autowired
-    DetalleFacturaDAO detalleFacturaDAO;
-
-    @Autowired
-    StockDAO stockDAO;
-    
-    @Autowired
-    FacturaService facturaService;
+    FacadeService facadeService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
-        List<Factura> list = facturaDAO.getAll();
+        List<Factura> list = facadeService.getFacturaDAO().getAll();
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
@@ -78,13 +54,13 @@ public class FacturaController implements Serializable {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<?> add(OAuth2Authentication authentication,
             @RequestBody Factura factura) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         factura.setUsuarioCreacion(user.getIdUsuario());
         factura.setFechaCreacion(new Date());
         factura.setEstado("INICIADO");
         factura.setIdSucursal(user.getUsuarioSucursal().getIdSucursal());
         factura.setTotal(BigDecimal.ZERO);
-        int idFactura = facturaDAO.add(factura);
+        int idFactura = facadeService.getFacturaDAO().add(factura);
         JsonResponse msg = new JsonResponse("Success", String.valueOf(idFactura));
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -92,10 +68,10 @@ public class FacturaController implements Serializable {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<?> update(OAuth2Authentication authentication,
             @RequestBody Factura factura) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         factura.setUsuarioModificacion(user.getIdUsuario());
         factura.setFechaModificacion(new Date());
-        facturaDAO.update(factura);
+        facadeService.getFacturaDAO().update(factura);
         JsonResponse msg = new JsonResponse("Success", "Factura modificada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -104,19 +80,19 @@ public class FacturaController implements Serializable {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<?> delete(OAuth2Authentication authentication,
             @RequestParam("idFactura") int idFactura) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
-        List<DetalleFactura> detalles = detalleFacturaDAO.facturaDetalle(idFactura);
-        List<MetodoPagoFactura> metodos = metodoPagoFacturaDAO.getFacturaMetodo(idFactura);
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
+        List<DetalleFactura> detalles = facadeService.getDetalleFacturaDAO().facturaDetalle(idFactura);
+        List<MetodoPagoFactura> metodos = facadeService.getMetodoPagoFacturaDAO().getFacturaMetodo(idFactura);
         if (metodos.isEmpty()) {
             if (!detalles.isEmpty()) {
                 for (DetalleFactura detalleFactura : detalles) {
                     detalleFactura.setEstadoDetalle(false);
                     detalleFactura.setUsuarioModificacion(user.getIdUsuario());
                     detalleFactura.setFechaModificacion(new Date());
-                    detalleFacturaDAO.update(detalleFactura);
+                    facadeService.getDetalleFacturaDAO().update(detalleFactura);
                     @SuppressWarnings("UnusedAssignment")
                     int cantidadActual = 0;
-                    WrapperStock stock = stockDAO.searchStockById(detalleFactura.getIdStock(), user.getUsuarioSucursal().getIdSucursal());
+                    WrapperStock stock = facadeService.getStockDAO().searchStockById(detalleFactura.getIdStock(), user.getUsuarioSucursal().getIdSucursal());
                     if (stock.getStockTierra() != null) {
                         cantidadActual = stock.getStockTierra().getCantidad();
                         stock.getStockTierra().setCantidad(cantidadActual + detalleFactura.getCantidadDetalle());
@@ -127,19 +103,19 @@ public class FacturaController implements Serializable {
                         cantidadActual = stock.getStockLibertador().getCantidad();
                         stock.getStockLibertador().setCantidad(cantidadActual + detalleFactura.getCantidadDetalle());
                     }
-                    stockDAO.update(stock);
-                    Producto prodRest = productoDAO.findById(detalleFactura.getProducto().getIdProducto());
+                    facadeService.getStockDAO().update(stock);
+                    Producto prodRest = facadeService.getProductoDAO().findById(detalleFactura.getProducto().getIdProducto());
                     int cantProd = prodRest.getCantidadTotal();
                     prodRest.setCantidadTotal(cantProd + detalleFactura.getCantidadDetalle());
-                    productoDAO.update(prodRest);
+                    facadeService.getProductoDAO().update(prodRest);
                 }
             }
-            Factura factura = facturaDAO.searchById(idFactura);
+            Factura factura = facadeService.getFacturaDAO().searchById(idFactura);
             factura.setEstado("CANCELADO");
             factura.setFechaModificacion(new Date());
             factura.setTotal(BigDecimal.ZERO);
             factura.setUsuarioModificacion(user.getIdUsuario());
-            facturaDAO.update(factura);
+            facadeService.getFacturaDAO().update(factura);
             JsonResponse msg = new JsonResponse("Success", "Factura cancelada con exito.");
             return new ResponseEntity<>(msg, HttpStatus.OK);
         } else {
@@ -150,7 +126,7 @@ public class FacturaController implements Serializable {
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity<?> searchById(@RequestParam("idFactura") int id) {
-        Factura factura = facturaDAO.searchById(id);
+        Factura factura = facadeService.getFacturaDAO().searchById(id);
         if (factura != null) {
             return new ResponseEntity<>(factura, HttpStatus.OK);
         } else {
@@ -160,7 +136,7 @@ public class FacturaController implements Serializable {
 
     @RequestMapping(value = "/day", method = RequestMethod.GET)
     public ResponseEntity<?> getDay() {
-        List<Factura> factura = facturaDAO.getDiary();
+        List<Factura> factura = facadeService.getFacturaDAO().getDiary();
         if (factura != null) {
             return new ResponseEntity<>(factura, HttpStatus.OK);
         } else {
@@ -170,7 +146,7 @@ public class FacturaController implements Serializable {
 
     @RequestMapping(value = "/month", method = RequestMethod.GET)
     public ResponseEntity<?> getMonth() {
-        List<Factura> factura = facturaDAO.getMonth();
+        List<Factura> factura = facadeService.getFacturaDAO().getMonth();
         if (factura != null) {
             return new ResponseEntity<>(factura, HttpStatus.OK);
         } else {
@@ -182,7 +158,7 @@ public class FacturaController implements Serializable {
     public ResponseEntity<?> getMonthPaged(
             @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
             @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
-        Page factura = facturaService.getFacturasMonth(page, size);
+        Page factura = facadeService.getFacturaService().getFacturasMonth(page, size);
         if (factura != null) {
             return new ResponseEntity<>(factura, HttpStatus.OK);
         } else {

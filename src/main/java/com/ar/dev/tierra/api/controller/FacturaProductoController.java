@@ -5,13 +5,10 @@
  */
 package com.ar.dev.tierra.api.controller;
 
-import com.ar.dev.tierra.api.dao.FacturaProductoDAO;
-import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.FacturaProducto;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Usuarios;
-import com.ar.dev.tierra.api.repository.FacturaProductoRepository;
-import com.ar.dev.tierra.api.service.FacturaProductoService;
+import com.ar.dev.tierra.api.resource.FacadeService;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -37,17 +34,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class FacturaProductoController implements Serializable {
 
     @Autowired
-    private UsuariosDAO usuariosDAO;
-
-    @Autowired
-    private FacturaProductoDAO facturaProductoDAO;
-
-    @Autowired
-    FacturaProductoService facturaProductoService;
+    FacadeService facadeService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
-        List<FacturaProducto> list = facturaProductoDAO.getAll();
+        List<FacturaProducto> list = facadeService.getFacturaProductoDAO().getAll();
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
@@ -59,7 +50,7 @@ public class FacturaProductoController implements Serializable {
     public ResponseEntity<?> getAllPaged(
             @RequestParam(value = "page", required = false, defaultValue = "") Integer page,
             @RequestParam(value = "size", required = false, defaultValue = "") Integer size) {
-        Page<FacturaProducto> paged = facturaProductoService.getAllPaged(page, size);
+        Page<FacturaProducto> paged = facadeService.getFacturaProductoService().getAllPaged(page, size);
         if (paged.getSize() != 0) {
             return new ResponseEntity<>(paged, HttpStatus.OK);
         } else {
@@ -70,13 +61,13 @@ public class FacturaProductoController implements Serializable {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<?> add(OAuth2Authentication authentication,
             @RequestBody FacturaProducto facturaProducto) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         facturaProducto.setUsuarioCreacion(user.getIdUsuario());
         facturaProducto.setFechaCreacion(new Date());
         facturaProducto.setEstadoLocal("SIN REPARTIR");
         facturaProducto.setEstado(true);
         facturaProducto.setCarga(true);
-        int idFacturaProducto = facturaProductoDAO.add(facturaProducto);
+        int idFacturaProducto = facadeService.getFacturaProductoDAO().add(facturaProducto);
         JsonResponse msg = new JsonResponse("Success", String.valueOf(idFacturaProducto));
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -84,10 +75,10 @@ public class FacturaProductoController implements Serializable {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<?> update(OAuth2Authentication authentication,
             @RequestBody FacturaProducto facturaProducto) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         facturaProducto.setUsuarioModificacion(user.getIdUsuario());
         facturaProducto.setFechaModificacion(new Date());
-        facturaProductoDAO.update(facturaProducto);
+        facadeService.getFacturaProductoDAO().update(facturaProducto);
         JsonResponse msg = new JsonResponse("Success", "Factura de producto/s  modificada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -96,18 +87,18 @@ public class FacturaProductoController implements Serializable {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<?> delete(OAuth2Authentication authentication,
             @RequestBody FacturaProducto facturaProducto) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         facturaProducto.setEstado(false);
         facturaProducto.setUsuarioModificacion(user.getIdUsuario());
         facturaProducto.setFechaModificacion(new Date());
-        facturaProductoDAO.update(facturaProducto);
+        facadeService.getFacturaProductoDAO().update(facturaProducto);
         JsonResponse msg = new JsonResponse("Success", "Factura de producto/s eliminada con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/detail", method = RequestMethod.POST)
     public ResponseEntity<?> detail(@RequestParam("idFacturaProducto") int idFacturaProducto) {
-        FacturaProducto facturaProducto = facturaProductoDAO.detail(idFacturaProducto);
+        FacturaProducto facturaProducto = facadeService.getFacturaProductoDAO().detail(idFacturaProducto);
         if (facturaProducto != null) {
             return new ResponseEntity<>(facturaProducto, HttpStatus.OK);
         } else {
@@ -117,10 +108,10 @@ public class FacturaProductoController implements Serializable {
 
     @RequestMapping(value = "/finish", method = RequestMethod.POST)
     public ResponseEntity<?> finish(@RequestParam("idFacturaProducto") int idFacturaProducto) {
-        FacturaProducto facturaProducto = facturaProductoDAO.detail(idFacturaProducto);
+        FacturaProducto facturaProducto = facadeService.getFacturaProductoDAO().detail(idFacturaProducto);
         if (facturaProducto != null) {
             facturaProducto.setCarga(false);
-            facturaProductoDAO.update(facturaProducto);
+            facadeService.getFacturaProductoDAO().update(facturaProducto);
             JsonResponse msg = new JsonResponse("Success", "La carga finalizo con exito.");
             return new ResponseEntity<>(msg, HttpStatus.OK);
         } else {

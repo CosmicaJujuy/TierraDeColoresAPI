@@ -5,11 +5,10 @@
  */
 package com.ar.dev.tierra.api.controller;
 
-import com.ar.dev.tierra.api.dao.ClienteDAO;
-import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.Cliente;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Usuarios;
+import com.ar.dev.tierra.api.resource.FacadeService;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -34,14 +33,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ClienteController implements Serializable {
 
     @Autowired
-    ClienteDAO clienteDAO;
-
-    @Autowired
-    UsuariosDAO usuariosDAO;
+    FacadeService facadeService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll() {
-        List<Cliente> list = clienteDAO.getAll();
+        List<Cliente> list = facadeService.getClienteDAO().getAll();
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
@@ -52,10 +48,10 @@ public class ClienteController implements Serializable {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<?> add(OAuth2Authentication authentication,
             @RequestBody Cliente cliente) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         cliente.setUsuarioCreacion(user.getIdUsuario());
         cliente.setFechaCreacion(new Date());
-        int idCliente = clienteDAO.add(cliente);
+        int idCliente = facadeService.getClienteDAO().add(cliente);
         JsonResponse msg = new JsonResponse("Success", String.valueOf(idCliente));
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -63,10 +59,10 @@ public class ClienteController implements Serializable {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<?> update(OAuth2Authentication authentication,
             @RequestBody Cliente cliente) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         cliente.setUsuarioModificacion(user.getIdUsuario());
         cliente.setFechaModificacion(new Date());
-        clienteDAO.update(cliente);
+        facadeService.getClienteDAO().update(cliente);
         JsonResponse msg = new JsonResponse("Success", "Cliente modificado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -75,17 +71,17 @@ public class ClienteController implements Serializable {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<?> delete(OAuth2Authentication authentication,
             @RequestBody Cliente cliente) {
-        Usuarios user = usuariosDAO.findUsuarioByUsername(authentication.getName());
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         cliente.setUsuarioModificacion(user.getIdUsuario());
         cliente.setFechaModificacion(new Date());
-        clienteDAO.delete(cliente);
+        facadeService.getClienteDAO().delete(cliente);
         JsonResponse msg = new JsonResponse("Success", "Cliente eliminado con exito");
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/searchId", method = RequestMethod.POST)
     public ResponseEntity<?> searchById(@RequestParam("idCliente") int idCliente) {
-        Cliente cliente = clienteDAO.searchById(idCliente);
+        Cliente cliente = facadeService.getClienteDAO().searchById(idCliente);
         if (cliente != null) {
             return new ResponseEntity<>(cliente, HttpStatus.OK);
         } else {
@@ -95,7 +91,7 @@ public class ClienteController implements Serializable {
 
     @RequestMapping(value = "/searchApellido", method = RequestMethod.POST)
     public ResponseEntity<?> searchByNombre(@RequestParam("apellidoCliente") String apellidoCliente) {
-        List<Cliente> list = clienteDAO.searchByNombre(apellidoCliente);
+        List<Cliente> list = facadeService.getClienteDAO().searchByNombre(apellidoCliente);
         if (!list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
