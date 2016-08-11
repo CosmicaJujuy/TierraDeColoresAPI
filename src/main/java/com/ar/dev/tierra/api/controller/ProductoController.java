@@ -67,7 +67,7 @@ public class ProductoController implements Serializable {
         }
     }
 
-    @RequestMapping(value = "/advanced", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/advanced", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> advanced(
             @RequestParam(value = "descripcion", required = false, defaultValue = "") String descripcion,
             @RequestParam(value = "marca", required = false, defaultValue = "") String marca,
@@ -210,7 +210,7 @@ public class ProductoController implements Serializable {
         }
     }
 
-    @RequestMapping(value = "/list/factura/paged", method = RequestMethod.POST)
+    @RequestMapping(value = "/list/factura/paged", method = RequestMethod.GET)
     public ResponseEntity<?> findByIdFacturaPaged(
             @RequestParam("idFacturaProducto") int idFacturaProducto,
             @RequestParam(value = "page", required = false, defaultValue = "") Integer page,
