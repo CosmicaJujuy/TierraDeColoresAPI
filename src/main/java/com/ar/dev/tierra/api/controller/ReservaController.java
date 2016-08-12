@@ -16,12 +16,14 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -70,6 +72,18 @@ public class ReservaController implements Serializable {
         }
     }
 
+    @RequestMapping(value = "/day/paged", method = RequestMethod.GET)
+    public ResponseEntity<?> getDayPaged(
+            @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
+        Page factura = facadeService.getFacturaService().getReservasDay(page, size);
+        if (factura != null) {
+            return new ResponseEntity<>(factura, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @RequestMapping(value = "/month", method = RequestMethod.GET)
     public ResponseEntity<?> getMonth() {
         List<Factura> list = facadeService.getFacturaDAO().getMonthReserva();
@@ -77,6 +91,18 @@ public class ReservaController implements Serializable {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/month/paged", method = RequestMethod.GET)
+    public ResponseEntity<?> getMonthPaged(
+            @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
+        Page factura = facadeService.getFacturaService().getReservasMonth(page, size);
+        if (factura != null) {
+            return new ResponseEntity<>(factura, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 

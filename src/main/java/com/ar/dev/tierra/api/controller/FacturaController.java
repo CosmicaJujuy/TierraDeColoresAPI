@@ -144,6 +144,18 @@ public class FacturaController implements Serializable {
         }
     }
 
+    @RequestMapping(value = "/day/paged", method = RequestMethod.GET)
+    public ResponseEntity<?> getDayPaged(
+            @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
+        Page factura = facadeService.getFacturaService().getFacturasDay(page, size);
+        if (factura != null) {
+            return new ResponseEntity<>(factura, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @RequestMapping(value = "/month", method = RequestMethod.GET)
     public ResponseEntity<?> getMonth() {
         List<Factura> factura = facadeService.getFacturaDAO().getMonth();
@@ -161,6 +173,27 @@ public class FacturaController implements Serializable {
         Page factura = facadeService.getFacturaService().getFacturasMonth(page, size);
         if (factura != null) {
             return new ResponseEntity<>(factura, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/sum", method = RequestMethod.GET)
+    public ResponseEntity<?> sumByDay(@RequestParam("time") String time, @RequestParam("type") String type) {
+        BigDecimal sum;
+        if (time.equals("day")) {
+            if (type.equals("factura")) {
+                sum = facadeService.getFacturaService().getFacturaSumByDay();
+            } else {
+                sum = facadeService.getFacturaService().getReservaSumByDay();
+            }
+        } else if (type.equals("factura")) {
+            sum = facadeService.getFacturaService().getFacturaSumByMonth();
+        } else {
+            sum = facadeService.getFacturaService().getReservaSumByMonth();
+        }
+        if (sum != null) {
+            return new ResponseEntity<>(sum, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
