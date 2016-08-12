@@ -6,19 +6,44 @@
 package com.ar.dev.tierra.api.repository;
 
 import com.ar.dev.tierra.api.model.Factura;
+import java.math.BigDecimal;
 import java.util.Date;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.Repository;
+import org.springframework.data.repository.query.Param;
 
 /**
  *
  * @author PauloGaldo
  */
-public interface FacturaRepository extends PagingAndSortingRepository<Factura, String> {
+public interface FacturaRepository extends Repository<Factura, String> {
 
-    Page<Factura> findByEstadoNotAndFechaCreacionBetween(String estado, Date from, Date to, Pageable pageable);
+    @Query("SELECT f FROM Factura f "
+            + "WHERE f.estado <> 'RESERVADO' AND "
+            + "f.fechaCreacion BETWEEN "
+            + ":from AND :to "
+            + "ORDER BY f.idFactura DESC")
+    Page<Factura> findFacturasByDate(@Param("from") Date from, @Param("to") Date to, Pageable pageable);
 
-    Page<Factura> findByEstadoAndFechaCreacionBetween(String estado, Date from, Date to, Pageable pageable);
+    @Query("SELECT f FROM Factura f "
+            + "WHERE f.estado = 'RESERVADO' AND "
+            + "f.fechaCreacion BETWEEN "
+            + ":from AND :to "
+            + "ORDER BY f.idFactura DESC")
+    Page<Factura> findReservasByDate(@Param("from") Date from, @Param("to") Date to, Pageable pageable);
+    
+    @Query("SELECT SUM(f.total) FROM Factura f "
+            + "WHERE f.estado = 'CONFIRMADO' AND "
+            + "f.fechaCreacion BETWEEN "
+            + ":from AND :to")
+    BigDecimal sumFacturasEnded(@Param("from") Date from, @Param("to") Date to);
+    
+    @Query("SELECT SUM(f.total) FROM Factura f "
+            + "WHERE f.estado = 'RESERVADO' AND "
+            + "f.fechaCreacion BETWEEN "
+            + ":from AND :to")
+    BigDecimal sumReservas(@Param("from") Date from, @Param("to") Date to);
 
 }
