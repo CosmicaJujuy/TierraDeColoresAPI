@@ -45,5 +45,11 @@ public interface FacturaRepository extends Repository<Factura, String> {
             + "f.fechaCreacion BETWEEN "
             + ":from AND :to")
     BigDecimal sumReservas(@Param("from") Date from, @Param("to") Date to);
+    
+    @Query("SELECT COUNT(f.idFactura) FROM Factura f "
+            + "WHERE f.numeracion IS NOT NULL AND "
+            + "f.fechaCreacion BETWEEN "
+            + ":from AND :to")
+    int countByImpresionByDate(@Param("from") Date from, @Param("to") Date to);
 
 }
