@@ -9,6 +9,7 @@ import com.ar.dev.tierra.api.model.DetalleFactura;
 import com.ar.dev.tierra.api.model.Factura;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.MetodoPagoFactura;
+import com.ar.dev.tierra.api.model.Metric;
 import com.ar.dev.tierra.api.model.Producto;
 import com.ar.dev.tierra.api.model.Usuarios;
 import com.ar.dev.tierra.api.model.WrapperStock;
@@ -178,25 +179,19 @@ public class FacturaController implements Serializable {
         }
     }
 
-    @RequestMapping(value = "/sum", method = RequestMethod.GET)
-    public ResponseEntity<?> sumByDay(@RequestParam("time") String time, @RequestParam("type") String type) {
-        BigDecimal sum;
-        if (time.equals("day")) {
-            if (type.equals("factura")) {
-                sum = facadeService.getFacturaService().getFacturaSumByDay();
-            } else {
-                sum = facadeService.getFacturaService().getReservaSumByDay();
-            }
-        } else if (type.equals("factura")) {
-            sum = facadeService.getFacturaService().getFacturaSumByMonth();
-        } else {
-            sum = facadeService.getFacturaService().getReservaSumByMonth();
-        }
-        if (sum != null) {
-            return new ResponseEntity<>(sum, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    @RequestMapping(value = "/metrics", method = RequestMethod.GET)
+    @SuppressWarnings("null")
+    public ResponseEntity<?> metrics() {
+        Metric metric = new Metric();
+        metric.setEfectivoHoy(facadeService.getFacturaService().getEfectivoHoy());
+        metric.setEfectivoMensual(facadeService.getFacturaService().getEfectivoMensual());
+        metric.setImpresasHoy(facadeService.getFacturaService().getCountByImpresionHoy());
+        metric.setImpresasMensual(facadeService.getFacturaService().getCountByImpresionMensual());
+        metric.setTotalFacturasHoy(facadeService.getFacturaService().getFacturaSumByDay());
+        metric.setTotalFacturasMensual(facadeService.getFacturaService().getFacturaSumByMonth());
+        metric.setTotalReservasHoy(facadeService.getFacturaService().getReservaSumByDay());
+        metric.setTotalReservasMensual(facadeService.getFacturaService().getReservaSumByMonth());
+        return new ResponseEntity<>(metric, HttpStatus.OK);
     }
 
 }
