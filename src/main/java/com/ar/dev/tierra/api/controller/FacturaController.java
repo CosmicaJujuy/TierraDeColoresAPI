@@ -147,9 +147,11 @@ public class FacturaController implements Serializable {
 
     @RequestMapping(value = "/day/paged", method = RequestMethod.GET)
     public ResponseEntity<?> getDayPaged(
+            OAuth2Authentication authentication,
             @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
             @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
-        Page factura = facadeService.getFacturaService().getFacturasDay(page, size);
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
+        Page factura = facadeService.getFacturaService().getFacturasDay(page, size, user.getUsuarioSucursal().getIdSucursal());
         if (factura != null) {
             return new ResponseEntity<>(factura, HttpStatus.OK);
         } else {
@@ -169,9 +171,11 @@ public class FacturaController implements Serializable {
 
     @RequestMapping(value = "/month/paged", method = RequestMethod.GET)
     public ResponseEntity<?> getMonthPaged(
+            OAuth2Authentication authentication,
             @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
             @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
-        Page factura = facadeService.getFacturaService().getFacturasMonth(page, size);
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
+        Page factura = facadeService.getFacturaService().getFacturasMonth(page, size, user.getUsuarioSucursal().getIdSucursal());
         if (factura != null) {
             return new ResponseEntity<>(factura, HttpStatus.OK);
         } else {
@@ -181,16 +185,17 @@ public class FacturaController implements Serializable {
 
     @RequestMapping(value = "/metrics", method = RequestMethod.GET)
     @SuppressWarnings("null")
-    public ResponseEntity<?> metrics() {
+    public ResponseEntity<?> metrics(OAuth2Authentication authentication) {
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         Metric metric = new Metric();
-        metric.setEfectivoHoy(facadeService.getFacturaService().getEfectivoHoy());
-        metric.setEfectivoMensual(facadeService.getFacturaService().getEfectivoMensual());
-        metric.setImpresasHoy(facadeService.getFacturaService().getCountByImpresionHoy());
-        metric.setImpresasMensual(facadeService.getFacturaService().getCountByImpresionMensual());
-        metric.setTotalFacturasHoy(facadeService.getFacturaService().getFacturaSumByDay());
-        metric.setTotalFacturasMensual(facadeService.getFacturaService().getFacturaSumByMonth());
-        metric.setTotalReservasHoy(facadeService.getFacturaService().getReservaSumByDay());
-        metric.setTotalReservasMensual(facadeService.getFacturaService().getReservaSumByMonth());
+        metric.setEfectivoHoy(facadeService.getFacturaService().getEfectivoHoy(user.getUsuarioSucursal().getIdSucursal()));
+        metric.setEfectivoMensual(facadeService.getFacturaService().getEfectivoMensual(user.getUsuarioSucursal().getIdSucursal()));
+        metric.setImpresasHoy(facadeService.getFacturaService().getCountByImpresionHoy(user.getUsuarioSucursal().getIdSucursal()));
+        metric.setImpresasMensual(facadeService.getFacturaService().getCountByImpresionMensual(user.getUsuarioSucursal().getIdSucursal()));
+        metric.setTotalFacturasHoy(facadeService.getFacturaService().getFacturaSumByDay(user.getUsuarioSucursal().getIdSucursal()));
+        metric.setTotalFacturasMensual(facadeService.getFacturaService().getFacturaSumByMonth(user.getUsuarioSucursal().getIdSucursal()));
+        metric.setTotalReservasHoy(facadeService.getFacturaService().getReservaSumByDay(user.getUsuarioSucursal().getIdSucursal()));
+        metric.setTotalReservasMensual(facadeService.getFacturaService().getReservaSumByMonth(user.getUsuarioSucursal().getIdSucursal()));
         return new ResponseEntity<>(metric, HttpStatus.OK);
     }
 

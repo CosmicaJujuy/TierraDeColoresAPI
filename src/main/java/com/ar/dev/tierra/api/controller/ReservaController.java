@@ -5,8 +5,6 @@
  */
 package com.ar.dev.tierra.api.controller;
 
-import com.ar.dev.tierra.api.dao.FacturaDAO;
-import com.ar.dev.tierra.api.dao.UsuariosDAO;
 import com.ar.dev.tierra.api.model.Factura;
 import com.ar.dev.tierra.api.model.JsonResponse;
 import com.ar.dev.tierra.api.model.Usuarios;
@@ -74,9 +72,11 @@ public class ReservaController implements Serializable {
 
     @RequestMapping(value = "/day/paged", method = RequestMethod.GET)
     public ResponseEntity<?> getDayPaged(
+            OAuth2Authentication authentication,
             @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
             @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
-        Page factura = facadeService.getFacturaService().getReservasDay(page, size);
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
+        Page factura = facadeService.getFacturaService().getReservasDay(page, size, user.getUsuarioSucursal().getIdSucursal());
         if (factura != null) {
             return new ResponseEntity<>(factura, HttpStatus.OK);
         } else {
@@ -96,9 +96,11 @@ public class ReservaController implements Serializable {
 
     @RequestMapping(value = "/month/paged", method = RequestMethod.GET)
     public ResponseEntity<?> getMonthPaged(
+            OAuth2Authentication authentication,
             @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
             @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
-        Page factura = facadeService.getFacturaService().getReservasMonth(page, size);
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
+        Page factura = facadeService.getFacturaService().getReservasMonth(page, size, user.getUsuarioSucursal().getIdSucursal());
         if (factura != null) {
             return new ResponseEntity<>(factura, HttpStatus.OK);
         } else {

@@ -20,9 +20,11 @@ import org.springframework.data.repository.query.Param;
 public interface MetodoPagoFacturaRepository extends Repository<MetodoPagoFactura, Serializable> {
 
     @Query("SELECT SUM(m.montoPago) FROM MetodoPagoFactura m "
+            + "INNER JOIN m.factura f "
             + "WHERE m.planPago = 1 AND "
+            + "(f.idSucursal = :idSucursal) AND "
             + "m.fechaCreacion BETWEEN "
             + ":from AND :to")
-    BigDecimal sumEfectivoByDate(@Param("from") Date from, @Param("to") Date to);
+    BigDecimal sumEfectivoByDate(@Param("from") Date from, @Param("to") Date to, @Param("idSucursal") int idSucursal);
 
 }

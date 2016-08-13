@@ -22,34 +22,39 @@ public interface FacturaRepository extends Repository<Factura, String> {
 
     @Query("SELECT f FROM Factura f "
             + "WHERE f.estado <> 'RESERVADO' AND "
+            + "(f.idSucursal = :idSucursal) AND "
             + "f.fechaCreacion BETWEEN "
             + ":from AND :to "
             + "ORDER BY f.idFactura DESC")
-    Page<Factura> findFacturasByDate(@Param("from") Date from, @Param("to") Date to, Pageable pageable);
+    Page<Factura> findFacturasByDate(@Param("from") Date from, @Param("to") Date to, Pageable pageable, @Param("idSucursal") int idSucursal);
 
     @Query("SELECT f FROM Factura f "
             + "WHERE f.estado = 'RESERVADO' AND "
+            + "(f.idSucursal = :idSucursal) AND "
             + "f.fechaCreacion BETWEEN "
             + ":from AND :to "
             + "ORDER BY f.idFactura DESC")
-    Page<Factura> findReservasByDate(@Param("from") Date from, @Param("to") Date to, Pageable pageable);
-    
+    Page<Factura> findReservasByDate(@Param("from") Date from, @Param("to") Date to, Pageable pageable, @Param("idSucursal") int idSucursal);
+
     @Query("SELECT SUM(f.total) FROM Factura f "
             + "WHERE f.estado = 'CONFIRMADO' AND "
+            + "(f.idSucursal = :idSucursal) AND "
             + "f.fechaCreacion BETWEEN "
             + ":from AND :to")
-    BigDecimal sumFacturasEnded(@Param("from") Date from, @Param("to") Date to);
-    
+    BigDecimal sumFacturasEnded(@Param("from") Date from, @Param("to") Date to, @Param("idSucursal") int idSucursal);
+
     @Query("SELECT SUM(f.total) FROM Factura f "
             + "WHERE f.estado = 'RESERVADO' AND "
+            + "(f.idSucursal = :idSucursal) AND "
             + "f.fechaCreacion BETWEEN "
             + ":from AND :to")
-    BigDecimal sumReservas(@Param("from") Date from, @Param("to") Date to);
-    
+    BigDecimal sumReservas(@Param("from") Date from, @Param("to") Date to, @Param("idSucursal") int idSucursal);
+
     @Query("SELECT COUNT(f.idFactura) FROM Factura f "
             + "WHERE f.numeracion IS NOT NULL AND "
+            + "(f.idSucursal = :idSucursal) AND "
             + "f.fechaCreacion BETWEEN "
             + ":from AND :to")
-    int countByImpresionByDate(@Param("from") Date from, @Param("to") Date to);
+    int countByImpresionByDate(@Param("from") Date from, @Param("to") Date to, @Param("idSucursal") int idSucursal);
 
 }

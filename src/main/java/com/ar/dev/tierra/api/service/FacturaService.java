@@ -28,16 +28,16 @@ public class FacturaService {
     @Autowired
     FacturaRepository facturaRepository;
 
-    public Page getFacturasMonth(Integer page, Integer size) {
+    public Page getFacturasMonth(Integer page, Integer size, int idSucursal) {
         Calendar calendar = Calendar.getInstance();
         Date toDate = calendar.getTime();
         calendar.add(Calendar.MONTH, -1);
         Date fromDate = calendar.getTime();
-        Page facturas = facturaRepository.findFacturasByDate(fromDate, toDate, new PageRequest(page, size));
+        Page facturas = facturaRepository.findFacturasByDate(fromDate, toDate, new PageRequest(page, size), idSucursal);
         return facturas;
     }
 
-    public Page getFacturasDay(Integer page, Integer size) {
+    public Page getFacturasDay(Integer page, Integer size, int idSucursal) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
@@ -47,20 +47,20 @@ public class FacturaService {
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
         Date toDate = calendar.getTime();
-        Page facturas = facturaRepository.findFacturasByDate(fromDate, toDate, new PageRequest(page, size));
+        Page facturas = facturaRepository.findFacturasByDate(fromDate, toDate, new PageRequest(page, size), idSucursal);
         return facturas;
     }
 
-    public Page getReservasMonth(Integer page, Integer size) {
+    public Page getReservasMonth(Integer page, Integer size, int idSucursal) {
         Calendar calendar = Calendar.getInstance();
         Date to = calendar.getTime();
         calendar.add(Calendar.MONTH, -1);
         Date from = calendar.getTime();
-        Page paged = facturaRepository.findReservasByDate(from, to, new PageRequest(page, size));
+        Page paged = facturaRepository.findReservasByDate(from, to, new PageRequest(page, size), idSucursal);
         return paged;
     }
 
-    public Page getReservasDay(Integer page, Integer size) {
+    public Page getReservasDay(Integer page, Integer size, int idSucursal) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
@@ -70,20 +70,20 @@ public class FacturaService {
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
         Date to = calendar.getTime();
-        Page paged = facturaRepository.findReservasByDate(from, to, new PageRequest(page, size));
+        Page paged = facturaRepository.findReservasByDate(from, to, new PageRequest(page, size), idSucursal);
         return paged;
     }
 
-    public BigDecimal getFacturaSumByMonth() {
+    public BigDecimal getFacturaSumByMonth(int idSucursal) {
         Calendar calendar = Calendar.getInstance();
         Date toDate = calendar.getTime();
         calendar.add(Calendar.MONTH, -1);
         Date fromDate = calendar.getTime();
-        BigDecimal total = facturaRepository.sumFacturasEnded(fromDate, toDate);
+        BigDecimal total = facturaRepository.sumFacturasEnded(fromDate, toDate, idSucursal);
         return total;
     }
 
-    public BigDecimal getFacturaSumByDay() {
+    public BigDecimal getFacturaSumByDay(int idSucursal) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
@@ -93,20 +93,20 @@ public class FacturaService {
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
         Date toDate = calendar.getTime();
-        BigDecimal total = facturaRepository.sumFacturasEnded(fromDate, toDate);
+        BigDecimal total = facturaRepository.sumFacturasEnded(fromDate, toDate, idSucursal);
         return total;
     }
 
-    public BigDecimal getReservaSumByMonth() {
+    public BigDecimal getReservaSumByMonth(int idSucursal) {
         Calendar calendar = Calendar.getInstance();
         Date toDate = calendar.getTime();
         calendar.add(Calendar.MONTH, -1);
         Date fromDate = calendar.getTime();
-        BigDecimal total = facturaRepository.sumReservas(fromDate, toDate);
+        BigDecimal total = facturaRepository.sumReservas(fromDate, toDate, idSucursal);
         return total;
     }
 
-    public BigDecimal getReservaSumByDay() {
+    public BigDecimal getReservaSumByDay(int idSucursal) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
@@ -116,20 +116,20 @@ public class FacturaService {
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
         Date toDate = calendar.getTime();
-        BigDecimal total = facturaRepository.sumReservas(fromDate, toDate);
+        BigDecimal total = facturaRepository.sumReservas(fromDate, toDate, idSucursal);
         return total;
     }
 
-    public BigDecimal getEfectivoMensual() {
+    public BigDecimal getEfectivoMensual(int idSucursal) {
         Calendar calendar = Calendar.getInstance();
         Date toDate = calendar.getTime();
         calendar.add(Calendar.MONTH, -1);
         Date fromDate = calendar.getTime();
-        BigDecimal sum = metodoPagoFacturaRepository.sumEfectivoByDate(fromDate, toDate);
+        BigDecimal sum = metodoPagoFacturaRepository.sumEfectivoByDate(fromDate, toDate, idSucursal);
         return sum;
     }
 
-    public BigDecimal getEfectivoHoy() {
+    public BigDecimal getEfectivoHoy(int idSucursal) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
@@ -139,20 +139,20 @@ public class FacturaService {
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
         Date toDate = calendar.getTime();
-        BigDecimal sum = metodoPagoFacturaRepository.sumEfectivoByDate(fromDate, toDate);
+        BigDecimal sum = metodoPagoFacturaRepository.sumEfectivoByDate(fromDate, toDate, idSucursal);
         return sum;
     }
 
-    public int getCountByImpresionMensual() {
+    public int getCountByImpresionMensual(int idSucursal) {
         Calendar calendar = Calendar.getInstance();
         Date to = calendar.getTime();
         calendar.add(Calendar.MONTH, -1);
         Date from = calendar.getTime();
-        int count = facturaRepository.countByImpresionByDate(from, to);
+        int count = facturaRepository.countByImpresionByDate(from, to, idSucursal);
         return count;
     }
 
-    public int getCountByImpresionHoy() {
+    public int getCountByImpresionHoy(int idSucursal) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
@@ -162,7 +162,7 @@ public class FacturaService {
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
         Date to = calendar.getTime();
-        int count = facturaRepository.countByImpresionByDate(from, to);
+        int count = facturaRepository.countByImpresionByDate(from, to, idSucursal);
         return count;
     }
 
