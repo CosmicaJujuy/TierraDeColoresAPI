@@ -184,7 +184,6 @@ public class FacturaController implements Serializable {
     }
 
     @RequestMapping(value = "/metrics", method = RequestMethod.GET)
-    @SuppressWarnings("null")
     public ResponseEntity<?> metrics(OAuth2Authentication authentication) {
         Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
         Metric metric = new Metric();

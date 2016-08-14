@@ -259,8 +259,9 @@ public class UsuariosController implements Serializable {
     }
 
     @RequestMapping(value = "/vendedores", method = RequestMethod.GET)
-    public ResponseEntity<?> listaVendedores() {
-        List<Usuarios> vendedores = facadeService.getUsuariosDAO().getVendedores();
+    public ResponseEntity<?> listaVendedores(OAuth2Authentication authentication) {
+        Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());
+        List<Usuarios> vendedores = facadeService.getUsuariosDAO().getVendedores(user.getUsuarioSucursal().getIdSucursal());
         if (!vendedores.isEmpty()) {
             return new ResponseEntity<>(vendedores, HttpStatus.OK);
         } else {

@@ -60,11 +60,16 @@ public class UsuariosDAOImpl implements UsuariosDAO {
     }
 
     @Override
-    public List<Usuarios> getVendedores() {
+    public List<Usuarios> getVendedores(int idSucursal) {
         Criteria criteria = getSession().createCriteria(Usuarios.class);
         criteria.add(Restrictions.eq("estado", true));
         Criteria roles = criteria.createCriteria("roles");
-        roles.add(Restrictions.eq("idRol", 2));
+        roles.add(Restrictions.or(
+                Restrictions.eq("idRol", 2),
+                Restrictions.eq("idRol", 3),
+                Restrictions.eq("idRol", 6)));
+        Criteria sucursal = criteria.createCriteria("usuarioSucursal");
+        sucursal.add(Restrictions.eq("idSucursal", idSucursal));
         criteria.addOrder(Order.asc("idUsuario"));
         List<Usuarios> us = criteria.list();
         return us;
@@ -96,7 +101,7 @@ public class UsuariosDAOImpl implements UsuariosDAO {
         Usuarios us = (Usuarios) criteria.uniqueResult();
         return us;
     }
-    
+
     @Override
     public Usuarios findUsuarioById(int idUsuario) {
         Criteria criteria = getSession().createCriteria(Usuarios.class);
