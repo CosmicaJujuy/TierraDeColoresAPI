@@ -66,7 +66,7 @@ public class EntidadBancariaController implements Serializable {
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN, ROLE_CONTADOR')")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<?> delete(OAuth2Authentication authentication,
             @RequestBody EntidadBancaria bancaria) {
