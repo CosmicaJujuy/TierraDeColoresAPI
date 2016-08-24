@@ -71,6 +71,30 @@ public class ProductoController implements Serializable {
         }
     }
 
+    @RequestMapping(value = "/full", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> fullSearch(
+            @RequestParam(value = "descripcion", required = false, defaultValue = "") String descripcion,
+            @RequestParam(value = "marca", required = false, defaultValue = "") String marca,
+            @RequestParam(value = "talla", required = false, defaultValue = "") String talla,
+            @RequestParam(value = "codigo", required = false, defaultValue = "") String codigo,
+            @RequestParam(value = "categoria", required = false, defaultValue = "") String categoria,
+            @RequestParam(value = "temporada", required = false, defaultValue = "") String temporada,
+            @RequestParam(value = "sexo", required = false, defaultValue = "") String sexo,
+            @RequestParam(value = "clase", required = false, defaultValue = "") String clase,
+            @RequestParam(value = "color", required = false, defaultValue = "") String color,
+            @RequestParam(value = "proveedor", required = false, defaultValue = "") String proveedor,
+            @RequestParam(value = "factura", required = false, defaultValue = "") String factura,
+            @RequestParam(value = "page", required = false, defaultValue = "") Integer page,
+            @RequestParam(value = "size", required = false, defaultValue = "") Integer size
+    ) {
+        Page paged = facadeService.getProductoService().getByAllParams(descripcion, marca, talla, codigo, categoria, temporada, sexo, clase, color, proveedor, factura, page, size);
+        if (paged.getSize() != 0) {
+            return new ResponseEntity<>(paged, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @RequestMapping(value = "/paged", method = RequestMethod.GET)
     public ResponseEntity<?> getAllHotels(
             @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
