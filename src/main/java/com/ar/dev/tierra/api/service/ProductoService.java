@@ -43,4 +43,14 @@ public class ProductoService {
         Page paged = productoRepository.findByIdFactura(idFactura, new PageRequest(page, size));
         return paged;
     }
+
+    public Page<Producto> getByAllParams(String descripcion, String marca, String talla, String codigo,
+            String categoria, String temporada, String sexo, String clase, String color, String proveedor,
+            String factura, Integer page, Integer size) {
+        Page pageParams = productoRepository.findByAllParams(
+                descripcion, marca, talla, codigo, categoria, temporada,
+                sexo, clase, color, proveedor, factura,
+                new PageRequest(page, size));
+        return pageParams;
+    }
 }
