@@ -24,11 +24,12 @@ public interface ProductoRepository extends Repository<Producto, String> {
             "SELECT p from Producto p "
             + "INNER JOIN p.marcas m "
             + "INNER JOIN p.categoria c "
-            + "WHERE m.nombreMarca LIKE %:marca% AND "
-            + "c.nombreCategoria LIKE %:categoria% AND "
-            + "p.descripcion LIKE %:descripcion% AND "
+            + "WHERE lower(m.nombreMarca) LIKE concat('%', lower(:marca), '%') AND "
+            + "lower(c.nombreCategoria) LIKE concat('%', lower(:categoria), '%') AND "
+            + "lower(p.descripcion) LIKE concat('%', lower(:descripcion), '%') AND "
             + "p.codigoProducto LIKE %:codigo% AND "
-            + "p.talla LIKE %:talla% AND p.estadoProducto = true "
+            + "lower(p.talla) LIKE concat('%', lower(:talla), '%') AND "
+            + "p.estadoProducto = true "
             + "ORDER BY p.idProducto DESC"
     )
     Page<Producto> findByParams(
@@ -45,4 +46,40 @@ public interface ProductoRepository extends Repository<Producto, String> {
             + "p.estadoProducto = true "
             + "ORDER BY p.idProducto DESC")
     Page<Producto> findByIdFactura(@Param("idFactura") int idFactura, Pageable pageable);
+
+    @Query(
+            "SELECT p from Producto p "
+            + "INNER JOIN p.marcas m "
+            + "INNER JOIN p.categoria c "
+            + "INNER JOIN p.temporada t "
+            + "INNER JOIN p.sexo s "
+            + "INNER JOIN p.facturaProducto fp "
+            + "INNER JOIN fp.proveedor pr "
+            + "WHERE m.nombreMarca LIKE %:marca% AND "
+            + "c.nombreCategoria LIKE %:categoria% AND "
+            + "t.nombreTemporada LIKE %:temporada% AND "
+            + "s.nombreSexo LIKE  %:sexo% AND "
+            + "fp.numeroFactura LIKE %:factura% AND "
+            + "lower(pr.nombreProveedor) LIKE concat('%', lower(:proveedor), '%') AND "
+            + "lower(p.descripcion) LIKE concat('%', lower(:descripcion), '%') AND "
+            + "lower(p.talla) LIKE concat('%', lower(:talla), '%') AND "
+            + "p.codigoProducto LIKE %:codigo% AND "
+            + "p.claseProducto LIKE %:clase% AND "
+            + "lower(p.colorProducto) LIKE concat('%', lower(:color), '%') AND "
+            + "p.estadoProducto = true "
+            + "ORDER BY p.idProducto DESC"
+    )
+    Page<Producto> findByAllParams(
+            @Param("descripcion") String descripcion,
+            @Param("marca") String marca,
+            @Param("talla") String talla,
+            @Param("codigo") String codigo,
+            @Param("categoria") String categoria,
+            @Param("temporada") String temporada,
+            @Param("sexo") String sexo,
+            @Param("clase") String clase,
+            @Param("color") String color,
+            @Param("proveedor") String proveedor,
+            @Param("factura") String factura,
+            Pageable pageable);
 }
