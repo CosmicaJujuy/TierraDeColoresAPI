@@ -32,8 +32,6 @@ import org.springframework.security.oauth2.provider.token.store.InMemoryTokenSto
 @Configuration
 public class Oauth2Configuration {
 
-    private static final String RESOURCE_ID = "restservice";
-
     @Configuration
     @EnableResourceServer
     protected static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
@@ -44,7 +42,7 @@ public class Oauth2Configuration {
         @Override
         public void configure(ResourceServerSecurityConfigurer resources) {
             resources
-                    .resourceId(RESOURCE_ID);
+                    .resourceId("TierraRestAPI");
         }
 
         @Override
@@ -108,7 +106,7 @@ public class Oauth2Configuration {
                     .authorizedGrantTypes("password", "refresh_token")
                     .authorities("USER")
                     .scopes("read", "write")
-                    .resourceIds(RESOURCE_ID)
+                    .resourceIds("TierraRestAPI")
                     .secret("123456");
         }
 
