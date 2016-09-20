@@ -14,6 +14,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -148,6 +149,18 @@ public class FacturaDAOImpl implements FacturaDAO {
         criteria.add(Restrictions.eq("idFactura", idFactura));
         Factura foundFactura = (Factura) criteria.uniqueResult();
         return foundFactura;
+    }
+
+    @Override
+    public List<Factura> findByRegalo(String serial) {
+        Criteria criteria = getSession().createCriteria(Factura.class);
+        Calendar calendar = Calendar.getInstance();
+        Date toDate = calendar.getTime();
+        calendar.add(Calendar.MONTH, -1);
+        Date fromDate = calendar.getTime();
+        criteria.add(Restrictions.between("fechaCreacion", fromDate, toDate));
+        criteria.add(Restrictions.ilike("regalo", serial, MatchMode.ANYWHERE));
+        return criteria.list();
     }
 
 }

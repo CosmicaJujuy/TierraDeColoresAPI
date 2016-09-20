@@ -183,6 +183,16 @@ public class FacturaController implements Serializable {
         }
     }
 
+    @RequestMapping(value = "/regalo", method = RequestMethod.GET)
+    public ResponseEntity<?> regalo(@RequestParam("regalo") String serial) {
+        List<Factura> facturas = facadeService.getFacturaDAO().findByRegalo(serial);
+        if (!facturas.isEmpty()) {
+            return new ResponseEntity<>(facturas, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @RequestMapping(value = "/metrics", method = RequestMethod.GET)
     public ResponseEntity<?> metrics(OAuth2Authentication authentication) {
         Usuarios user = facadeService.getUsuariosDAO().findUsuarioByUsername(authentication.getName());

@@ -19,13 +19,13 @@ import org.springframework.stereotype.Repository;
 public interface FacturaDAO {
 
     public List<Factura> getAll();
-    
+
     public List<Factura> getDiary();
-    
+
     public List<Factura> getMonth();
-    
+
     public List<Factura> getDiaryReserva();
-    
+
     public List<Factura> getMonthReserva();
 
     public void update(Factura factura);
@@ -35,5 +35,6 @@ public interface FacturaDAO {
     public void delete(Factura factura);
 
     public Factura searchById(int idFactura);
-    
+
+    public List<Factura> findByRegalo(String serial);
 }
