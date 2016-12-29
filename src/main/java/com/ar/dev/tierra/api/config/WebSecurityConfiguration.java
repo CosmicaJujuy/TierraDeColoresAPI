@@ -39,8 +39,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth
                 .userDetailsService(cuds)
                 .passwordEncoder(passwordEncoder());
-//                .and()
-//                .authenticationProvider(customAuthenticationProvider);
     }
 
     @Bean
