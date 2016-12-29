@@ -13,6 +13,7 @@ import com.ar.dev.tierra.api.dao.DetalleTransferenciaDAO;
 import com.ar.dev.tierra.api.dao.EntidadBancariaDAO;
 import com.ar.dev.tierra.api.dao.FacturaDAO;
 import com.ar.dev.tierra.api.dao.FacturaProductoDAO;
+import com.ar.dev.tierra.api.dao.FiscalDAO;
 import com.ar.dev.tierra.api.dao.MarcasDAO;
 import com.ar.dev.tierra.api.dao.MedioPagoDAO;
 import com.ar.dev.tierra.api.dao.MetodoPagoFacturaDAO;
@@ -64,6 +65,9 @@ public class FacadeService implements Serializable {
 
     @Autowired
     private FacturaDAO facturaDAO;
+    
+    @Autowired
+    private FiscalDAO fiscalDAO;
 
     @Autowired
     private FacturaProductoDAO facturaProductoDAO;
@@ -519,6 +523,20 @@ public class FacadeService implements Serializable {
      */
     public void setStockService(StockService stockService) {
         this.stockService = stockService;
+    }
+
+    /**
+     * @return the fiscalDAO
+     */
+    public FiscalDAO getFiscalDAO() {
+        return fiscalDAO;
+    }
+
+    /**
+     * @param fiscalDAO the fiscalDAO to set
+     */
+    public void setFiscalDAO(FiscalDAO fiscalDAO) {
+        this.fiscalDAO = fiscalDAO;
     }
 
 }
