@@ -5,11 +5,8 @@
  */
 package com.ar.dev.tierra.api.model;
 
-import com.ar.dev.tierra.api.model.Producto;
-import com.ar.dev.tierra.api.model.Sucursal;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
