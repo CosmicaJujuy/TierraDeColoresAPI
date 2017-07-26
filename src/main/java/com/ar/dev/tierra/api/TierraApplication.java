@@ -19,5 +19,5 @@ public class TierraApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(TierraApplication.class, args);
-    }
+    } 
 }
