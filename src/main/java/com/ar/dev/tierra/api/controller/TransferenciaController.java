@@ -5,8 +5,12 @@
  */
 package com.ar.dev.tierra.api.controller;
 
+import com.ar.dev.tierra.api.mapper.StockMapper;
 import com.ar.dev.tierra.api.model.DetalleTransferencia;
 import com.ar.dev.tierra.api.model.JsonResponse;
+import com.ar.dev.tierra.api.model.StockBebelandia;
+import com.ar.dev.tierra.api.model.StockLibertador;
+import com.ar.dev.tierra.api.model.StockTierra;
 import com.ar.dev.tierra.api.model.Transferencia;
 import com.ar.dev.tierra.api.model.Usuarios;
 import com.ar.dev.tierra.api.model.WrapperStock;
@@ -148,18 +152,53 @@ public class TransferenciaController implements Serializable {
                     @SuppressWarnings("UnusedAssignment")
                     int cantUpdate = 0;
                     WrapperStock wrapperStock = facadeService.getStockDAO().searchStockById(detalleTransferencia.getIdStock(), detalleTransferencia.getIdSucursal());
+                    WrapperStock insertStock = new WrapperStock();
                     if (wrapperStock.getStockBebelandia() != null) {
                         cantUpdate = wrapperStock.getStockBebelandia().getCantidad();
                         wrapperStock.getStockBebelandia().setCantidad(cantUpdate - detalleTransferencia.getCantidad());
+                        if (detalleTransferencia.getIdTransferencia().getSucursalPedido() == 1) {
+                            StockTierra st = StockMapper.INSTANCE.StockBebelandiaToStockTierra(wrapperStock.getStockBebelandia());
+                            st.setCantidad(detalleTransferencia.getCantidad());
+                            st.setIdSucursal(1);
+                            insertStock.setStockTierra(st);
+                        } else if (detalleTransferencia.getIdTransferencia().getSucursalPedido() == 3) {
+                            StockLibertador sl = StockMapper.INSTANCE.StockBebelandiaToStockLibertador(wrapperStock.getStockBebelandia());
+                            sl.setCantidad(detalleTransferencia.getCantidad());
+                            sl.setIdSucursal(3);
+                            insertStock.setStockLibertador(sl);
+                        }
                     }
                     if (wrapperStock.getStockLibertador() != null) {
                         cantUpdate = wrapperStock.getStockLibertador().getCantidad();
                         wrapperStock.getStockLibertador().setCantidad(cantUpdate - detalleTransferencia.getCantidad());
+                        if (detalleTransferencia.getIdTransferencia().getSucursalPedido() == 1) {
+                            StockTierra st = StockMapper.INSTANCE.StockLibertadorToStockTierra(wrapperStock.getStockLibertador());
+                            st.setCantidad(detalleTransferencia.getCantidad());
+                            st.setIdSucursal(1);
+                            insertStock.setStockTierra(st);
+                        } else if (detalleTransferencia.getIdTransferencia().getSucursalPedido() == 2) {
+                            StockBebelandia sb = StockMapper.INSTANCE.StockLibertadorToStockBebelandia(wrapperStock.getStockLibertador());
+                            sb.setCantidad(detalleTransferencia.getCantidad());
+                            sb.setIdSucursal(3);
+                            insertStock.setStockBebelandia(sb);
+                        }
                     }
                     if (wrapperStock.getStockTierra() != null) {
                         cantUpdate = wrapperStock.getStockTierra().getCantidad();
                         wrapperStock.getStockTierra().setCantidad(cantUpdate - detalleTransferencia.getCantidad());
+                        if (detalleTransferencia.getIdTransferencia().getSucursalPedido() == 3) {
+                            StockLibertador sl = StockMapper.INSTANCE.StockTierraToStockLibertador(wrapperStock.getStockTierra());
+                            sl.setCantidad(detalleTransferencia.getCantidad());
+                            sl.setIdSucursal(1);
+                            insertStock.setStockLibertador(sl);
+                        } else if (detalleTransferencia.getIdTransferencia().getSucursalPedido() == 2) {
+                            StockBebelandia sb = StockMapper.INSTANCE.StockTierraToStockBebelandia(wrapperStock.getStockTierra());
+                            sb.setCantidad(detalleTransferencia.getCantidad());
+                            sb.setIdSucursal(3);
+                            insertStock.setStockBebelandia(sb);
+                        }
                     }
+                    facadeService.getStockDAO().add(insertStock);
                     facadeService.getStockDAO().update(wrapperStock);
                 }
                 if (user.getRoles().getIdRol() == 1) {
