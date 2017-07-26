@@ -4,7 +4,7 @@
     <groupId>com.ar.dev.tierra.api</groupId>
     <artifactId>TierraDeColoresAPI</artifactId>
     <version>1.6.0</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     
     <parent>
         <groupId>org.springframework.boot</groupId>
